@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title', 255);
             $table->text('content')->nullable();
+            $table->smallInteger('status')->comment('0: Private, 1: Public');
             $table->foreignId('created_by_id')->constrained('users');
             $table->foreignId('modified_by_id')->constrained('users');
+            $table->date('posted_at')->default(today());
             $table->timestamps();
             $table->softDeletes();
         });

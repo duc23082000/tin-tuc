@@ -19,6 +19,9 @@
                             <a href="{{ route('admin.author.lists') }}">Authors</a>
                         </li>
                         <li>
+                            <a href="{{ route('admin.user.lists') }}">Users</a>
+                        </li>
+                        <li>
                             <a href="index2.html">Categories</a>
                         </li>
                     </ul>

@@ -158,6 +158,7 @@ class AuthController extends Controller
 
         if(empty($select)){
             $newUser = new User();
+            $newUser->username = $email;
             $newUser->email = $email;
             $newUser->password = '';
             $newUser->save();

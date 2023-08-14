@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Web\AuthorController;
 use App\Http\Controllers\Admin\Web\PostController;
+use App\Http\Controllers\Admin\Web\UserController;
 use App\Http\Controllers\Client\HomeController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -75,6 +76,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'auth.admin'])->grou
         Route::put('edit/{id}', [AuthorController::class, 'editing']);
 
         Route::get('delete/{id}', [AuthorController::class, 'delete'])->name('delete');
+
+    });
+
+    Route::prefix('users')->name('user.')->group(function(){
+        Route::get('', [UserController::class, 'index'])->name('lists');
+
+        Route::get('create', [UserController::class, 'create'])->name('create');
+
+        Route::post('create', [UserController::class, 'creating']);
+
+        Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
+
+        Route::put('edit/{id}', [UserController::class, 'editing']);
+
+        Route::get('delete/{id}', [UserController::class, 'delete'])->name('delete');
 
     });
 
