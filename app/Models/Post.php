@@ -28,4 +28,9 @@ class Post extends Model
         return PostStatusEnum::getKey($this->status);
     }
 
+    public function tags(){
+        return $this->hasMany(PostTag::class, 'post_id', 'id');
+    }
+
+
 }

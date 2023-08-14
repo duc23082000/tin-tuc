@@ -16,13 +16,16 @@
                             <a href="{{ route('admin.post.lists') }}">Posts</a>
                         </li>
                         <li>
+                            <a href="{{ route('admin.category.lists') }}">Categories</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.tag.lists') }}">Tags</a>
+                        </li>
+                        <li>
                             <a href="{{ route('admin.author.lists') }}">Authors</a>
                         </li>
                         <li>
                             <a href="{{ route('admin.user.lists') }}">Users</a>
-                        </li>
-                        <li>
-                            <a href="index2.html">Categories</a>
                         </li>
                     </ul>
                 </li>

@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Web\AuthorController;
+use App\Http\Controllers\Admin\Web\CategoryController;
 use App\Http\Controllers\Admin\Web\PostController;
+use App\Http\Controllers\Admin\Web\TagController;
 use App\Http\Controllers\Admin\Web\UserController;
 use App\Http\Controllers\Client\HomeController;
 use App\Models\User;
@@ -106,6 +108,34 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'auth.admin'])->grou
         Route::put('edit/{id}', [PostController::class, 'editing']);
 
         Route::get('delete/{id}', [PostController::class, 'delete'])->name('delete');
+    });
+
+    Route::prefix('categories')->name('category.')->group(function(){
+        Route::get('', [CategoryController::class, 'index'])->name('lists');
+
+        Route::get('create', [CategoryController::class, 'create'])->name('create');
+
+        Route::post('create', [CategoryController::class, 'creating']);
+
+        Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('edit');
+
+        Route::put('edit/{id}', [CategoryController::class, 'editing']);
+
+        Route::get('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
+    });
+
+    Route::prefix('tags')->name('tag.')->group(function(){
+        Route::get('', [TagController::class, 'index'])->name('lists');
+
+        Route::get('create', [TagController::class, 'create'])->name('create');
+
+        Route::post('create', [TagController::class, 'creating']);
+
+        Route::get('edit/{id}', [TagController::class, 'edit'])->name('edit');
+
+        Route::put('edit/{id}', [TagController::class, 'editing']);
+
+        Route::get('delete/{id}', [TagController::class, 'delete'])->name('delete');
     });
 
 
