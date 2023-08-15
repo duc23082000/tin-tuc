@@ -13,4 +13,8 @@ class Category extends Model
     protected $table = 'categories';
     public $timestamps = true;
     protected $dates = ['deleted_at'];
+
+    public function posts(){
+        return $this->hasMany(Post::class, 'category_id', 'id');
+    }
 }

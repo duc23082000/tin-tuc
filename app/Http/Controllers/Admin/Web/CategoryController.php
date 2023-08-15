@@ -66,7 +66,7 @@ class CategoryController extends Controller
     }
 
     public function delete($id){
-        // dd(1);
+        
         $category = Category::find($id);
         if(!$category){
             return redirect(route('admin.category.lists'));

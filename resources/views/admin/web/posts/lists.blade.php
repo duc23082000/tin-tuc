@@ -43,9 +43,9 @@
                         <th>
                             <form action="" method="get" >
                                 <input type="hidden" name="search" value="{{ $search }}">
-                                <input type="hidden" name="collum" value="posts.content">
+                                <input type="hidden" name="collum" value="categories.name">
                                 <input type="hidden" name="sort" value="{{ $sort }}">                           
-                                <span>content <button><i class="fa fa-sort" aria-hidden="true"></i></button></span>
+                                <span>category <button><i class="fa fa-sort" aria-hidden="true"></i></button></span>
                             </form>
                         </th>
                         <th>Status</th>
@@ -97,7 +97,7 @@
                     <tr class="tr-shadow">
                         <td>{{ $item->id }}</td>
                         <td>{{ $item->title }}</td>
-                        <td>{{ $item->content }}</td>
+                        <td>{{ $item->name }}</td>
                         <td>{{ $item->status_name }}</td>
                         <td>{{ $item->posted_at }}</td>
                         <td>{{ $item->email }}</td>

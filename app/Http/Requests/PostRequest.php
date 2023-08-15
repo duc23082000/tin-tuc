@@ -23,10 +23,19 @@ class PostRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'title' => 'required|string|min:8|max:255',
             'status' => ['required', Rule::in(PostStatusEnum::asArray())],
+            'category' => 'required|exists:categories,id,deleted_at,NULL',
+            'posted_at' => ['required', 'date'],
         ];
+        if($this->input('tags')){
+            $rules['tags.*'] = 'exists:tags,id,deleted_at,NULL';
+        }
+        if($this->input('status') == PostStatusEnum::Private){
+            $rules['posted_at'][] = 'after:yesterday';
+        }
+        return $rules;
     }
 
     public function messages()
@@ -38,7 +47,12 @@ class PostRequest extends FormRequest
             'title.max' => 'Tiêu đề chỉ được phép tối đa 255 kí tự',
             'status.required' => 'Trạng thái không được bỏ trống',
             'status.in' => 'Trạng thái không hợp lệ',
-            
+            'category.required' => 'Vui lòng chọn dữ liệu',
+            'category.exists' => 'Giá trị phải khớp với giá trị của bảng categories',
+            'tags.*.exist' => 'Giá trị không hợp lệ',
+            'posted_at.required' => 'Ngày đăng không được để trống',
+            'posted_at.date' => 'Ngày đăng phải là kiểu ngày',
+            'posted_at.after' => 'Nếu status là private thì ngày đăng phải bắt buộc phải lớn hơn hoặc bằng hôm nay',
         ];
     }
 }

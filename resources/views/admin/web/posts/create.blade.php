@@ -3,6 +3,8 @@
 @section('content')
 <div class="card-body card-block">
     <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+
+        {{-- Title --}}
         <div class="row form-group">
             <div class="col col-md-3">
                 <label for="text-input" class=" form-control-label">title</label>
@@ -14,6 +16,8 @@
                 @enderror
             </div>     
         </div>
+
+        {{-- Content --}}
         <div class="row form-group">
             <div class="col col-md-3">
                 <label for="textarea-input" class=" form-control-label">Content</label>
@@ -22,6 +26,8 @@
                 <textarea name="content" id="textarea-input" rows="9" placeholder="Content..." class="form-control">{{ old('content') }}</textarea>
             </div>
         </div>
+
+        {{-- Status --}}
         <div class="row form-group">
             <div class="col col-md-3">
                 <label class=" form-control-label">Status</label>
@@ -41,14 +47,66 @@
                 @enderror
             </div>
         </div>
+
+        {{-- Categories --}}
+        <div class="row form-group">
+            <div class="col col-md-3">
+                <label for="tags">Categories</label>
+            </div>
+            <div class="col col-md-9">
+                <div class="form-check">
+                    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="category">
+                        <option>Chọn danh mục</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" 
+                                @selected($category->id == old('category'))>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                @error('category')
+                    <small style="color: red">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
+
+        {{-- Tags --}}
+        <div class="row form-group">
+            <div class="col col-md-3">
+                <label for="tags">Tags</label>
+            </div>
+            <div class="col col-md-9">
+                <div class="form-check">
+                    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="tags[]" multiple>
+                        @foreach($tags as $tag)
+                            <option value="{{ $tag->id }}" 
+                                @selected(in_array($tag->id, old('tags') ?? []) )>
+                                {{ $tag->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                @error('tags.*')
+                    <small style="color: red">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
+
+        {{-- Posted at --}}
         <div class="row form-group">
             <div class="col col-md-3">
                 <label for="posted_at" class=" form-control-label">Posted at</label>
             </div>
             <div class="col-12 col-md-9">
-                <input type="date" id="posted_at" name="posted_at" class="form-control">
+                <input type="date" id="posted_at" name="posted_at" value="{{ old('posted_at') }}" class="form-control">
+                @error('posted_at')
+                    <small style="color: red">{{ $message }}</small>
+                @enderror
             </div>
         </div>
+
+    {{-- File Image --}}
         <div class="row form-group">
             <div class="col col-md-3">
                 <label for="file-multiple-input" class=" form-control-label">Multiple File input</label>
@@ -57,6 +115,7 @@
                 <input type="file" id="file-multiple-input" name="file-multiple-input" multiple="" class="form-control-file">
             </div>
         </div>
+
         <div class="row form-group">
             <div class="col col-md-3"></div>
             <div class="col-12 col-md-9">

@@ -15,6 +15,6 @@ class Tag extends Model
     protected $dates = ['deleted_at'];
 
     public function posts(){
-        return $this->hasMany(PostTag::class, 'tag_id', 'id');
+        return $this->belongsToMany(Post::class);
     }
 }

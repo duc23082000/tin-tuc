@@ -7,10 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ListRequest;
 use App\Http\Requests\PostRequest;
 use App\ModelFilters\PostFilter;
+use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+
 
 class PostController extends Controller
 {
@@ -26,7 +29,7 @@ class PostController extends Controller
         
     }
     public function index(ListRequest $request){
-        // dd(now());
+        
         $search = $request->input('search');
 
         $collum = $request->input('collum') ?? 'updated_at';
@@ -41,30 +44,36 @@ class PostController extends Controller
     }
 
     public function create(){
-        return view('admin.web.posts.create');
+        $tags = Tag::all();
+        $categories = Category::all();
+        return view('admin.web.posts.create', compact('tags', 'categories'));
     }
 
     public function creating(PostRequest $request){
-        // dd($request->posted_at);
         $post = new Post();
         $post->title = $request->input('title');
         $post->content = $request->input('content');
+        $post->category_id = $request->input('category');
         $post->status = $request->input('status');
         $post->posted_at = $request->input('posted_at');
         $post->created_by_id = Auth::user()->id;
         $post->modified_by_id = Auth::user()->id;
         $post->save();
 
+        $post->tags()->sync($request->input('tags'));
+
         return redirect(route('admin.post.lists'));
     }
 
     public function edit($id){
-        $post = Post::with(['user_create', 'user_modify'])->find($id);
-        // dd($post->content);
+        $post = Post::find($id);
+        
         if(!$post){
             return redirect(route('admin.post.lists'));
         }
-        return view('admin.web.posts.edit', compact('post'));
+        $tags = Tag::all();
+        $categories = Category::all();
+        return view('admin.web.posts.edit', compact('post', 'tags', 'categories'));
     }
 
     public function editing($id, PostRequest $request){
@@ -74,15 +83,19 @@ class PostController extends Controller
         }
         $post->title = $request->input('title');
         $post->content = $request->input('content');
+        $post->category_id = $request->input('category');
         $post->status = $request->input('status');
+        $post->posted_at = $request->input('posted_at'); 
         $post->modified_by_id = Auth::user()->id;
         $post->save();
-        // dd($post->content);
+        
+        $post->tags()->sync($request->input('tags'));
+
         return redirect(route('admin.post.lists'));
     }
 
     public function delete($id){
-        // dd(1);
+        
         $post = Post::find($id);
         if(!$post){
             return redirect(route('admin.post.lists'));

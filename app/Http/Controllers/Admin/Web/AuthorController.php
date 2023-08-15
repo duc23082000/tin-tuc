@@ -71,7 +71,7 @@ class AuthorController extends Controller
     }
 
     public function delete($id){
-        // dd(1);
+        
         $user = User::find($id);
         if(!$user){
             return redirect(route('admin.author.lists'));
