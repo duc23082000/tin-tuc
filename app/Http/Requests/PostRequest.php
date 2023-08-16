@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Enums\PostStatusEnum;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class PostRequest extends FormRequest
@@ -54,5 +56,14 @@ class PostRequest extends FormRequest
             'posted_at.date' => 'Ngày đăng phải là kiểu ngày',
             'posted_at.after' => 'Nếu status là private thì ngày đăng phải bắt buộc phải lớn hơn hoặc bằng hôm nay',
         ];
+    }
+
+    public function failedValidation(Validator $validator){
+        if(session()->has('upload'.$this->user()->id)){
+            foreach(session()->get('upload'.$this->user()->id) as $fileName){
+                Storage::delete('public/images/'.$fileName);
+            }
+        }
+        parent::failedValidation($validator);
     }
 }

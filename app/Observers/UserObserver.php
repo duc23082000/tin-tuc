@@ -29,7 +29,12 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        //
+        
+    }
+
+    public function deleting(User $user): void
+    {
+        $user->posts_created_by()->delete();
     }
 
     /**
@@ -37,7 +42,7 @@ class UserObserver
      */
     public function restored(User $user): void
     {
-        //
+        
     }
 
     /**

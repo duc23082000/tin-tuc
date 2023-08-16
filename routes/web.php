@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Web\CategoryController;
 use App\Http\Controllers\Admin\Web\PostController;
 use App\Http\Controllers\Admin\Web\TagController;
 use App\Http\Controllers\Admin\Web\UserController;
+use App\Http\Controllers\Author\PostController as AuthorPostController;
 use App\Http\Controllers\Client\HomeController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -139,6 +140,25 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'auth.admin'])->grou
     });
 
 
+});
+
+Route::prefix('author')->name('author.')->middleware(['auth', 'auth.author'])->group(function(){
+
+    Route::prefix('posts')->name('post.')->group(function(){
+        Route::get('', [AuthorPostController::class, 'index'])->name('lists');
+
+        Route::get('create', [AuthorPostController::class, 'create'])->name('create');
+
+        Route::post('create', [AuthorPostController::class, 'creating']);
+
+        Route::post('upload', [AuthorPostController::class, 'upload'])->name('upload');
+
+        Route::get('edit/{id}', [AuthorPostController::class, 'edit'])->name('edit');
+
+        Route::put('edit/{id}', [AuthorPostController::class, 'editing']);
+
+        Route::get('delete/{id}', [AuthorPostController::class, 'delete'])->name('delete');
+    });
 });
 
 

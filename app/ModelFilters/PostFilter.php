@@ -2,7 +2,9 @@
 
 namespace App\ModelFilters;
 
+use App\Enums\UserRoleEnum;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 
 class PostFilter extends Post
 {
@@ -19,6 +21,9 @@ class PostFilter extends Post
                 ->orWhere('users.email', 'LIKE', '%' .$search. '%')
                 ->orWhere('users2.email', 'LIKE', '%' .$search. '%')
                 ->orWhere('categories.name', 'LIKE', '%' .$search. '%');
+            })
+            ->when(Auth::user()->role === UserRoleEnum::Author, function($q){
+                $q->where('posts.created_by_id', Auth::user()->id);
             })
             ->orderBy($collum, $sort);
     }

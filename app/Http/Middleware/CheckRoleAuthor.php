@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class checkRoleAdmin
+class CheckRoleAuthor
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class checkRoleAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user()->role === UserRoleEnum::Admin){
+        if($request->user()->role === UserRoleEnum::Author){
             return $next($request);
         }
         return redirect(route('home'));
