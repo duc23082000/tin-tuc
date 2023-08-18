@@ -21,9 +21,16 @@ class AuthRequest extends FormRequest
      */
     public function rules(): array
     {
+        if($this->url() == route('account.register')){
+            $table = 'accounts';
+        }
+        if($this->url() == route('register')){
+            $table = 'users';
+        }
+        
         return [
             'username' => 'required|string|min:3|max:255',
-            'email' => 'required|email|max:255|unique:users,email,'. $this->input('id') .',id',
+            'email' => 'required|email|max:255|unique:'.$table.',email,'. $this->input('id') .',id',
             'password' => 'required|string|min:6|max:50',
             'cfpassword' => 'same:password',
         ];

@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'accounts' => [
+            'driver' => 'session',
+            'provider' => 'accounts',
+        ],
     ],
 
     /*
@@ -65,10 +70,11 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'accounts' => [
+            'driver' => 'database',
+            'model' => App\Models\Account::class,
+            'table' => 'accounts'
+        ],
     ],
 
     /*
@@ -93,6 +99,13 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'accounts' => [
+            'provider' => 'accounts',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

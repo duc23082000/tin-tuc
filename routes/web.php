@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Account\Auth\Authcontroller as AccAuthcontroller;
 use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Web\AuthorController;
 use App\Http\Controllers\Admin\Web\CategoryController;
@@ -31,7 +32,7 @@ Route::get('delete-acc', function () {
 Route::get('home', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('auth')->group(function(){
-    Route::middleware('auth.check')->group(function(){
+    Route::prefix('admin')->middleware('auth.check')->group(function(){
         Route::get('login', [AuthController::class, 'login'])->name('login');
 
         Route::post('login', [AuthController::class, 'handelLogin']);
@@ -49,6 +50,24 @@ Route::prefix('auth')->group(function(){
         Route::get('login/google/callback', [AuthController::class, 'handleGoogleCallback']);
     });
 
+    Route::prefix('account')->name('account.')->group(function(){
+        Route::get('login', [AccAuthcontroller::class, 'login'])->name('login');
+
+        Route::post('login', [AccAuthcontroller::class, 'handelLogin']);
+
+        Route::get('register', [AccAuthcontroller::class, 'register'])->name('register');
+
+        Route::post('register', [AccAuthcontroller::class, 'handelRegister']);
+
+        Route::get('forgot-password', [AccAuthcontroller::class, 'forgot'])->name('forgot');
+
+        Route::post('forgot-password', [AccAuthcontroller::class, 'sendMailReset']);
+
+        Route::get('login/google', [AccAuthcontroller::class, 'redirectToGoogle'])->name('login.Google');
+
+        Route::get('login/google/callback', [AccAuthcontroller::class, 'handleGoogleCallback']);
+    });
+
     Route::get('reset-password/email={email}&token={token}', [AuthController::class, 'reset'])->name('password.reset');
 
     Route::post('reset-password/email={email}&token={token}', [AuthController::class, 'reseting']);
@@ -58,7 +77,7 @@ Route::prefix('auth')->group(function(){
 
 Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])->middleware(['auth', 'signed'])->name('verification.verify');
 
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'auth.admin'])->group(function(){
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'auth.admin', 'delete.imageCkeditor'])->group(function(){
     Route::get('logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
     Route::get('change-password', [AuthController::class, 'formChange'])->name('change');
@@ -100,13 +119,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'auth.admin'])->grou
     Route::prefix('posts')->name('post.')->group(function(){
         Route::get('', [PostController::class, 'index'])->name('lists');
 
-        Route::get('create', [PostController::class, 'create'])->name('create');
+        Route::withoutMiddleware('delete.imageCkeditor')->group(function(){
+            Route::get('create', [PostController::class, 'create'])->name('create');
 
-        Route::post('create', [PostController::class, 'creating']);
+            Route::post('create', [PostController::class, 'creating']);
 
-        Route::get('edit/{id}', [PostController::class, 'edit'])->name('edit');
+            Route::post('upload', [PostController::class, 'upload'])->name('upload');
 
-        Route::put('edit/{id}', [PostController::class, 'editing']);
+            Route::get('edit/{id}', [PostController::class, 'edit'])->name('edit');
+
+            Route::put('edit/{id}', [PostController::class, 'editing']);
+        });
 
         Route::get('delete/{id}', [PostController::class, 'delete'])->name('delete');
     });
@@ -142,20 +165,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'auth.admin'])->grou
 
 });
 
-Route::prefix('author')->name('author.')->middleware(['auth', 'auth.author'])->group(function(){
+Route::prefix('author')->name('author.')->middleware(['auth', 'auth.author', 'delete.imageCkeditor'])->group(function(){
 
     Route::prefix('posts')->name('post.')->group(function(){
         Route::get('', [AuthorPostController::class, 'index'])->name('lists');
 
-        Route::get('create', [AuthorPostController::class, 'create'])->name('create');
+        Route::withoutMiddleware('delete.imageCkeditor')->group(function(){
+            Route::get('create', [AuthorPostController::class, 'create'])->name('create');
 
-        Route::post('create', [AuthorPostController::class, 'creating']);
-
-        Route::post('upload', [AuthorPostController::class, 'upload'])->name('upload');
-
-        Route::get('edit/{id}', [AuthorPostController::class, 'edit'])->name('edit');
-
-        Route::put('edit/{id}', [AuthorPostController::class, 'editing']);
+            Route::post('create', [AuthorPostController::class, 'creating']);
+    
+            Route::post('upload', [AuthorPostController::class, 'upload'])->name('upload');
+    
+            Route::get('edit/{id}', [AuthorPostController::class, 'edit'])->name('edit');
+    
+            Route::put('edit/{id}', [AuthorPostController::class, 'editing']);
+        });
 
         Route::get('delete/{id}', [AuthorPostController::class, 'delete'])->name('delete');
     });

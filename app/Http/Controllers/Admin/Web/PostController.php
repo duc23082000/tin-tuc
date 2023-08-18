@@ -12,8 +12,10 @@ use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
-
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -65,9 +67,42 @@ class PostController extends Controller
         return redirect(route('admin.post.lists'));
     }
 
+    public function upload(Request $request){
+        try {
+            $request->validate(['upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120']);
+            if($request->hasFile('upload')){
+                $image = $request->file('upload');
+                
+                $fileName = Str::random(40) . '.' . $image->getClientOriginalExtension();
+    
+                Storage::put('public/images/'.$fileName, file_get_contents($request->file('upload')->getRealPath()));
+                $url = asset('storage/images/'.$fileName);
+    
+                if(session()->has('upload'.$request->user()->id)){
+                    session()->push('upload'.$request->user()->id, $fileName);
+                } else {
+                    session()->put('upload'.$request->user()->id, [$fileName]);
+                }
+    
+                return response()->json([
+                    'fileName' => $fileName,
+                    'uploaded' => 1,
+                    'url' => $url
+                ]);
+            }
+        } catch (\Throwable $error) {
+            
+            return response()->json([
+                'uploaded' => 0,
+                'error' => [
+                    'message' => 'Ảnh phải có định dạng jpeg,png,jpg,gif và nhỏ hơn 5MB',
+                ],
+            ]);
+        }
+    }
+
     public function edit($id){
         $post = Post::find($id);
-        
         if(!$post){
             return redirect(route('admin.post.lists'));
         }
@@ -81,6 +116,7 @@ class PostController extends Controller
         if(!$post){
             return redirect(route('admin.post.lists'));
         }
+        session()->put('contentImages', $post->content);
         $post->title = $request->input('title');
         $post->content = $request->input('content');
         $post->category_id = $request->input('category');
