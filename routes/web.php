@@ -165,6 +165,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'auth.admin', 'delet
 
 });
 
+Route::prefix('')->name('account.')->middleware('auth.account')->group(function(){
+    Route::get('logout', [AccAuthcontroller::class, 'logout'])->name('logout');
+
+    Route::get('change-password', [AccAuthcontroller::class, 'formChange'])->name('change');
+
+    Route::post('change-password', [AccAuthcontroller::class, 'changePassword']);
+});
+
 Route::prefix('author')->name('author.')->middleware(['auth', 'auth.author', 'delete.imageCkeditor'])->group(function(){
 
     Route::prefix('posts')->name('post.')->group(function(){

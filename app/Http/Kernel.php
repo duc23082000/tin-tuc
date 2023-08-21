@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'auth.check' => \App\Http\Middleware\CheckLogin::class,
         'auth.admin' => \App\Http\Middleware\checkRoleAdmin::class,
         'auth.author' => \App\Http\Middleware\CheckRoleAuthor::class,
+        'auth.account' => \App\Http\Middleware\AuthAccount::class,
         'delete.imageCkeditor' => \App\Http\Middleware\DeleteImageCkeditor::class,
     ];
 }

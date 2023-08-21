@@ -44,7 +44,7 @@ class Authcontroller extends Controller
     }
 
     public function logout(Request $request){
-        Auth::logout();
+        Auth::guard('accounts')->logout();
 
         $request->session()->invalidate();
 
@@ -71,7 +71,7 @@ class Authcontroller extends Controller
     }
 
     public function sendMailReset(Request $request){
-        $email = User::where('email', $request->input('email'))->pluck('id')->first();
+        $email = Account::where('email', $request->input('email'))->pluck('id')->first();
         // dd($email);
         if($email){
             SendMailResetPassword::dispatch($request->only('email'));
@@ -100,7 +100,7 @@ class Authcontroller extends Controller
 
     public function reseting(ResetPassRequest $request){
         // dd($request->email);
-        $user = User::where('email', $request->email)->first();
+        $user = Account::where('email', $request->email)->first();
         // dd($user);
         if($user->resetPass->created_at < now()->addHours(-1)) {
             ResetPassword::where('email', $request->email)->delete();
@@ -119,11 +119,11 @@ class Authcontroller extends Controller
     }
 
     public function changePassword(ChangePasswordRequest $request){
-        $user = User::find(Auth::user()->id);
+        $user = Account::find(Auth::guard('accounts')->user()->id);
         $user->password = Hash::make($request->input('password'));
         $user->save();
 
-        Auth::logoutOtherDevices($request->input('current_password'));
+        Auth::guard('accounts')->logoutOtherDevices($request->input('current_password'));
 
         return redirect(route('admin.post.lists'));
     }
@@ -153,21 +153,21 @@ class Authcontroller extends Controller
         $email = $user->email;
         // dd($email);
 
-        $select = User::where('email', $email)->first();
+        $select = Account::where('email', $email)->first();
         // dd($select->id);
 
         if(empty($select)){
-            $newUser = new User();
+            $newUser = new Account();
             $newUser->username = $email;
             $newUser->email = $email;
             $newUser->password = '';
             $newUser->save();
             // dd(1);
-            Auth::loginUsingId($newUser->id);
+            Auth::guard('accounts')->loginUsingId($newUser->id);
             return redirect(route('admin.post.lists'));
         }
 
-        Auth::loginUsingId($select->id);
+        Auth::guard('accounts')->loginUsingId($select->id);
         return redirect(route('admin.post.lists'));
     }
 }

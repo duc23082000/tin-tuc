@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class ChangePasswordRequest extends FormRequest
@@ -22,7 +23,12 @@ class ChangePasswordRequest extends FormRequest
      */
     public function rules(): array
     {
-        $user = $this->user();
+        if($this->url() == route('admin.change')){
+            $user = Auth::guard('web')->user();
+        }
+        if($this->url() == route('account.change')){
+            $user = Auth::guard('accounts')->user();
+        }
         return [
             'current_password' => [function ($attribute, $value, $fail) use ($user) {
                 if (!Hash::check($value, $user->password)) {

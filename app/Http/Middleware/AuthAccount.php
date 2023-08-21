@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckLogin
+class AuthAccount
 {
     /**
      * Handle an incoming request.
@@ -16,10 +16,9 @@ class CheckLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check()){
-            return redirect(route('admin.post.lists'));
+        if(Auth::guard('accounts')->check()){
+            return $next($request);
         }
-        return $next($request);
-       
+        return redirect(route('account.login'));
     }
 }
