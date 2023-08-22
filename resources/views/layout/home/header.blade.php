@@ -11,7 +11,7 @@
                     <div class="col-3">
                         <div class="d-flex justify-content-end">
                             <div class="account-wrap">
-                                @auth('web')
+                                @auth('admins')
                                 <div class="account-item clearfix js-item-menu">
                                     <div class="content">
                                         <a class="js-acc-btn" href="#">john doe</a>
@@ -50,7 +50,7 @@
                                     </div>
                                 </div>
                                 @endauth
-                                @auth('accounts')
+                                @auth('web')
                                 <div class="account-item clearfix js-item-menu">
                                     <div class="content">
                                         <a class="js-acc-btn" href="#">john doe</a>
@@ -85,7 +85,7 @@
                                     </div>
                                 </div>
                                 @endauth
-                                @guest('accounts')
+                                @guest('web')
                                 <div class="account-item clearfix">
                                     <div class="content">
                                         <a class="js-acc-btn" href="{{ route('account.login') }}">Log in</a>

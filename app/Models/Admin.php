@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
-class Account extends Model
+class Admin extends Model
 {
     use HasFactory, Notifiable, SoftDeletes;
 
-    protected $table = 'accounts';
+    protected $table = 'admins';
 
     /**
      * The attributes that are mass assignable.
@@ -43,4 +43,12 @@ class Account extends Model
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function posts_created_by(){
+        return $this->hasMany(Post::class, 'created_by_id', 'id');
+    }
+
+    public function posts_modified_by(){
+        return $this->hasMany(Post::class, 'modified_by_id', 'id');
+    }
 }

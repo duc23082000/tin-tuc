@@ -41,9 +41,9 @@ return [
             'provider' => 'users',
         ],
 
-        'accounts' => [
+        'admins' => [
             'driver' => 'session',
-            'provider' => 'accounts',
+            'provider' => 'admins',
         ],
     ],
 
@@ -70,10 +70,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        'accounts' => [
+        'admins' => [
             'driver' => 'database',
             'model' => App\Models\Account::class,
-            'table' => 'accounts'
+            'table' => 'admins'
         ],
     ],
 

@@ -17,11 +17,11 @@ class Post extends Model
     protected $dates = ['deleted_at'];
 
     public function user_create(){
-        return $this->belongsTo(User::class, 'created_by_id');
+        return $this->belongsTo(Admin::class, 'created_by_id');
     }
 
     public function user_modify(){
-        return $this->belongsTo(User::class, 'modified_by_id');
+        return $this->belongsTo(Admin::class, 'modified_by_id');
     }
 
     public function getStatusNameAttribute(){

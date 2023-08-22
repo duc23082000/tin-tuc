@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Account\Auth\Authcontroller as AccAuthcontroller;
+use App\Http\Controllers\User\Auth\Authcontroller as AccAuthcontroller;
 use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Web\AuthorController;
 use App\Http\Controllers\Admin\Web\CategoryController;
@@ -32,7 +32,7 @@ Route::get('delete-acc', function () {
 Route::get('home', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('auth')->group(function(){
-    Route::prefix('admin')->middleware('auth.check')->group(function(){
+    Route::prefix('admin')->group(function(){
         Route::get('login', [AuthController::class, 'login'])->name('login');
 
         Route::post('login', [AuthController::class, 'handelLogin']);
@@ -45,9 +45,6 @@ Route::prefix('auth')->group(function(){
 
         Route::post('forgot-password', [AuthController::class, 'sendMailReset']);
 
-        Route::get('login/google', [AuthController::class, 'redirectToGoogle'])->name('login.Google');
-
-        Route::get('login/google/callback', [AuthController::class, 'handleGoogleCallback']);
     });
 
     Route::prefix('account')->name('account.')->group(function(){
@@ -77,8 +74,8 @@ Route::prefix('auth')->group(function(){
 
 Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])->middleware(['auth', 'signed'])->name('verification.verify');
 
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'auth.admin', 'delete.imageCkeditor'])->group(function(){
-    Route::get('logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+Route::prefix('admin')->name('admin.')->middleware(['auth.admin', 'delete.imageCkeditor'])->group(function(){
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('change-password', [AuthController::class, 'formChange'])->name('change');
 
@@ -173,7 +170,7 @@ Route::prefix('')->name('account.')->middleware('auth.account')->group(function(
     Route::post('change-password', [AccAuthcontroller::class, 'changePassword']);
 });
 
-Route::prefix('author')->name('author.')->middleware(['auth', 'auth.author', 'delete.imageCkeditor'])->group(function(){
+Route::prefix('author')->name('author.')->middleware(['auth.author', 'delete.imageCkeditor'])->group(function(){
 
     Route::prefix('posts')->name('post.')->group(function(){
         Route::get('', [AuthorPostController::class, 'index'])->name('lists');

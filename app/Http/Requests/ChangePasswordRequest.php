@@ -24,10 +24,10 @@ class ChangePasswordRequest extends FormRequest
     public function rules(): array
     {
         if($this->url() == route('admin.change')){
-            $user = Auth::guard('web')->user();
+            $user = Auth::guard('admins')->user();
         }
         if($this->url() == route('account.change')){
-            $user = Auth::guard('accounts')->user();
+            $user = Auth::guard('web')->user();
         }
         return [
             'current_password' => [function ($attribute, $value, $fail) use ($user) {

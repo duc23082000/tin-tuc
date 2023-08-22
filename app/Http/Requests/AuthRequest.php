@@ -21,11 +21,11 @@ class AuthRequest extends FormRequest
      */
     public function rules(): array
     {
-        if($this->url() == route('account.register')){
-            $table = 'accounts';
-        }
-        if($this->url() == route('register')){
+        if($this->url() == route('account.register') || $this->url() == route('admin.user.create') || $this->url() == route('admin.user.edit', $this->input('id'))){
             $table = 'users';
+        }
+        if($this->url() == route('register') || $this->url() == route('admin.author.create') || $this->url() == route('admin.author.edit', $this->input('id'))){
+            $table = 'admins';
         }
         
         return [

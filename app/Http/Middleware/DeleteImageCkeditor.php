@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,11 +17,11 @@ class DeleteImageCkeditor
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session()->has('upload'.$request->user()->id)){
-            foreach(session()->get('upload'.$request->user()->id) as $fileName){
+        if(session()->has('upload'.Auth::guard('admins')->user()->id)){
+            foreach(session()->get('upload'.Auth::guard('admins')->user()->id) as $fileName){
                 Storage::delete('public/images/'.$fileName);
             }
-            session()->forget('upload'.request()->user()->id);
+            session()->forget('upload'.Auth::guard('admins')->user()->id);
         }
         return $next($request);
     }

@@ -13,5 +13,4 @@ final class UserRoleEnum extends Enum
 {
     const Admin = 0;
     const Author = 1;
-    const User = 2;
 }

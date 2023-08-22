@@ -46,15 +46,4 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function posts_created_by(){
-        return $this->hasMany(Post::class, 'created_by_id', 'id');
-    }
-
-    public function posts_modified_by(){
-        return $this->hasMany(Post::class, 'modified_by_id', 'id');
-    }
-
-    public function resetPass(){
-        return $this->belongsTo(ResetPassword::class, 'email', 'email');
-    }
 }

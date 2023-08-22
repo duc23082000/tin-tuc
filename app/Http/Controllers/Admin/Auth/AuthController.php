@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
+use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ResetPassRequest;
 use App\Jobs\SendMailResetPassword;
 use App\Models\ResetPassword;
-use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,7 @@ class AuthController extends Controller
         ];
         
 
-        if(Auth::attempt($user)){
+        if(Auth::guard('admins')->attempt($user)){
             if($request->remember){
                 setcookie('email', $request->input('email'), time()+(10*24*60*60));
                 setcookie('password', $request->input('password'), time()+(10*24*60*60));
@@ -38,19 +39,19 @@ class AuthController extends Controller
                 setcookie('email', "");
                 setcookie('password', "");
             }
-            return redirect(route('admin.post.lists'));
+            return Auth::guard('admins')->user()->role == UserRoleEnum::Admin ? redirect(route('admin.post.lists')) : redirect(route('author.post.lists'));
         }
         return back()->with('message', 'Tài khoản hoặc mật khẩu không chính xác');
     }
 
     public function logout(Request $request){
-        Auth::guard('web')->logout();
+        Auth::guard('admins')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
-        return redirect(route('account.login'));
+        return redirect(route('login'));
     }
 
     public function register(){
@@ -58,7 +59,7 @@ class AuthController extends Controller
     }
 
     public function handelRegister(AuthRequest $request){
-        $user = new User();
+        $user = new Admin();
         $user->username = $request->username;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
@@ -71,7 +72,7 @@ class AuthController extends Controller
     }
 
     public function sendMailReset(Request $request){
-        $email = User::where('email', $request->input('email'))->pluck('id')->first();
+        $email = Admin::where('email', $request->input('email'))->pluck('id')->first();
         // dd($email);
         if($email){
             SendMailResetPassword::dispatch($request->only('email'));
@@ -100,7 +101,7 @@ class AuthController extends Controller
 
     public function reseting(ResetPassRequest $request){
         // dd($request->email);
-        $user = User::where('email', $request->email)->first();
+        $user = Admin::where('email', $request->email)->first();
         // dd($user);
         if($user->resetPass->created_at < now()->addHours(-1)) {
             ResetPassword::where('email', $request->email)->delete();
@@ -119,11 +120,11 @@ class AuthController extends Controller
     }
 
     public function changePassword(ChangePasswordRequest $request){
-        $user = User::find(Auth::user()->id);
+        $user = Admin::find(Auth::guard('admins')->user()->id);
         $user->password = Hash::make($request->input('password'));
         $user->save();
 
-        Auth::logoutOtherDevices($request->input('current_password'));
+        // Auth::logoutOtherDevices($request->input('current_password'));
 
         return redirect(route('admin.post.lists'));
     }
@@ -140,34 +141,4 @@ class AuthController extends Controller
         return redirect('admin.post.lists');
     }
 
-    // Đăng nhập bằng google
-    public function redirectToGoogle()
-    {
-        return Socialite::driver('google')->redirect();
-    }
-
-    // Xử lí đăng nhập bằng google
-    public function handleGoogleCallback()
-    {
-        $user = Socialite::driver('google')->user();
-        $email = $user->email;
-        // dd($email);
-
-        $select = User::where('email', $email)->first();
-        // dd($select->id);
-
-        if(empty($select)){
-            $newUser = new User();
-            $newUser->username = $email;
-            $newUser->email = $email;
-            $newUser->password = '';
-            $newUser->save();
-            // dd(1);
-            Auth::loginUsingId($newUser->id);
-            return redirect(route('admin.post.lists'));
-        }
-
-        Auth::loginUsingId($select->id);
-        return redirect(route('admin.post.lists'));
-    }
 }

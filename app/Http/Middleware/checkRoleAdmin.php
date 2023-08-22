@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Enums\UserRoleEnum;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class checkRoleAdmin
@@ -16,9 +17,9 @@ class checkRoleAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user()->role === UserRoleEnum::Admin){
+        if(Auth::guard('admins')->check() && Auth::guard('admins')->user()->role === UserRoleEnum::Admin){
             return $next($request);
         }
-        return redirect(route('home'));
+        return redirect(route('login'));
     }
 }

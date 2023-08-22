@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin\Web;
 use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
-use App\ModelFilters\UserFilter;
-use App\Models\User;
+use App\ModelFilters\AdminFilter;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +16,7 @@ class AuthorController extends Controller
     private $author;
     public function __construct()
     {
-        $this->author = new UserFilter();
+        $this->author = new AdminFilter();
     }
     public function index(Request $request){
 
@@ -40,7 +40,7 @@ class AuthorController extends Controller
 
     public function creating(AuthRequest $request){
         // dd($request->posted_at);
-        $user = new User();
+        $user = new Admin();
         $user->username = $request->input('username');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
@@ -51,7 +51,7 @@ class AuthorController extends Controller
     }
 
     public function edit($id){
-        $user = User::find($id);
+        $user = Admin::find($id);
         if(!$user){
             return redirect(route('admin.author.lists'));
         }
@@ -59,7 +59,7 @@ class AuthorController extends Controller
     }
 
     public function editing($id, AuthRequest $request){
-        $user = User::find($id);
+        $user = Admin::find($id);
         if(!$user){
             return redirect(route('admin.author.lists'));
         }
@@ -72,7 +72,7 @@ class AuthorController extends Controller
 
     public function delete($id){
         
-        $user = User::find($id);
+        $user = Admin::find($id);
         if(!$user){
             return redirect(route('admin.author.lists'));
         }

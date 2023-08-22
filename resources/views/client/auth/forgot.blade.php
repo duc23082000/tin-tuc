@@ -5,7 +5,7 @@
     <form action="" method="post">
         <div class="form-group">
             <label>Email Address</label>
-            <input class="au-input au-input--full" type="text" name="email" placeholder="Email">
+            <input class="au-input au-input--full" type="text" name="email" value="{{ old('email') }}" placeholder="Email">
             @if (session('message'))
                 <small style="color: {{ session('color') }}">{{ session('message') }}</small>
             @endif

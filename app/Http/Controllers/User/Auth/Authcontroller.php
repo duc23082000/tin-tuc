@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Account\Auth;
+namespace App\Http\Controllers\User\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ResetPassRequest;
 use App\Jobs\SendMailResetPassword;
-use App\Models\Account;
 use App\Models\ResetPassword;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -30,7 +29,7 @@ class Authcontroller extends Controller
         ];
         
 
-        if(Auth::guard('accounts')->attempt($user)){
+        if(Auth::guard('web')->attempt($user)){
             if($request->remember){
                 setcookie('email_acc', $request->input('email'), time()+(10*24*60*60));
                 setcookie('password_acc', $request->input('password'), time()+(10*24*60*60));
@@ -44,13 +43,13 @@ class Authcontroller extends Controller
     }
 
     public function logout(Request $request){
-        Auth::guard('accounts')->logout();
+        Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
-        return redirect(route('login'));
+        return redirect(route('account.login'));
     }
 
     public function register(){
@@ -58,7 +57,7 @@ class Authcontroller extends Controller
     }
 
     public function handelRegister(AuthRequest $request){
-        $user = new Account();
+        $user = new User();
         $user->username = $request->username;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
@@ -71,7 +70,7 @@ class Authcontroller extends Controller
     }
 
     public function sendMailReset(Request $request){
-        $email = Account::where('email', $request->input('email'))->pluck('id')->first();
+        $email = User::where('email', $request->input('email'))->pluck('id')->first();
         // dd($email);
         if($email){
             SendMailResetPassword::dispatch($request->only('email'));
@@ -100,7 +99,7 @@ class Authcontroller extends Controller
 
     public function reseting(ResetPassRequest $request){
         // dd($request->email);
-        $user = Account::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
         // dd($user);
         if($user->resetPass->created_at < now()->addHours(-1)) {
             ResetPassword::where('email', $request->email)->delete();
@@ -119,11 +118,11 @@ class Authcontroller extends Controller
     }
 
     public function changePassword(ChangePasswordRequest $request){
-        $user = Account::find(Auth::guard('accounts')->user()->id);
+        $user = User::find(Auth::guard('web')->user()->id);
         $user->password = Hash::make($request->input('password'));
         $user->save();
 
-        Auth::guard('accounts')->logoutOtherDevices($request->input('current_password'));
+        // Auth::guard('web')->logoutOtherDevices($request->input('current_password'));
 
         return redirect(route('admin.post.lists'));
     }
@@ -153,21 +152,21 @@ class Authcontroller extends Controller
         $email = $user->email;
         // dd($email);
 
-        $select = Account::where('email', $email)->first();
+        $select = User::where('email', $email)->first();
         // dd($select->id);
 
         if(empty($select)){
-            $newUser = new Account();
+            $newUser = new User();
             $newUser->username = $email;
             $newUser->email = $email;
             $newUser->password = '';
             $newUser->save();
             // dd(1);
-            Auth::guard('accounts')->loginUsingId($newUser->id);
-            return redirect(route('admin.post.lists'));
+            Auth::guard('web')->loginUsingId($newUser->id);
+            return redirect(route('home'));
         }
 
-        Auth::guard('accounts')->loginUsingId($select->id);
-        return redirect(route('admin.post.lists'));
+        Auth::guard('web')->loginUsingId($select->id);
+        return redirect(route('home'));
     }
 }

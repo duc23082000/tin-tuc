@@ -9,21 +9,21 @@ use Illuminate\Support\Facades\Auth;
 class PostFilter extends Post
 {
     public function listPost($search, $collum, $sort){
-        return $this->join('users', 'posts.created_by_id', '=', 'users.id')
-            ->join('users as users2', 'posts.modified_by_id', '=', 'users2.id')
+        return $this->join('admins', 'posts.created_by_id', '=', 'admins.id')
+            ->join('admins as admins2', 'posts.modified_by_id', '=', 'admins2.id')
             ->join('categories', 'posts.category_id', '=', 'categories.id')
-            ->select('posts.*', 'users.email', 'users2.email as email2', 'categories.name')
+            ->select('posts.*', 'admins.email', 'admins2.email as email2', 'categories.name')
             ->where(function($query) use($search){
                 $query->where('posts.id', $search)
                 ->orWhere('posts.title', 'LIKE', '%' .$search. '%')
                 ->orWhere('posts.content', 'LIKE', '%' .$search. '%')
                 ->orWhere('posts.posted_at', 'LIKE', '%' .$search. '%')
-                ->orWhere('users.email', 'LIKE', '%' .$search. '%')
-                ->orWhere('users2.email', 'LIKE', '%' .$search. '%')
+                ->orWhere('admins.email', 'LIKE', '%' .$search. '%')
+                ->orWhere('admins2.email', 'LIKE', '%' .$search. '%')
                 ->orWhere('categories.name', 'LIKE', '%' .$search. '%');
             })
-            ->when(Auth::user()->role === UserRoleEnum::Author, function($q){
-                $q->where('posts.created_by_id', Auth::user()->id);
+            ->when(Auth::guard('admins')->user()->role === UserRoleEnum::Author, function($q){
+                $q->where('posts.created_by_id', Auth::guard('admins')->user()->id);
             })
             ->orderBy($collum, $sort);
     }

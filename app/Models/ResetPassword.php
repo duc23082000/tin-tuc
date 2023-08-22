@@ -12,6 +12,6 @@ class ResetPassword extends Model
     protected $table = 'password_reset_tokens';
 
     public function user(){
-        return $this->hasOne(User::class, 'email', 'email');
+        return $this->hasOne(Admin::class, 'email', 'email');
     }
 }

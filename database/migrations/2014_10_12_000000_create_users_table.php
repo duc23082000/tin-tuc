@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->smallInteger('role')->comment('0: Admin, 1:Author, 2:User')->default(2)->index();
+            $table->string('image', 255)->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

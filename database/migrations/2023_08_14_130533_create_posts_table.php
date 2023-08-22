@@ -17,8 +17,8 @@ return new class extends Migration
             $table->text('content')->nullable();
             $table->smallInteger('status')->comment('0: Private, 1: Public');
             $table->foreignId('category_id')->constrained('categories');
-            $table->foreignId('created_by_id')->constrained('users');
-            $table->foreignId('modified_by_id')->constrained('users');
+            $table->foreignId('created_by_id')->constrained('admins');
+            $table->foreignId('modified_by_id')->constrained('admins');
             $table->date('posted_at')->default(today());
             $table->timestamps();
             $table->softDeletes();

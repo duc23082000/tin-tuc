@@ -16,7 +16,7 @@ class AuthAccount
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::guard('accounts')->check()){
+        if(Auth::guard('web')->check()){
             return $next($request);
         }
         return redirect(route('account.login'));

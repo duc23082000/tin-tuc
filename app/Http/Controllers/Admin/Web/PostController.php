@@ -40,7 +40,7 @@ class PostController extends Controller
 
         $posts = $this->post->listPost($search, $collum, $sort)
             ->paginate(10)->withQueryString();
-
+        
         $sort = $sort == 'asc' ? 'desc' : 'asc';
         return view('admin.web.posts.lists', compact('posts', 'search', 'sort'));
     }
@@ -58,8 +58,8 @@ class PostController extends Controller
         $post->category_id = $request->input('category');
         $post->status = $request->input('status');
         $post->posted_at = $request->input('posted_at');
-        $post->created_by_id = Auth::user()->id;
-        $post->modified_by_id = Auth::user()->id;
+        $post->created_by_id = Auth::guard('admins')->user()->id;
+        $post->modified_by_id = Auth::guard('admins')->user()->id;
         $post->save();
 
         $post->tags()->sync($request->input('tags'));
@@ -78,10 +78,10 @@ class PostController extends Controller
                 Storage::put('public/images/'.$fileName, file_get_contents($request->file('upload')->getRealPath()));
                 $url = asset('storage/images/'.$fileName);
     
-                if(session()->has('upload'.$request->user()->id)){
-                    session()->push('upload'.$request->user()->id, $fileName);
+                if(session()->has('upload'.Auth::guard('admins')->user()->id)){
+                    session()->push('upload'.Auth::guard('admins')->user()->id, $fileName);
                 } else {
-                    session()->put('upload'.$request->user()->id, [$fileName]);
+                    session()->put('upload'.Auth::guard('admins')->user()->id, [$fileName]);
                 }
     
                 return response()->json([
@@ -116,13 +116,13 @@ class PostController extends Controller
         if(!$post){
             return redirect(route('admin.post.lists'));
         }
-        session()->put('contentImages', $post->content);
+        session()->put('contentImages'.Auth::guard('admins')->user()->id, $post->content);
         $post->title = $request->input('title');
         $post->content = $request->input('content');
         $post->category_id = $request->input('category');
         $post->status = $request->input('status');
         $post->posted_at = $request->input('posted_at'); 
-        $post->modified_by_id = Auth::user()->id;
+        $post->modified_by_id = Auth::guard('admins')->user()->id;
         $post->save();
         
         $post->tags()->sync($request->input('tags'));

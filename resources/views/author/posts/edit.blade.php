@@ -20,10 +20,10 @@
         {{-- Content --}}
         <div class="row form-group">
             <div class="col col-md-3">
-                <label for="textarea-input" class=" form-control-label">Content</label>
+                <label for="editor" class=" form-control-label">Content</label>
             </div>
             <div class="col-12 col-md-9">
-                <textarea name="content" id="textarea-input" rows="9" placeholder="Content..." class="form-control">{{ old('content') ?? $post->content }}</textarea>
+                <textarea name="content" id="editor" rows="9" placeholder="Content..." class="form-control">{{ old('content') ?? $post->content }}</textarea>
             </div>
         </div>
 
@@ -132,4 +132,17 @@
         </div>
     </form>
 </div>
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+<script>
+	ClassicEditor
+		.create( document.querySelector( '#editor' ), {
+            ckfinder: {
+                uploadUrl: '{{ route('admin.post.upload'). '?_token=' . csrf_token() }}'
+            }
+        })
+		.catch( error => {
+			console.error( error );
+		});
+</script>
 @endsection

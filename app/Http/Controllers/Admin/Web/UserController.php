@@ -26,7 +26,7 @@ class UserController extends Controller
 
         $sort = $request->input('sort') ?? 'desc';
 
-        $users = $this->users->listUser($search, $collum, $sort, UserRoleEnum::User)->paginate(10)->withQueryString();
+        $users = $this->users->listUser($search, $collum, $sort)->paginate(10)->withQueryString();
 
         $sort = $sort == 'asc' ? 'desc' : 'asc';
         return view('admin.web.users.lists', compact('users', 'search', 'sort'));
@@ -42,7 +42,6 @@ class UserController extends Controller
         $user->username = $request->input('username');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
-        $user->role = UserRoleEnum::User;
         $user->save();
 
         return redirect(route('admin.author.lists'));

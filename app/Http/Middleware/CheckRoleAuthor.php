@@ -16,9 +16,9 @@ class CheckRoleAuthor
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user()->role === UserRoleEnum::Author){
+        if(auth()->guard('admins')->user()->role === UserRoleEnum::Author){
             return $next($request);
         }
-        return redirect(route('home'));
+        return redirect(route('login'));
     }
 }
