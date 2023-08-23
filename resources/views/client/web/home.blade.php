@@ -3,9 +3,7 @@
 @section('content')
     @foreach ($posts as $post)
         <h3>{{ $post->title }}</h3>
-        <div class="ml-5 text-center">
-            <p>{!! $post->content !!}</p>
-        </div>
+        {{-- <img src="{{ asset }}" alt="img"> --}}
     @endforeach
     <div class="d-flex justify-content-end">
         {{ $posts->links('pagination.simple-tailwind') }}

@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PostObserver
 {
@@ -26,7 +27,7 @@ class PostObserver
 
     public function saving(Post $post): void
     {
-        // Kiểm tra xem người dùng có upload ảnh hay không
+        // Kiểm tra xem người dùng có upload ảnh vào content hay không
         if(session()->has('upload'.auth()->guard('admins')->user()->id)){
             // Lấy ra toàn bộ ảnh mà người dùng upload
             $upload = session()->get('upload'.auth()->guard('admins')->user()->id);
@@ -39,14 +40,30 @@ class PostObserver
         }
 
         // Kiểm tra xem bài viết có ảnh cũ hay không
-        if(session()->has('contentImages')){
-            $contentImages = session()->get('contentImages'.Auth::guard('admins')->user()->id);
+        if(session()->has('contentImages'.app('admin_id'))){
+            $contentImages = session()->get('contentImages'.app('admin_id'));
             // Lấy ra những ảnh mà người dùng thay đổi và xóa nó đi
             foreach(array_diff(get_image($contentImages), get_image($post->content)) as $image){
                 Storage::delete('public/images/'. $image);
             }
+            session()->forget('contentImages'.app('admin_id'));
         }
-        
+
+        // Kiểm tra xem người dùng có Up ảnh cho bài viết hay không
+        if(request()->image){
+            // Kiểm tra xem bài viết có ảnh cũ hay không nếu có thì xóa ảnh cũ
+            if(session()->has('oldImage'.app('admin_id'))){
+                $oldImage = session()->get('oldImage'.app('admin_id'));
+                Storage::delete('public/images/'.$oldImage);
+            }
+            // Lấy ra ảnh người dùng upload xử lí và lưu tên lên database
+            $image = request()->image;
+            $fileName = Str::random(40) . '.' . $image->getClientOriginalExtension();
+            Storage::put('public/images/'.$fileName, file_get_contents(request()->image->getRealPath()));
+
+            $post->image = $fileName;
+        }
+        session()->forget('oldImage'.app('admin_id'));
     }
 
     /**

@@ -36,6 +36,9 @@ class PostRequest extends FormRequest
         if($this->input('status') == PostStatusEnum::PubLic){
             $rules['posted_at'][] = 'before_or_equal:today';
         }
+        if($this->file('image')){
+            $rules['image'] = 'required|image|mimes:jpeg,png,jpg,gif|max:5120';
+        }
         return $rules;
     }
 
@@ -54,6 +57,9 @@ class PostRequest extends FormRequest
             'posted_at.required' => 'Ngày đăng không được để trống',
             'posted_at.date' => 'Ngày đăng phải là kiểu ngày',
             'posted_at.before_or_equal' => 'Không thể public bài đăng của tương lai',
+            'image.mimes' => 'Ảnh phải là có định dạng jpeg, png, jpg, gif và nhỏ hơn 5MB',
+            'image.max' => 'Ảnh phải là có định dạng jpeg, png, jpg, gif và nhỏ hơn 5MB',
+            'image.image' => 'Ảnh phải là có định dạng jpeg, png, jpg, gif và nhỏ hơn 5MB',
         ];
     }
 

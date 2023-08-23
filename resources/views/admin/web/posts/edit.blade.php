@@ -113,7 +113,15 @@
                 <label for="file-multiple-input" class=" form-control-label">Multiple File input</label>
             </div>
             <div class="col-12 col-md-9">
-                <input type="file" id="file-multiple-input" name="file-multiple-input" multiple="" class="form-control-file">
+                <input type="file" id="file-multiple-input" name="image" multiple="" class="form-control-file">
+                @error('image')
+                    <small style="color: red">{{ $message }}</small>
+                @enderror
+                @if (!empty($post->image))
+                    <div style="width: 30%; height: auto;">
+                        <img src="{{ asset('storage/images/' .$post->image) }}" alt="1">
+                    </div>
+                @endif
             </div>
         </div>
 

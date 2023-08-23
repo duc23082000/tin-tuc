@@ -116,6 +116,9 @@ class PostController extends Controller
         if(!$post){
             return redirect(route('author.post.lists'));
         }
+        if(!empty($post->image)){
+            session()->put('oldImage'.app('admin_id'), $post->image);
+        }
         session()->put('contentImages'.Auth::guard('admins')->user()->id, $post->content);
         $post->title = $request->input('title');
         $post->content = $request->input('content');

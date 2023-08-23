@@ -120,7 +120,7 @@ class AuthController extends Controller
     }
 
     public function changePassword(ChangePasswordRequest $request){
-        $user = Admin::find(Auth::guard('admins')->user()->id);
+        $user = Admin::find(app('admin_id'));
         $user->password = Hash::make($request->input('password'));
         $user->save();
 

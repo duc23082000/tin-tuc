@@ -2,7 +2,8 @@
 
 namespace App\Console;
 
-use App\Commands\CreateModelFilter;
+
+use App\Console\Commands\CreateModelFilter;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

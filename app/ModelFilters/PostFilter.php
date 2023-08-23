@@ -23,8 +23,12 @@ class PostFilter extends Post
                 ->orWhere('categories.name', 'LIKE', '%' .$search. '%');
             })
             ->when(Auth::guard('admins')->user()->role === UserRoleEnum::Author, function($q){
-                $q->where('posts.created_by_id', Auth::guard('admins')->user()->id);
+                $q->where('posts.created_by_id', app('admin_id'));
             })
             ->orderBy($collum, $sort);
+    }
+
+    public function listPostUser(){
+        // return 
     }
 }

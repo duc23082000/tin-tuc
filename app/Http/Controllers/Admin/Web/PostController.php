@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 class PostController extends Controller
 {
     private $post;
+
     public function __construct()
     {
         $this->post = new PostFilter();
@@ -31,7 +32,6 @@ class PostController extends Controller
         
     }
     public function index(ListRequest $request){
-        
         $search = $request->input('search');
 
         $collum = $request->input('collum') ?? 'updated_at';
@@ -58,8 +58,8 @@ class PostController extends Controller
         $post->category_id = $request->input('category');
         $post->status = $request->input('status');
         $post->posted_at = $request->input('posted_at');
-        $post->created_by_id = Auth::guard('admins')->user()->id;
-        $post->modified_by_id = Auth::guard('admins')->user()->id;
+        $post->created_by_id = app('admin_id');
+        $post->modified_by_id = app('admin_id');
         $post->save();
 
         $post->tags()->sync($request->input('tags'));
@@ -78,10 +78,10 @@ class PostController extends Controller
                 Storage::put('public/images/'.$fileName, file_get_contents($request->file('upload')->getRealPath()));
                 $url = asset('storage/images/'.$fileName);
     
-                if(session()->has('upload'.Auth::guard('admins')->user()->id)){
-                    session()->push('upload'.Auth::guard('admins')->user()->id, $fileName);
+                if(session()->has('upload'.app('admin_id'))){
+                    session()->push('upload'.app('admin_id'), $fileName);
                 } else {
-                    session()->put('upload'.Auth::guard('admins')->user()->id, [$fileName]);
+                    session()->put('upload'.app('admin_id'), [$fileName]);
                 }
     
                 return response()->json([
@@ -116,13 +116,16 @@ class PostController extends Controller
         if(!$post){
             return redirect(route('admin.post.lists'));
         }
-        session()->put('contentImages'.Auth::guard('admins')->user()->id, $post->content);
+        if(!empty($post->image)){
+            session()->put('oldImage'.app('admin_id'), $post->image);
+        }
+        session()->put('contentImages'.app('admin_id'), $post->content);
         $post->title = $request->input('title');
         $post->content = $request->input('content');
         $post->category_id = $request->input('category');
         $post->status = $request->input('status');
         $post->posted_at = $request->input('posted_at'); 
-        $post->modified_by_id = Auth::guard('admins')->user()->id;
+        $post->modified_by_id = app('admin_id');
         $post->save();
         
         $post->tags()->sync($request->input('tags'));

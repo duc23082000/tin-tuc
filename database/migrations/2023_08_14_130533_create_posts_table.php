@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title', 255);
             $table->text('content')->nullable();
             $table->smallInteger('status')->comment('0: Private, 1: Public');
+            $table->string('image', 50)->nullable();
             $table->foreignId('category_id')->constrained('categories');
             $table->foreignId('created_by_id')->constrained('admins');
             $table->foreignId('modified_by_id')->constrained('admins');
