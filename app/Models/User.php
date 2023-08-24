@@ -46,7 +46,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function post_like(){
+    public function posts(){
         return $this->belongsToMany(Post::class, 'post_like', 'user_id');
     }
 }

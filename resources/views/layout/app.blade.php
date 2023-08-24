@@ -33,6 +33,8 @@
 	<!-- Main CSS-->
 	<link href="{{ asset('css/theme.css') }}" rel="stylesheet" media="all">
 
+	@yield('style')
+
 </head>
 
 <body class="animsition">
@@ -87,6 +89,8 @@
 
 	<!-- Main JS-->
 	<script src="{{ asset('js/main.js') }}"></script>
+
+	@yield('script')
 
 </body>
 

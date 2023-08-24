@@ -2,6 +2,7 @@
 
 namespace App\ModelFilters;
 
+use App\Enums\PostStatusEnum;
 use App\Enums\UserRoleEnum;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,9 @@ class PostFilter extends Post
             ->orderBy($collum, $sort);
     }
 
-    public function listPostUser(){
-        // return 
+    public function listPostUser($search){
+        return $this->where('title', 'LIKE', "%$search%")
+            // ->where()
+            ->where('status', PostStatusEnum::PubLic);
     }
 }

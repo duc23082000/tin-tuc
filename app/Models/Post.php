@@ -36,9 +36,13 @@ class Post extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-    public function like_users(){
+    public function likes(){
         return $this->belongsToMany(User::class, 'post_like', 'post_id');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'post_id', 'id');
+    }
 
 }
