@@ -88,7 +88,7 @@
                         @endforeach
                     </select>
                 </div>
-                @error('tags.*')
+                @error('tags')
                     <small style="color: red">{{ $message }}</small>
                 @enderror
             </div>

@@ -27,6 +27,9 @@
                         <li>
                             <a href="{{ route('admin.user.lists') }}">Users</a>
                         </li>
+                        <li>
+                            <a href="{{ route('admin.notice.lists') }}">Notification</a>
+                        </li>
                     </ul>
                 </li>
                 <li>

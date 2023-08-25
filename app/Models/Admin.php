@@ -51,4 +51,9 @@ class Admin extends Model
     public function posts_modified_by(){
         return $this->hasMany(Post::class, 'modified_by_id', 'id');
     }
+
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class, 'notification_author', 'author_id');
+    }
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\User\Auth\Authcontroller as AccAuthcontroller;
 use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Web\AuthorController;
 use App\Http\Controllers\Admin\Web\CategoryController;
+use App\Http\Controllers\Admin\Web\NoticeController;
 use App\Http\Controllers\Admin\Web\PostController;
 use App\Http\Controllers\Admin\Web\TagController;
 use App\Http\Controllers\Admin\Web\UserController;
@@ -165,6 +166,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth.admin', 'delete.imageC
         Route::get('edit/{id}', [TagController::class, 'edit'])->name('edit');
 
         Route::put('edit/{id}', [TagController::class, 'editing']);
+
+        Route::get('delete/{id}', [TagController::class, 'delete'])->name('delete');
+    });
+
+    Route::prefix('notices')->name('notice.')->group(function(){
+        Route::get('', [NoticeController::class, 'index'])->name('lists');
+
+        Route::get('create', [NoticeController::class, 'create'])->name('create');
+
+        Route::post('create', [NoticeController::class, 'creating']);
+
+        Route::get('edit/{id}', [NoticeController::class, 'edit'])->name('edit');
+
+        Route::put('edit/{id}', [NoticeController::class, 'editing']);
 
         Route::get('delete/{id}', [TagController::class, 'delete'])->name('delete');
     });

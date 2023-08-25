@@ -49,4 +49,9 @@ class User extends Authenticatable
     public function posts(){
         return $this->belongsToMany(Post::class, 'post_like', 'user_id');
     }
+
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class, 'notification_user', 'user_id');
+    }
 }

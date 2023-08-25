@@ -31,7 +31,7 @@ class PostRequest extends FormRequest
             'posted_at' => ['required', 'date'],
         ];
         if($this->input('tags')){
-            $rules['tags.*'] = 'exists:tags,id,deleted_at,NULL';
+            $rules['tags'] = 'exists:tags,id,deleted_at,NULL';
         }
         if($this->input('status') == PostStatusEnum::PubLic){
             $rules['posted_at'][] = 'before_or_equal:today';
@@ -53,7 +53,7 @@ class PostRequest extends FormRequest
             'status.in' => 'Trạng thái không hợp lệ',
             'category.required' => 'Vui lòng chọn dữ liệu',
             'category.exists' => 'Giá trị phải khớp với giá trị của bảng categories',
-            'tags.*.exist' => 'Giá trị không hợp lệ',
+            'tags.exist' => 'Giá trị không hợp lệ',
             'posted_at.required' => 'Ngày đăng không được để trống',
             'posted_at.date' => 'Ngày đăng phải là kiểu ngày',
             'posted_at.before_or_equal' => 'Không thể public bài đăng của tương lai',
