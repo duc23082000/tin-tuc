@@ -31,7 +31,8 @@ class PostController extends Controller
         
         
     }
-    public function index(ListRequest $request){
+    public function index(ListRequest $request)
+    {
         $search = $request->input('search');
 
         $collum = $request->input('collum') ?? 'updated_at';
@@ -45,13 +46,15 @@ class PostController extends Controller
         return view('admin.web.posts.lists', compact('posts', 'search', 'sort'));
     }
 
-    public function create(){
+    public function create()
+    {
         $tags = Tag::all();
         $categories = Category::all();
         return view('admin.web.posts.create', compact('tags', 'categories'));
     }
 
-    public function creating(PostRequest $request){
+    public function creating(PostRequest $request)
+    {
         $post = new Post();
         $post->title = $request->input('title');
         $post->content = $request->input('content');
@@ -67,7 +70,8 @@ class PostController extends Controller
         return redirect(route('admin.post.lists'));
     }
 
-    public function upload(Request $request){
+    public function upload(Request $request)
+    {
         try {
             $request->validate(['upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120']);
             if($request->hasFile('upload')){
@@ -101,7 +105,8 @@ class PostController extends Controller
         }
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $post = Post::find($id);
         if(!$post){
             return redirect(route('admin.post.lists'));
@@ -111,7 +116,8 @@ class PostController extends Controller
         return view('admin.web.posts.edit', compact('post', 'tags', 'categories'));
     }
 
-    public function editing($id, PostRequest $request){
+    public function editing($id, PostRequest $request)
+    {
         $post = Post::find($id);
         if(!$post){
             return redirect(route('admin.post.lists'));
@@ -133,7 +139,8 @@ class PostController extends Controller
         return redirect(route('admin.post.lists'));
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         
         $post = Post::find($id);
         if(!$post){
