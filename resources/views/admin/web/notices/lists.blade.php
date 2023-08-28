@@ -73,7 +73,7 @@
                     <tr class="tr-shadow">
                         <td>{{ $item->id }}</td>
                         <td>{{ $item->title }}</td>
-                        <td>{{ $item->status_name }}</td>
+                        <td></td>
                         <td>{{ $item->email }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>{{ $item->updated_at }}</td>
@@ -85,9 +85,9 @@
                                 <a class="item" href="{{ route('admin.notice.delete', [$item->id]) }}" onclick="return confirm('Bạn có chắc chắn muốn xóa?')" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete">
                                     <i class="zmdi zmdi-delete"></i>
                                 </a>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="" data-original-title="More">
-                                    <i class="zmdi zmdi-more"></i>
-                                </button>
+                                <a class="item" href="{{ route('admin.notice.send', [$item->id]) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Send">
+                                    <i class="zmdi zmdi-mail-send"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>

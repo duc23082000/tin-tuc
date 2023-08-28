@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title', 255);
             $table->text('content')->nullable();
-            $table->smallInteger('status')->default(0);
+            $table->smallInteger('status')->default(0)->comment('0: unsent, 1: send');
             $table->foreignId('created_by_id')->constrained('admins');
             $table->timestamps();
             $table->softDeletes();

@@ -9,9 +9,12 @@ use App\Http\Requests\NotificationRequest;
 use App\Http\Requests\TestValidate;
 use App\ModelFilters\NotificationFilter;
 use App\Models\Admin;
-use App\Models\Notification;
+use App\Models\Notice;
 use App\Models\User;
+use App\Notifications\TestNotification;
+use App\Notifications\UserNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification as FacadesNotification;
 use Illuminate\Support\Facades\View;
 
 class NoticeController extends Controller
@@ -47,7 +50,7 @@ class NoticeController extends Controller
 
     public function creating(NotificationRequest $request){
 
-        $notice = new Notification();
+        $notice = new Notice();
         $notice->title = $request->input('title');
         $notice->content = $request->input('content');
         $notice->created_by_id = app('admin_id');
@@ -60,7 +63,7 @@ class NoticeController extends Controller
     }
 
     public function edit($id){
-        $notice = Notification::find($id);
+        $notice = Notice::find($id);
         if(!$notice){
             return redirect(route('admin.post.lists'));
         }
@@ -69,8 +72,9 @@ class NoticeController extends Controller
         return view('admin.web.notices.edit', compact('notice', 'users', 'authors'));
     }
 
-    public function editing($id, NotificationRequest $request){
-        $notice = Notification::find($id);
+    public function editing($id, NotificationRequest $request)
+    {
+        $notice = Notice::find($id);
         if(!$notice){
             return redirect(route('admin.notice.lists'));
         }
@@ -83,5 +87,17 @@ class NoticeController extends Controller
         $notice->authors()->sync($request->input('author'));
 
         return redirect(route('admin.notice.lists'));
+    }
+
+    public function sendNotifications($id)
+    {
+        $notices = Notice::find($id);
+        if(!empty($notices->users)){
+            FacadesNotification::send($notices->users, new UserNotification($notices->created_by->email, $notices->title, $notices->content));
+        }
+        if(!empty($notices->author)){
+            FacadesNotification::send($notices->author, new UserNotification($notices->created_by->email, $notices->title, $notices->content));
+        }
+        return back();
     }
 }

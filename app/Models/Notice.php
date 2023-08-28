@@ -5,12 +5,11 @@ namespace App\Models;
 use App\Enums\NoticeStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Notification extends Model
+class Notice extends Model
 {
-    use HasFactory, SoftDeletes;
-
+    use HasFactory;
+    
     protected $table = 'notices';
 
     public function created_by(){

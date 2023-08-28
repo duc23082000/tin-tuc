@@ -181,7 +181,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth.admin', 'delete.imageC
 
         Route::put('edit/{id}', [NoticeController::class, 'editing']);
 
-        Route::get('delete/{id}', [TagController::class, 'delete'])->name('delete');
+        Route::get('delete/{id}', [NoticeController::class, 'delete'])->name('delete');
+
+        Route::get('send/{id}', [NoticeController::class, 'sendNotifications'])->name('send');
+
     });
 
 

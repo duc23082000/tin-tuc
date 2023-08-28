@@ -2,9 +2,9 @@
 
 namespace App\ModelFilters;
 
-use App\Models\Notification;
+use App\Models\Notice;
 
-class NotificationFilter extends Notification
+class NotificationFilter extends Notice
 {
     public function listNotification($search, $collum, $sort){
         return $this->join('admins', 'notices.created_by_id', '=', 'admins.id')
