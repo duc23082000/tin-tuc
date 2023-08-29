@@ -12,5 +12,5 @@ use BenSampo\Enum\Enum;
 final class NoticeStatusEnum extends Enum
 {
     const Unsent = 0;
-    const Seed = 1;
+    const Send = 1;
 }

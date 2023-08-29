@@ -10,6 +10,39 @@
                     </div>
                     <div class="col-3">
                         <div class="d-flex justify-content-end">
+                            @auth
+                            <div class="noti-wrap">
+                                <div class="noti__item js-item-menu">
+                                    <i class="zmdi zmdi-notifications"></i>
+                                    <span class="quantity">{{ count(auth()->user()->unreadNotifications) }}</span>
+                                    <div class="notifi-dropdown js-dropdown">
+                                        <div class="notifi__title">
+                                            <p>You have {{ count(auth()->user()->unreadNotifications) }} Notifications</p>
+                                        </div>
+                                        @foreach (auth()->user()->notifications->take(5)  as $notification)
+                                        <div class="notifi__item">
+                                            <div class="bg-c1 img-cir img-40">
+                                                <i class="zmdi zmdi-email-open"></i>
+                                            </div>
+                                            <div class="content">
+                                                <a href="{{ route('notification.show', [$notification->id]) }}">
+                                                    @if ($notification->read_at != NULL)
+                                                    <p>{{ $notification->data['title'] ?? ''}}</p>
+                                                    @else
+                                                    <p style="color: red">{{ $notification->data['title'] ?? ''}}</p>
+                                                    @endif
+                                                    <span class="date">{{ $notification->created_at }}</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                        <div class="notifi__footer">
+                                            <a href="#">All notifications</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endauth
                             <div class="account-wrap">
                                 @auth('admins')
                                 <div class="account-item clearfix js-item-menu">

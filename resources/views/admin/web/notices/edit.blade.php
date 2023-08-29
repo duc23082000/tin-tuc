@@ -73,7 +73,7 @@
                 <button type="submit" class="btn btn-primary btn-sm">
                     <i class="fa fa-dot-circle-o"></i> Submit
                 </button>
-                <a href="{{ route('admin.post.lists') }}" class="btn btn-danger  btn-sm">
+                <a href="{{ route('admin.notice.lists') }}" class="btn btn-danger  btn-sm">
                     <i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Back
                 </a>
             </div>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Web\TagController;
 use App\Http\Controllers\Admin\Web\UserController;
 use App\Http\Controllers\Author\PostController as AuthorPostController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\User\Web\NotificationController;
 use App\Http\Controllers\User\Web\PostController as WebPostController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -39,6 +40,8 @@ Route::middleware('auth')->group(function(){
     Route::get('like/{id}', [WebPostController::class, 'like'])->name('like');
 
     Route::post('comment/{id}', [WebPostController::class, 'comment'])->name('comment');
+
+    Route::get('notification/{id}', [NotificationController::class, 'show'])->name('notification.show');
 });
 
 

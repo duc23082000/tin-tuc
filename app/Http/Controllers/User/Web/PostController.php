@@ -5,9 +5,11 @@ namespace App\Http\Controllers\User\Web;
 use App\Http\Controllers\Controller;
 use App\ModelFilters\PostFilter;
 use App\Models\Comment;
+use App\Models\Notice;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 
 class PostController extends Controller
 {
@@ -15,12 +17,12 @@ class PostController extends Controller
     public function __construct()
     {
         $this->posts = new PostFilter();
+        
     }
 
     public function index(Request $request){
         $search = $request->input('search');
         $posts = $this->posts->listPostUser($search)->paginate(20)->withQueryString();
-        // dd($posts->all());
         return view('client.web.home', compact('posts'));
     }
 

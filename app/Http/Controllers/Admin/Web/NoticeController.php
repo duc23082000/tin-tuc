@@ -89,15 +89,33 @@ class NoticeController extends Controller
         return redirect(route('admin.notice.lists'));
     }
 
+    public function delete($id)
+    {
+        
+        $notice = Notice::find($id);
+        if(!$notice){
+            return redirect(route('admin.notice.lists'));
+        }
+
+        $notice->delete();
+
+        return redirect(route('admin.notice.lists'));
+    }
+
     public function sendNotifications($id)
     {
-        $notices = Notice::find($id);
-        if(!empty($notices->users)){
-            FacadesNotification::send($notices->users, new UserNotification($notices->created_by->email, $notices->title, $notices->content));
+        $notice = Notice::find($id);
+        if(!$notice){
+            return redirect(route('admin.notice.lists'));
         }
-        if(!empty($notices->author)){
-            FacadesNotification::send($notices->author, new UserNotification($notices->created_by->email, $notices->title, $notices->content));
+        if(!empty($notice->users)){
+            FacadesNotification::send($notice->users, new UserNotification($notice->created_by->email, $notice->title, $notice->content));
         }
+        if(!empty($notice->author)){
+            FacadesNotification::send($notice->author, new UserNotification($notice->created_by->email, $notice->title, $notice->content));
+        }
+        $notice->status = NoticeStatusEnum::Send;
+        $notice->save();
         return back();
     }
 }
