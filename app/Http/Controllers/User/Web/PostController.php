@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\User\Web;
 
+use App\Enums\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\ModelFilters\PostFilter;
+use App\Models\Admin;
+use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Notice;
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -17,12 +21,30 @@ class PostController extends Controller
     public function __construct()
     {
         $this->posts = new PostFilter();
-        
+        $categories = Category::all(); 
+
+        $tags = Tag::all();
+
+        $authors = Admin::where('role', UserRoleEnum::Author)->get();
+
+        View::share([
+            'categories' => $categories,
+            'tags' => $tags,
+            'authors' => $authors,
+        ]);
     }
 
     public function index(Request $request){
         $search = $request->input('search');
-        $posts = $this->posts->listPostUser($search)->paginate(20)->withQueryString();
+
+        $category = $request->input('category');
+
+        $author = $request->input('author');
+
+        $tag = $request->input('tag');
+
+        $posts = $this->posts->listPostUser($search, $category, $author, $tag)->paginate(20)->withQueryString();
+
         return view('client.web.home', compact('posts'));
     }
 

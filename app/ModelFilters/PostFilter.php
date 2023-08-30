@@ -29,9 +29,29 @@ class PostFilter extends Post
             ->orderBy($collum, $sort);
     }
 
-    public function listPostUser($search){
-        return $this->where('title', 'LIKE', "%$search%")
-            // ->where()
-            ->where('status', PostStatusEnum::PubLic);
+    public function listPostUser($search, $category, $author, $tag){
+        return $this->where(function($query) use($search){
+            $query->Where('posts.title', 'LIKE', '%' .$search. '%')
+            ->orWhere('posts.content', 'LIKE', '%' .$search. '%');
+        })
+        ->when(!empty($author), function($q) use($author){
+            $q->WhereHas('user_create', function($q) use($author){
+                $q->where('username', $author);
+            });
+        })
+        ->when(!empty($category), function($q) use($category){
+            $q->WhereHas('category', function($q) use($category){
+                $q->where('name', $category);
+            });
+        })
+        ->when(!empty($tag), function($q) use($tag){
+            $q->WhereHas('tags', function($q) use($tag){
+                $q->where('name', $tag);
+            });
+        })
+        ->where('status', PostStatusEnum::PubLic)
+        ->orderBy('created_at', 'desc');
+            
+            
     }
 }

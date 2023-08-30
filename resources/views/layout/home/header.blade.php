@@ -118,13 +118,6 @@
                                     </div>
                                 </div>
                                 @endauth
-                                @guest('web')
-                                <div class="account-item clearfix">
-                                    <div class="content">
-                                        <a class="js-acc-btn" href="{{ route('account.login') }}">Log in</a>
-                                    </div>
-                                </div>
-                                @endguest
                             </div>
                         </div>
                     </div>
