@@ -3,18 +3,25 @@
 namespace App\Models;
 
 use App\Enums\PostStatusEnum;
+use App\ModelFilters\Admin\PostFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use EloquentFilter\Filterable;
 
 class Post extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Filterable;
 
     protected $table = 'posts';
     protected $fillable = ['title', 'content', 'status', 'created_by_id', 'modified_by_id'];
     public $timestamps = true;
     protected $dates = ['deleted_at'];
+
+    public function modelFilter()
+    {
+        return $this->provideFilter(PostFilter::class);
+    }
 
     public function user_create(){
         return $this->belongsTo(Admin::class, 'created_by_id');

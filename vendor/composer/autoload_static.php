@@ -156,6 +156,7 @@ class ComposerStaticInitb4f8efbe2933af50356e5b5d3692bc98
         ),
         'E' => 
         array (
+            'EloquentFilter\\' => 15,
             'Egulias\\EmailValidator\\' => 23,
         ),
         'D' => 
@@ -496,6 +497,10 @@ class ComposerStaticInitb4f8efbe2933af50356e5b5d3692bc98
         array (
             0 => __DIR__ . '/..' . '/fakerphp/faker/src/Faker',
         ),
+        'EloquentFilter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tucker-eric/eloquentfilter/src',
+        ),
         'Egulias\\EmailValidator\\' => 
         array (
             0 => __DIR__ . '/..' . '/egulias/email-validator/src',
@@ -576,6 +581,7 @@ class ComposerStaticInitb4f8efbe2933af50356e5b5d3692bc98
         'App\\Enums\\NoticeStatusEnum' => __DIR__ . '/../..' . '/app/Enums/NoticeStatusEnum.php',
         'App\\Enums\\PostStatusEnum' => __DIR__ . '/../..' . '/app/Enums/PostStatusEnum.php',
         'App\\Enums\\UserRoleEnum' => __DIR__ . '/../..' . '/app/Enums/UserRoleEnum.php',
+        'App\\Events\\NotificationEvent' => __DIR__ . '/../..' . '/app/Events/NotificationEvent.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Admin\\Auth\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/Auth/AuthController.php',
         'App\\Http\\Controllers\\Admin\\Web\\AuthorController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/Web/AuthorController.php',
@@ -588,6 +594,7 @@ class ComposerStaticInitb4f8efbe2933af50356e5b5d3692bc98
         'App\\Http\\Controllers\\Client\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Client/HomeController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\User\\Auth\\Authcontroller' => __DIR__ . '/../..' . '/app/Http/Controllers/User/Auth/Authcontroller.php',
+        'App\\Http\\Controllers\\User\\Web\\NotificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/Web/NotificationController.php',
         'App\\Http\\Controllers\\User\\Web\\PostController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/Web/PostController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\AuthAccount' => __DIR__ . '/../..' . '/app/Http/Middleware/AuthAccount.php',
@@ -608,6 +615,7 @@ class ComposerStaticInitb4f8efbe2933af50356e5b5d3692bc98
         'App\\Http\\Requests\\CategoryRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CategoryRequest.php',
         'App\\Http\\Requests\\ChangePasswordRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ChangePasswordRequest.php',
         'App\\Http\\Requests\\ListRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ListRequest.php',
+        'App\\Http\\Requests\\NotificationRequest' => __DIR__ . '/../..' . '/app/Http/Requests/NotificationRequest.php',
         'App\\Http\\Requests\\PostRequest' => __DIR__ . '/../..' . '/app/Http/Requests/PostRequest.php',
         'App\\Http\\Requests\\ResetPassRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ResetPassRequest.php',
         'App\\Http\\Requests\\TagRequest' => __DIR__ . '/../..' . '/app/Http/Requests/TagRequest.php',
@@ -621,12 +629,14 @@ class ComposerStaticInitb4f8efbe2933af50356e5b5d3692bc98
         'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
         'App\\Models\\Category' => __DIR__ . '/../..' . '/app/Models/Category.php',
         'App\\Models\\Comment' => __DIR__ . '/../..' . '/app/Models/Comment.php',
-        'App\\Models\\Notification' => __DIR__ . '/../..' . '/app/Models/Notification.php',
+        'App\\Models\\Notice' => __DIR__ . '/../..' . '/app/Models/Notice.php',
         'App\\Models\\Post' => __DIR__ . '/../..' . '/app/Models/Post.php',
         'App\\Models\\ResetPassword' => __DIR__ . '/../..' . '/app/Models/ResetPassword.php',
         'App\\Models\\Tag' => __DIR__ . '/../..' . '/app/Models/Tag.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Notifications\\SendMailCreateAccount' => __DIR__ . '/../..' . '/app/Notifications/SendMailCreateAccount.php',
+        'App\\Notifications\\TestNotification' => __DIR__ . '/../..' . '/app/Notifications/TestNotification.php',
+        'App\\Notifications\\UserNotification' => __DIR__ . '/../..' . '/app/Notifications/UserNotification.php',
         'App\\Observers\\CategoryObserver' => __DIR__ . '/../..' . '/app/Observers/CategoryObserver.php',
         'App\\Observers\\PostObserver' => __DIR__ . '/../..' . '/app/Observers/PostObserver.php',
         'App\\Observers\\TagObserver' => __DIR__ . '/../..' . '/app/Observers/TagObserver.php',
@@ -1085,6 +1095,11 @@ class ComposerStaticInitb4f8efbe2933af50356e5b5d3692bc98
         'Egulias\\EmailValidator\\Warning\\QuotedString' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/QuotedString.php',
         'Egulias\\EmailValidator\\Warning\\TLD' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/TLD.php',
         'Egulias\\EmailValidator\\Warning\\Warning' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/Warning.php',
+        'EloquentFilter\\Commands\\MakeEloquentFilter' => __DIR__ . '/..' . '/tucker-eric/eloquentfilter/src/Commands/MakeEloquentFilter.php',
+        'EloquentFilter\\Filterable' => __DIR__ . '/..' . '/tucker-eric/eloquentfilter/src/Filterable.php',
+        'EloquentFilter\\LumenServiceProvider' => __DIR__ . '/..' . '/tucker-eric/eloquentfilter/src/LumenServiceProvider.php',
+        'EloquentFilter\\ModelFilter' => __DIR__ . '/..' . '/tucker-eric/eloquentfilter/src/ModelFilter.php',
+        'EloquentFilter\\ServiceProvider' => __DIR__ . '/..' . '/tucker-eric/eloquentfilter/src/ServiceProvider.php',
         'Faker\\Calculator\\Ean' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/Calculator/Ean.php',
         'Faker\\Calculator\\Iban' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/Calculator/Iban.php',
         'Faker\\Calculator\\Inn' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/Calculator/Inn.php',

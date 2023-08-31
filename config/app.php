@@ -170,6 +170,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\AdminIdServiceProvider::class,
+
+        EloquentFilter\ServiceProvider::class,
         
     ])->toArray(),
 

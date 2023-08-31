@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\Web\NoticeController;
 use App\Http\Controllers\Admin\Web\PostController;
 use App\Http\Controllers\Admin\Web\TagController;
 use App\Http\Controllers\Admin\Web\UserController;
+use App\Http\Controllers\Author\NotificationController as AuthorNotificationController;
 use App\Http\Controllers\Author\PostController as AuthorPostController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\User\Web\NotificationController;
@@ -79,9 +80,9 @@ Route::prefix('auth')->group(function(){
         Route::get('login/google/callback', [AccAuthcontroller::class, 'handleGoogleCallback']);
     });
 
-    Route::get('reset-password/email={email}&token={token}', [AuthController::class, 'reset'])->name('password.reset');
+    Route::get('reset-password/email={email}&token={token}', [AccAuthcontroller::class, 'reset'])->name('password.reset');
 
-    Route::post('reset-password/email={email}&token={token}', [AuthController::class, 'reseting']);
+    Route::post('reset-password/email={email}&token={token}', [AccAuthcontroller::class, 'reseting']);
 
 
 });
@@ -220,6 +221,8 @@ Route::prefix('author')->name('author.')->middleware(['auth.author', 'delete.ima
 
         Route::get('delete/{id}', [AuthorPostController::class, 'delete'])->name('delete');
     });
+
+    Route::get('notification/{id}', [AuthorNotificationController::class, 'show'])->name('notification.show');
 });
 
 

@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
+use App\ModelFilters\Admin\PostFilter as AdminFilter;
 
 class PostController extends Controller
 {
@@ -36,11 +37,14 @@ class PostController extends Controller
     }
     public function index(ListRequest $request)
     {
+        // dd(auth()->guard('admins')->user()->notifications);
         $search = $request->input('search');
 
         $collum = $request->input('collum') ?? 'updated_at';
 
         $sort = $request->input('sort') ?? 'desc';
+
+        // $posts = Post::filter($request->all())->paginate(10)->withQueryString();
 
         $posts = $this->post->listPost($search, $collum, $sort)
             ->paginate(10)->withQueryString();

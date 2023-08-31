@@ -28,9 +28,9 @@ class PostObserver
     public function saving(Post $post): void
     {
         // Kiểm tra xem người dùng có upload ảnh vào content hay không
-        if(session()->has('upload'.auth()->guard('admins')->user()->id)){
+        if(session()->has('upload'.app('admin_id'))){
             // Lấy ra toàn bộ ảnh mà người dùng upload
-            $upload = session()->get('upload'.auth()->guard('admins')->user()->id);
+            $upload = session()->get('upload'.app('admin_id'));
 
             // Lấy ra những ảnh người dùng upload lên ckeditor nhưng không dùng và xóa nó đi
             foreach(array_diff($upload, get_image($post->content)) as $image){

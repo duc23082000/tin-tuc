@@ -24,6 +24,7 @@ class PostController extends Controller
     public function __construct()
     {
         $this->post = new PostFilter();
+        
         View::share(['status' => PostStatusEnum::asArray(),
                     'statusName' => PostStatusEnum::getKeys(),
                 ]);    

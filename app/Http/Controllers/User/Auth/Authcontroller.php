@@ -87,7 +87,7 @@ class Authcontroller extends Controller
 
         if($user->created_at < now()->addHours(-1)){
             ResetPassword::where('email', $email)->delete();
-            return redirect(route('forgot'))->with(['message' => 'Link hết hạn vui lòng nhập lại email để lấy link', 'color' => 'red']);
+            return redirect(route('account.forgot'))->with(['message' => 'Link hết hạn vui lòng nhập lại email để lấy link', 'color' => 'red']);
         }
 
         if(Hash::check($token, $user->token)){
@@ -98,19 +98,20 @@ class Authcontroller extends Controller
     }
 
     public function reseting(ResetPassRequest $request){
-        // dd($request->email);
-        $user = User::where('email', $request->email)->first();
-        // dd($user);
-        if($user->resetPass->created_at < now()->addHours(-1)) {
-            ResetPassword::where('email', $request->email)->delete();
-            return redirect(route('forgot'))->with(['message' => 'Link hết hạn vui lòng nhập lại email để lấy link', 'color' => 'red']);
-        }
 
+        $token_reset = ResetPassword::where('email', $request->email)->first();
+        // dd($token_reset->delete());
+        if($token_reset->created_at < now()->addHours(-1)) {
+            ResetPassword::where('email', $request->email)->delete();
+            return redirect(route('account.forgot'))->with(['message' => 'Link hết hạn vui lòng nhập lại email để lấy link', 'color' => 'red']);
+        }
+        
+        $user = User::where('email', $request->email)->first();
         $user->password = Hash::make($request->password);
         $user->save();
-
+        ResetPassword::where('email', $request->email)->delete();
         // Auth::logoutOtherDevices($request->input('password'));
-        return redirect(route('login'));
+        return redirect(route('account.login'));
     }
 
     public function formChange(){
