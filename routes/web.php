@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Web\UserController;
 use App\Http\Controllers\Author\NotificationController as AuthorNotificationController;
 use App\Http\Controllers\Author\PostController as AuthorPostController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\User\Web\NotificationController;
 use App\Http\Controllers\User\Web\PostController as WebPostController;
 use App\Models\User;
@@ -224,5 +225,7 @@ Route::prefix('author')->name('author.')->middleware(['auth.author', 'delete.ima
 
     Route::get('notification/{id}', [AuthorNotificationController::class, 'show'])->name('notification.show');
 });
+
+Route::get('test', [TestController::class, 'index']);
 
 
