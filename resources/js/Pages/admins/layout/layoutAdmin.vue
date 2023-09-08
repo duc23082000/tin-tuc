@@ -1,19 +1,18 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header>
-        <header-nav></header-nav>
-      </el-header>
+      <el-aside width="200px">
+        <side-bar></side-bar>
+      </el-aside>
       <el-container>
-        <el-aside width="200px">
-            <side-bar></side-bar>
-        </el-aside>
+        <el-header height="100px">
+          <header-nav></header-nav>
+        </el-header>
         <el-main>
-            <slot></slot>
+          <slot></slot>
         </el-main>
       </el-container>
     </el-container>
-    
   </div>
 </template>
 

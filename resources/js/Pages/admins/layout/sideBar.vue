@@ -1,5 +1,9 @@
 <template>
-      <el-menu
+  <el-row class="mb-4">
+    <div class="w-full">image</div>
+  </el-row>
+  <el-row>
+    <el-menu
         active-text-color="#ffd04b"
         background-color="#545c64"
         class="el-menu-vertical-demo"
@@ -36,6 +40,7 @@
           <span>Navigator Four</span>
         </el-menu-item>
       </el-menu>
+  </el-row>
 </template>
 
 <script lang="ts" setup>
