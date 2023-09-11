@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class CategoryRequest extends FormRequest
 {
@@ -21,8 +22,9 @@ class CategoryRequest extends FormRequest
      */
     public function rules(): array
     {
+        Log::info($this->all());
         return [
-            'name' => 'required|string|min:6|max:255|unique:categories,name,'. $this->input('id') .',id',
+            'name' => 'required|string|min:6|max:255|unique:categories,name,'. $this->input('id') .',id,deleted_at,NULL',
         ];
     }
 

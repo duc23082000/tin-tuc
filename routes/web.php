@@ -226,6 +226,11 @@ Route::prefix('author')->name('author.')->middleware(['auth.author', 'delete.ima
     Route::get('notification/{id}', [AuthorNotificationController::class, 'show'])->name('notification.show');
 });
 
-Route::get('test', [TestController::class, 'index']);
+Route::get('category', [CategoryController::class, 'index'])->name('category');
+
+Route::get('category/create', [CategoryController::class, 'create'])->name('create');
+
+Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
+
 
 
