@@ -21,7 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('category', [CategoryController::class, 'indexApi'])->name('test');
+Route::middleware([
+    'auth',
+    // config('jetstream.auth_session'),
+    'verified',
+])->get('category', [CategoryController::class, 'indexApi'])->name('test');
 
 Route::post('category/create', [CategoryController::class, 'store'])->name('api.create');
 

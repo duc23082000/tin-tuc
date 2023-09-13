@@ -15,8 +15,10 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\User\Web\NotificationController;
 use App\Http\Controllers\User\Web\PostController as WebPostController;
 use App\Models\User;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,7 +51,7 @@ Route::middleware('auth')->group(function(){
 
 Route::prefix('auth')->group(function(){
     Route::prefix('admin')->group(function(){
-        Route::get('login', [AuthController::class, 'login'])->name('login');
+        Route::get('login', [AuthController::class, 'login']);
 
         Route::post('login', [AuthController::class, 'handelLogin']);
 
@@ -232,5 +234,24 @@ Route::get('category/create', [CategoryController::class, 'create'])->name('crea
 
 Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
 
+Route::get('/', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        // dd(123);
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+});
 
 
