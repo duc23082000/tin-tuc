@@ -16,7 +16,7 @@
             </div>
             <div class="mt-2 mb-2">
                 <el-button>
-                    <Link :href="route('admin.category.create')">Create</Link>
+                  <Link :href="route('admin.post.create')">Create</Link>
                 </el-button>
             </div>
             <el-table :data="tableData.data" style="width: 100%">
@@ -27,21 +27,42 @@
                     </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="Name" width="500">
+                <el-table-column prop="title" label="Title" width="500">
                     <template #header>
-                    <div @click="sortButton('name')">
-                        Name <el-icon><DCaret /></el-icon>
+                    <div @click="sortButton('title')">
+                        Title <el-icon><DCaret /></el-icon>
                     </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="created_at" label="created_at" width="300">
+                <el-table-column prop="name" label="Category" width="200">
+                    <template #header>
+                    <div @click="sortButton('categories.name')">
+                      Category <el-icon><DCaret /></el-icon>
+                    </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="email" label="created_by" width="250">
+                    <template #header>
+                    <div @click="sortButton('email')">
+                      created by <el-icon><DCaret /></el-icon>
+                    </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="email2" label="modified_by" width="250">
+                    <template #header>
+                    <div @click="sortButton('email2')">
+                      modified by <el-icon><DCaret /></el-icon>
+                    </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="created_at" label="created_at" width="100">
                     <template #header>
                     <div @click="sortButton('created_at')">
                         created_at <el-icon><DCaret /></el-icon>
                     </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="updated_at" label="updated_at" width="300">
+                <el-table-column prop="updated_at" label="updated_at" width="100">
                     <template #header>
                     <div @click="sortButton('updated_at')">
                         updated_at <el-icon><DCaret /></el-icon>
@@ -50,7 +71,7 @@
                 </el-table-column>
                 <el-table-column prop="right" label="Operations" width="120">
                     <template #default="scope">
-                        <Link :href="route('admin.category.edit', scope.row.id)"><el-button link type="primary" size="small">Edit</el-button></Link>
+                      <Link :href="route('admin.post.edit', scope.row.id)"><el-button link type="primary" size="small">Edit</el-button></Link>
                     <el-button link type="primary" size="small" @click="deleteCategory(scope.row.id)">Delete</el-button>
                     </template>
                 </el-table-column>
@@ -83,10 +104,9 @@
   })
 
   const getCategories = () => {
-    axios.get(route('admin.category.api.list', dataInput.value))
+    axios.get(route('admin.post.api.list', dataInput.value))
     .then(function(response){
       tableData.value = response.data
-      console.log(response.data.data)
     }).catch(function(error){
       console.log(error)
     })

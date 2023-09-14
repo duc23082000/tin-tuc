@@ -6,7 +6,7 @@
             <el-input v-model="name" />
             <small v-if="errors.name" class="text-red-600">{{ errors.name[0] }}</small>
             <div class="mt-2">
-                <el-button type="primary" @click="createCategory">Create</el-button>
+                <el-button type="primary" @click="updateCategory">Create</el-button>
             </div>
         </div>
       </div>
@@ -18,24 +18,43 @@
   import { ref, watchEffect } from 'vue';
   import layoutAdmin from '../../layout/layoutAdmin.vue'
   import { ElMessage } from 'element-plus';
+  import { router } from '@inertiajs/vue3';
 
+
+
+  const props = defineProps({
+    id: String,
+    });
 
   const name = ref('')
 
   const errors = ref({})
 
-  const createCategory = () => {
-    axios.post(route('admin.category.api.create'), {
+  const getCategory = () => {
+    axios.get(route('api.edit', props.id))
+    .then(function(response){
+        name.value = response.data.name
+    }).catch(function(error){
+        console.log(error);
+    })
+  }
+ 
+  
+
+  const updateCategory = () => {
+    axios.put(route('api.update', props.id), {
         name: name.value,
+        id: props.id,
     })
     .then(function(response){
         ElMessage.success(response.data.success)
-        console.log(response.data.success)
+        router.visit(response.data.url)
     }).catch(function(error){
         errors.value = error.response.data.errors
     })
   }
 
+  watchEffect(getCategory)
 
   
 </script>

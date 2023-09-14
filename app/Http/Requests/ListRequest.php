@@ -22,7 +22,6 @@ class ListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'collum' => 'in:posts.id,posts.title,posts.content,posts.craeted_at,posts.modified_at,admins.email,admins2.email,posts.posted_at,categories.name',
             'sort' => 'in:asc,desc'
         ];
     }

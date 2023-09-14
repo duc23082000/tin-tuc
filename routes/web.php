@@ -50,10 +50,8 @@ Route::middleware('auth')->group(function(){
 
 
 Route::prefix('auth')->group(function(){
-    Route::prefix('admin')->group(function(){
-        Route::get('login', [AuthController::class, 'login']);
-
-        Route::post('login', [AuthController::class, 'handelLogin']);
+    Route::prefix('admin')->name('admin.')->group(function(){
+        Route::get('login', [AuthController::class, 'login'])->name('login');
 
         Route::get('register', [AuthController::class, 'register'])->name('register');
 
@@ -92,7 +90,7 @@ Route::prefix('auth')->group(function(){
 
 Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])->middleware(['auth', 'signed'])->name('verification.verify');
 
-Route::prefix('admin')->name('admin.')->middleware(['auth.admin', 'delete.imageCkeditor'])->group(function(){
+Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'delete.imageCkeditor'])->group(function(){
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('change-password', [AuthController::class, 'formChange'])->name('change');
@@ -136,9 +134,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth.admin', 'delete.imageC
 
         Route::withoutMiddleware('delete.imageCkeditor')->group(function(){
             Route::get('create', [PostController::class, 'create'])->name('create');
-
-            Route::post('create', [PostController::class, 'creating']);
-
+            
             Route::post('upload', [PostController::class, 'upload'])->name('upload');
 
             Route::get('edit/{id}', [PostController::class, 'edit'])->name('edit');
@@ -154,11 +150,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth.admin', 'delete.imageC
 
         Route::get('create', [CategoryController::class, 'create'])->name('create');
 
-        Route::post('create', [CategoryController::class, 'creating']);
 
         Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('edit');
 
-        Route::put('edit/{id}', [CategoryController::class, 'editing']);
 
         Route::get('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
     });
@@ -228,11 +222,7 @@ Route::prefix('author')->name('author.')->middleware(['auth.author', 'delete.ima
     Route::get('notification/{id}', [AuthorNotificationController::class, 'show'])->name('notification.show');
 });
 
-Route::get('category', [CategoryController::class, 'index'])->name('category');
 
-Route::get('category/create', [CategoryController::class, 'create'])->name('create');
-
-Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [

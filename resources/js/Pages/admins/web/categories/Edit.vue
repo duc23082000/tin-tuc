@@ -31,7 +31,7 @@
   const errors = ref({})
 
   const getCategory = () => {
-    axios.get(route('api.edit', props.id))
+    axios.get(route('admin.category.api.edit', props.id))
     .then(function(response){
         name.value = response.data.name
     }).catch(function(error){

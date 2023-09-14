@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use App\ModelFilters\Admin\PostFilter as AdminFilter;
+use Inertia\Inertia;
 
 class PostController extends Controller
 {
@@ -27,40 +28,40 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->post = new PostFilter();
-
-        View::share(['status' => PostStatusEnum::asArray(),
-                    'statusName' => PostStatusEnum::getKeys(),
-                ]);
-        
-        
+        $this->post = new PostFilter();       
     }
-    public function index(ListRequest $request)
+    public function index()
     {
-        // dd(auth()->guard('admins')->user()->notifications);
+        return  Inertia::render('admins/web/posts/Index');
+    }
+
+    public function indexApi(ListRequest $request)
+    {
         $search = $request->input('search');
 
-        $collum = $request->input('collum') ?? 'updated_at';
+        $column = $request->input('column') ?? 'updated_at';
 
         $sort = $request->input('sort') ?? 'desc';
 
-        // $posts = Post::filter($request->all())->paginate(10)->withQueryString();
-
-        $posts = $this->post->listPost($search, $collum, $sort)
+        $posts = $this->post->listPost($search, $column, $sort)
             ->paginate(10)->withQueryString();
         
         $sort = $sort == 'asc' ? 'desc' : 'asc';
-        return view('admin.web.posts.lists', compact('posts', 'search', 'sort'));
+        return $posts;
     }
 
     public function create()
     {
         $tags = Tag::all();
         $categories = Category::all();
-        return view('admin.web.posts.create', compact('tags', 'categories'));
+        return  Inertia::render('admins/web/posts/Create', [
+            'tags' => $tags,
+            'categories' => $categories,
+            'status' => PostStatusEnum::asArray(),
+        ]);
     }
 
-    public function creating(PostRequest $request)
+    public function store(PostRequest $request)
     {
         $post = new Post();
         $post->title = $request->input('title');

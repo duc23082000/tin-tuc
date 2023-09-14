@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PostFilter extends Post
 {
-    public function listPost($search, $collum, $sort){
+    public function listPost($search, $column, $sort){
         return $this->join('admins', 'posts.created_by_id', '=', 'admins.id')
             ->join('admins as admins2', 'posts.modified_by_id', '=', 'admins2.id')
             ->join('categories', 'posts.category_id', '=', 'categories.id')
@@ -26,7 +26,7 @@ class PostFilter extends Post
             ->when(Auth::guard('admins')->user()->role === UserRoleEnum::Author, function($q){
                 $q->where('posts.created_by_id', app('admin_id'));
             })
-            ->orderBy($collum, $sort);
+            ->orderBy($column, $sort);
     }
 
     public function listPostUser($search, $category, $author, $tag){
