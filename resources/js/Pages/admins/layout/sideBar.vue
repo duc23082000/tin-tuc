@@ -16,7 +16,7 @@
             <span>Navigator One</span>
           </template>
           <el-menu-item-group title="Group One">
-            <el-menu-item index="1-1"><Link :href="route('admin.post.lists')">Post</Link></el-menu-item>
+            <Link :href="route('admin.post.lists')"><el-menu-item>Post</el-menu-item></Link>
             <el-menu-item index="1-2">item two</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group title="Group Two">

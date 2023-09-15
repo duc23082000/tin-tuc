@@ -11,7 +11,7 @@
             </div>
 
             <div class="mt-3">
-              <ckeditor :editor="ClassicEditor" v-model="data.content"></ckeditor>
+              <ckeditor :editor="a" id="editor" v-model="data.content"></ckeditor>
             </div>
 
             <div class="mt-3">
@@ -41,10 +41,9 @@
               <label for="">Posted at:</label>
               <div>
                 <el-date-picker
-                  v-model="posted_at"
+                  v-model="data.posted_at"
                   type="date"
                   placeholder="Pick a day"
-                  :size="size"
                 />
               </div>
               <small v-if="errors.posted_at" class="text-red-600">{{ errors.posted_at[0] }}</small>
@@ -72,6 +71,14 @@
               </div>
             </div>
 
+            <div class="mt-3">
+              <label for="">Image:</label>
+              <div>
+                <input type="file" @change="onChangeFileUpload($event)"/>
+              </div>
+              <small v-if="errors.image" class="text-red-600">{{ errors.image[0] }}</small>
+            </div>
+
             <div class="mt-2">
                 <el-button type="primary" @click="create">Create</el-button>
             </div>
@@ -86,6 +93,18 @@
   import layoutAdmin from '../../layout/layoutAdmin.vue'
   import { ElMessage } from 'element-plus';
   import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+  // import { SimpleUploadAdapter } from '@ckeditor/ckeditor5-upload';
+
+    // ClassicEditor.create( document.querySelector( '#editor' ), {
+    //         ckfinder: {
+    //             uploadUrl: ''
+    //         }
+    //     })
+		// .catch( error => {
+		// 	console.error( error );
+		// });
+
+    const a =  ClassicEditor
 
 
   const data = ref({
@@ -93,13 +112,18 @@
     content: '',
     category: '',
     status: 0,
-    posted_at: '',
+    posted_at: new Date(),
     tags: [],
+    image: '',
   })
 
   const props = defineProps(['status', 'tags', 'categories'])
 
   const errors = ref({})
+
+  const onChangeFileUpload = (event) => {
+            data.value.image = event.target.files[0]
+        }
 
   const create = () => {
     axios.post(route('admin.post.api.create'), data.value)

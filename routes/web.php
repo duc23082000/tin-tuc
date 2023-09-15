@@ -199,7 +199,7 @@ Route::prefix('')->name('account.')->middleware('auth.account')->group(function(
     Route::post('change-password', [AccAuthcontroller::class, 'changePassword']);
 });
 
-Route::prefix('author')->name('author.')->middleware(['auth.author', 'delete.imageCkeditor'])->group(function(){
+Route::prefix('author')->name('author.')->middleware(['auth:admins', 'delete.imageCkeditor'])->group(function(){
 
     Route::prefix('posts')->name('post.')->group(function(){
         Route::get('', [AuthorPostController::class, 'index'])->name('lists');

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Post;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -64,6 +65,7 @@ class PostObserver
             $post->image = $fileName;
         }
         session()->forget('oldImage'.app('admin_id'));
+        // dd(request()->image);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\PostStatusEnum;
+use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -15,6 +16,14 @@ class PostRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'posted_at' => Carbon::parse(request()->posted_at),
+        ]);
+
     }
 
     /**
@@ -30,9 +39,7 @@ class PostRequest extends FormRequest
             'category' => 'required|exists:categories,id,deleted_at,NULL',
             'posted_at' => ['required', 'date'],
         ];
-        if($this->input('tags')){
-            $rules['tags'] = 'exists:tags,id,deleted_at,NULL';
-        }
+
         if($this->input('status') == PostStatusEnum::PubLic){
             $rules['posted_at'][] = 'before_or_equal:today';
         }
