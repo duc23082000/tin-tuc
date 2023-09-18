@@ -11,13 +11,13 @@
             </div>
 
             <div class="mt-3">
-              <ckeditor :editor="a" id="editor" v-model="data.content"></ckeditor>
+              <ckeditor :editor="ClassicEditor" id="editor" v-model="data.content" ></ckeditor>
             </div>
 
             <div class="mt-3">
               <label for="">Category:</label>
               <div>
-                <el-select v-model="data.category" class=" w-96" placeholder="Select" >
+                <el-select v-model="data.category_id" class=" w-96" placeholder="Select" >
                   <el-option
                     v-for="(item, index) in props.categories"
                     :key="index"
@@ -93,24 +93,13 @@
   import layoutAdmin from '../../layout/layoutAdmin.vue'
   import { ElMessage } from 'element-plus';
   import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-  // import { SimpleUploadAdapter } from '@ckeditor/ckeditor5-upload';
-
-    // ClassicEditor.create( document.querySelector( '#editor' ), {
-    //         ckfinder: {
-    //             uploadUrl: ''
-    //         }
-    //     })
-		// .catch( error => {
-		// 	console.error( error );
-		// });
-
-    const a =  ClassicEditor
+  import { router } from '@inertiajs/vue3';
 
 
   const data = ref({
     title: '',
     content: '',
-    category: '',
+    category_id: '',
     status: 0,
     posted_at: new Date(),
     tags: [],
@@ -129,12 +118,10 @@
     axios.post(route('admin.post.api.create'), data.value)
     .then(function(response){
         ElMessage.success(response.data.success)
-        console.log(response.data.success)
+        router.visit(response.data.url)
     }).catch(function(error){
         errors.value = error.response.data.errors
     })
   }
-
-
   
 </script>

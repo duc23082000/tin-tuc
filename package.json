@@ -22,8 +22,11 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-alignment": "^39.0.2",
         "@ckeditor/ckeditor5-build-classic": "^39.0.2",
         "@ckeditor/ckeditor5-build-inline": "^39.0.2",
+        "@ckeditor/ckeditor5-editor-classic": "^39.0.2",
+        "@ckeditor/ckeditor5-heading": "^39.0.2",
         "@ckeditor/ckeditor5-upload": "^39.0.2",
         "@ckeditor/ckeditor5-vue": "^5.1.0",
         "@inertiajs/vue3": "^1.0.11",

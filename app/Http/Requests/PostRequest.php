@@ -35,9 +35,11 @@ class PostRequest extends FormRequest
     {
         $rules = [
             'title' => 'required|string|min:8|max:255',
+            'content' => 'nullable',
             'status' => ['required', Rule::in(PostStatusEnum::asArray())],
-            'category' => 'required|exists:categories,id,deleted_at,NULL',
+            'category_id' => 'required|exists:categories,id,deleted_at,NULL',
             'posted_at' => ['required', 'date'],
+            'tags' => 'nullable',
         ];
 
         if($this->input('status') == PostStatusEnum::PubLic){

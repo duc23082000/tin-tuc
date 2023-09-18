@@ -63,19 +63,13 @@ class PostController extends Controller
 
     public function store(PostRequest $request)
     {
-        $post = new Post();
-        $post->title = $request->input('title');
-        $post->content = $request->input('content');
-        $post->category_id = $request->input('category');
-        $post->status = $request->input('status');
-        $post->posted_at = $request->input('posted_at');
-        $post->created_by_id = app('admin_id');
-        $post->modified_by_id = app('admin_id');
-        $post->save();
+        $data = array_merge($request->validated(), ['created_by_id' => app('admin_id'), 'modified_by_id' => app('admin_id')]);
+        $post = Post::create($data);
 
-        $post->tags()->sync($request->input('tags'));
-
-        return redirect(route('admin.post.lists'));
+        return response()->json([
+            'success' => 'Tạo Thành công',
+            'url' => route('admin.post.lists'),
+        ]);
     }
 
     public function upload(Request $request)

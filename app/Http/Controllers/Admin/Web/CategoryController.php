@@ -85,7 +85,7 @@ class CategoryController extends Controller
 
         return response()->json([
             'success' => 'Sửa Thành công',
-            'url' => route('category'),
+            'url' => route('admin.category.lits'),
         ]);
     }
 

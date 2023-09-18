@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Post;
+use App\Models\Tag;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -65,7 +66,29 @@ class PostObserver
             $post->image = $fileName;
         }
         session()->forget('oldImage'.app('admin_id'));
-        // dd(request()->image);
+    }
+
+    public function saved(Post $post) 
+    {
+        $tags = request()->tags;
+        $newtags = array_filter($tags, 'is_string');
+
+        if(!empty($newtags)){
+            $tagInsert =  array_map(function($value) {
+                return ['name' => $value];
+            }, $newtags);
+            
+            Tag::insert($tagInsert);
+
+            $tagId = Tag::whereIn('name', $newtags)->pluck('id')->toArray();
+
+            $tagSame = array_filter($tags, 'is_numeric');
+
+            $tagAll = array_merge($tagSame, $tagId);
+            $post->tags()->sync($tagAll);
+        } else {
+            $post->tags()->sync($tags);
+        }
     }
 
     /**

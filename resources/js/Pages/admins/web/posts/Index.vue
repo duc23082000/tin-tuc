@@ -34,13 +34,14 @@
                     </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="Category" width="200">
+                <el-table-column prop="name" label="Category" width="150">
                     <template #header>
                     <div @click="sortButton('categories.name')">
                       Category <el-icon><DCaret /></el-icon>
                     </div>
                     </template>
                 </el-table-column>
+                <el-table-column prop="status_name" label="Status" width="100"/>
                 <el-table-column prop="email" label="created_by" width="250">
                     <template #header>
                     <div @click="sortButton('email')">
@@ -76,6 +77,17 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <div v-if="tableData.last_page < 2">
+              <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="tableData.total ?? 0"
+                :page-size="tableData.per_page"
+                class="mt-4"
+                @current-change="changePage"
+              />
+            </div>
+            
         </div>
       </div>
     </layout-admin>
@@ -101,12 +113,14 @@
     search: '',
     column: '',
     sort: 'desc',
+    page: 1,
   })
 
   const getCategories = () => {
     axios.get(route('admin.post.api.list', dataInput.value))
     .then(function(response){
       tableData.value = response.data
+      // console.log(response.data);
     }).catch(function(error){
       console.log(error)
     })
@@ -123,11 +137,15 @@
     dataInput.value.search = search.value
   }
 
+  const changePage = (page) => {
+    dataInput.value.page = page;
+  }
+
   const deleteCategory = (id) => {
     axios.delete(route('api.delete', id))
     .then(function(response){
         ElMessage.success(response.data.success)
-        console.log(response.data.success)
+        // console.log(response.data.success)
         getCategories()
     }).catch(function(error){
         console.log(error);

@@ -14,9 +14,11 @@ class Post extends Model
     use HasFactory, SoftDeletes, Filterable;
 
     protected $table = 'posts';
-    protected $fillable = ['title', 'content', 'status', 'created_by_id', 'modified_by_id'];
+    protected $fillable = ['title', 'content', 'status', 'category_id', 'created_by_id', 'modified_by_id'];
     public $timestamps = true;
     protected $dates = ['deleted_at'];
+
+    protected $appends = ['status_name'];
 
     public function modelFilter()
     {
