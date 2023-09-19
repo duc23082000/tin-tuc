@@ -45,9 +45,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admins',
 
         Route::post('create', [PostController::class, 'store'])->name('api.create');
 
-        Route::put('edit/{id}', [CategoryController::class, 'update'])->name('api.update');
+        Route::put('edit/{id}', [PostController::class, 'update'])->name('api.update');
 
-        Route::delete('delete/{id}', [CategoryController::class, 'delete'])->name('api.delete');
+        Route::delete('delete/{id}', [PostController::class, 'delete'])->name('api.delete');
     });
 });
 

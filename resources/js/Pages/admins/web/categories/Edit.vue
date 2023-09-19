@@ -42,7 +42,7 @@
   
 
   const updateCategory = () => {
-    axios.put(route('api.update', props.id), {
+    axios.put(route('admin.category.api.update', props.id), {
         name: name.value,
         id: props.id,
     })

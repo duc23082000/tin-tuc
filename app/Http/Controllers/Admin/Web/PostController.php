@@ -109,16 +109,21 @@ class PostController extends Controller
 
     public function edit($id)
     {
-        $post = Post::find($id);
+        $post = Post::with('tags')->find($id);
         if(!$post){
             return redirect(route('admin.post.lists'));
         }
         $tags = Tag::all();
         $categories = Category::all();
-        return view('admin.web.posts.edit', compact('post', 'tags', 'categories'));
+        return  Inertia::render('admins/web/posts/Edit', [
+            'tags' => $tags,
+            'categories' => $categories,
+            'post' => $post,
+            'status' => PostStatusEnum::asArray(),
+        ]);
     }
 
-    public function editing($id, PostRequest $request)
+    public function update($id, PostRequest $request)
     {
         $post = Post::find($id);
         if(!$post){
@@ -128,29 +133,25 @@ class PostController extends Controller
             session()->put('oldImage'.app('admin_id'), $post->image);
         }
         session()->put('contentImages'.app('admin_id'), $post->content);
-        $post->title = $request->input('title');
-        $post->content = $request->input('content');
-        $post->category_id = $request->input('category');
-        $post->status = $request->input('status');
-        $post->posted_at = $request->input('posted_at'); 
-        $post->modified_by_id = app('admin_id');
-        $post->save();
-        
-        $post->tags()->sync($request->input('tags'));
+        $data = array_merge($request->validated(), ['created_by_id' => app('admin_id'), 'modified_by_id' => app('admin_id')]);
+        $post->update($data);
 
-        return redirect(route('admin.post.lists'));
+        return response()->json([
+            'success' => 'Sửa Thành công',
+            'url' => route('admin.post.lists'),
+        ]);
+        
     }
 
-    public function delete($id)
-    {
+    public function delete($id){
         
         $post = Post::find($id);
         if(!$post){
-            return redirect(route('admin.post.lists'));
+            return redirect(route('admin.category.lists'));
         }
 
         $post->delete();
 
-        return redirect(route('admin.post.lists'));
+        return response()->json(['success' => 'Xóa thành công']);
     }
 }

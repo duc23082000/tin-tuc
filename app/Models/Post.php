@@ -18,7 +18,7 @@ class Post extends Model
     public $timestamps = true;
     protected $dates = ['deleted_at'];
 
-    protected $appends = ['status_name'];
+    protected $appends = ['status_name', 'tags_id'];
 
     public function modelFilter()
     {
@@ -35,6 +35,10 @@ class Post extends Model
 
     public function getStatusNameAttribute(){
         return PostStatusEnum::getKey($this->status);
+    }
+
+    public function getTagsIdAttribute(){
+        return $this->tags->pluck('id')->toArray();
     }
 
     public function category(){

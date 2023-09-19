@@ -13,32 +13,19 @@
         <el-sub-menu index="1">
           <template #title>
             <el-icon><location /></el-icon>
-            <span>Navigator One</span>
+            <span>Posts</span>
           </template>
-          <el-menu-item-group title="Group One">
-            <Link :href="route('admin.post.lists')"><el-menu-item>Post</el-menu-item></Link>
-            <el-menu-item index="1-2">item two</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="Group Two">
-            <el-menu-item index="1-3">item three</el-menu-item>
-          </el-menu-item-group>
-          <el-sub-menu index="1-4">
-            <template #title>item four</template>
-            <el-menu-item index="1-4-1">item one</el-menu-item>
-          </el-sub-menu>
+          <Link :href="route('admin.post.lists')"><el-menu-item>List</el-menu-item></Link>
+          <Link :href="route('admin.post.create')"><el-menu-item>Create</el-menu-item></Link>
         </el-sub-menu>
-        <el-menu-item index="2">
-          <el-icon><icon-menu /></el-icon>
-          <span>Navigator Two</span>
-        </el-menu-item>
-        <el-menu-item index="3" disabled>
-          <el-icon><document /></el-icon>
-          <span>Navigator Three</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <el-icon><setting /></el-icon>
-          <span>Navigator Four</span>
-        </el-menu-item>
+        <el-sub-menu index="2">
+          <template #title>
+            <el-icon><Grid /></el-icon>
+            <span>Categories</span>
+          </template>
+          <Link :href="route('admin.category.lists')"><el-menu-item>List</el-menu-item></Link>
+          <Link :href="route('admin.category.create')"><el-menu-item>Create</el-menu-item></Link>
+        </el-sub-menu>
       </el-menu>
   </el-row>
 </template>
@@ -49,6 +36,7 @@ import {
   Menu as IconMenu,
   Location,
   Setting,
+  Grid,
 } from '@element-plus/icons-vue'
 import { Link } from '@inertiajs/vue3';
 </script>
