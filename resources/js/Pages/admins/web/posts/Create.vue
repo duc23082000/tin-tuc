@@ -115,7 +115,13 @@
         }
 
   const create = () => {
-    axios.post(route('admin.post.api.create'), data.value)
+    axios.post(route('admin.post.api.create'),
+      data.value,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    })
     .then(function(response){
         ElMessage.success(response.data.success)
         router.visit(response.data.url)

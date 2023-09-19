@@ -16,6 +16,7 @@ use App\Notifications\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
 use Illuminate\Support\Facades\View;
+use Inertia\Inertia;
 
 class NoticeController extends Controller
 {
@@ -27,7 +28,13 @@ class NoticeController extends Controller
         View::share('status', NoticeStatusEnum::asArray());
     }
 
-    public function index(Request $request){
+    public function index()
+    {
+        return Inertia::render('admins/web/notifications/Index');
+    }
+
+    public function indexApi(Request $request)
+    {
         $search = $request->input('search');
 
         $collum = $request->input('collum') ?? 'updated_at';
@@ -38,38 +45,48 @@ class NoticeController extends Controller
 
         $sort = $sort == 'asc' ? 'desc' : 'asc';
 
-        return view('admin.web.notices.lists', compact('notices', 'search', 'sort'));
+        return $notices;
     }
 
     public function create(){
         $users = User::all();
         $authors = Admin::where('role', UserRoleEnum::Author)->get(); 
 
-        return view('admin.web.notices.create', compact('users', 'authors'));
+        return Inertia::render('admins/web/notifications/Create', [
+            'users' => $users,
+            'authors' => $authors,
+        ]);
     }
 
-    public function creating(NotificationRequest $request){
+    public function store(NotificationRequest $request)
+    {
+        $data = array_merge($request->validated(), ['created_by_id' => app('admin_id')]);
 
-        $notice = new Notice();
-        $notice->title = $request->input('title');
-        $notice->content = $request->input('content');
-        $notice->created_by_id = app('admin_id');
-        $notice->save();
+        $notice = Notice::create($data);
 
-        $notice->users()->sync($request->input('user'));
-        $notice->authors()->sync($request->input('author'));
+        $notice->users()->sync($request->input('users'));
+        $notice->authors()->sync($request->input('authors'));
 
-        return redirect(route('admin.notice.lists'));
+        return response()->json([
+            'success' => 'Tạo Thành công',
+            'url' => route('admin.notice.lists'),
+        ]);
     }
 
     public function edit($id){
-        $notice = Notice::find($id);
+        $notice = Notice::with(['users', 'authors'])->find($id);
         if(!$notice){
             return redirect(route('admin.post.lists'));
         }
         $users = User::all();
         $authors = Admin::where('role', UserRoleEnum::Author)->get(); 
-        return view('admin.web.notices.edit', compact('notice', 'users', 'authors'));
+        return Inertia::render('admins/web/notifications/Edit', [
+            'users' => $users,
+            'authors' => $authors,
+            'notice' => $notice,
+            'notified_users' => $notice->users->pluck('id')->toArray(),
+            'notified_authors' => $notice->authors->pluck('id')->toArray(),
+        ]);
     }
 
     public function editing($id, NotificationRequest $request)
@@ -78,15 +95,17 @@ class NoticeController extends Controller
         if(!$notice){
             return redirect(route('admin.notice.lists'));
         }
-        $notice->title = $request->input('title');
-        $notice->content = $request->input('content');
-        $notice->modified_by_id = app('admin_id');
-        $notice->save();
-        
-        $notice->users()->sync($request->input('user'));
-        $notice->authors()->sync($request->input('author'));
 
-        return redirect(route('admin.notice.lists'));
+        $data = array_merge($request->validated(), ['created_by_id' => app('admin_id')]);
+        $notice->update($data);
+
+        $notice->users()->sync($request->input('users'));
+        $notice->authors()->sync($request->input('authors'));
+
+        return response()->json([
+            'success' => 'Tạo Thành công',
+            'url' => route('admin.notice.lists'),
+        ]);
     }
 
     public function delete($id)
@@ -99,7 +118,7 @@ class NoticeController extends Controller
 
         $notice->delete();
 
-        return redirect(route('admin.notice.lists'));
+        return response()->json(['success' => 'Xóa thành công']);
     }
 
     public function sendNotifications($id)
@@ -108,15 +127,15 @@ class NoticeController extends Controller
         if(!$notice){
             return redirect(route('admin.notice.lists'));
         }
-        // if(!empty($notice->users)){
-        //     FacadesNotification::send($notice->users, new UserNotification($notice->created_by->email, $notice->title, $notice->content));
-        // }
-        // dd($notice->authors);
+        if(!empty($notice->users)){
+            FacadesNotification::send($notice->users, new UserNotification($notice->created_by->email, $notice->title, $notice->content));
+        }
         if(!empty($notice->authors)){
             FacadesNotification::send($notice->authors, new UserNotification($notice->created_by->email, $notice->title, $notice->content));
         }
-        $notice->status = NoticeStatusEnum::Send;
+        $notice->status = NoticeStatusEnum::Sent;
         $notice->save();
-        return back();
+
+        return response()->json(['success' => 'Gửi thành công']);
     }
 }

@@ -16,7 +16,7 @@
             </div>
             <div class="mt-2 mb-2">
                 <el-button>
-                  <Link :href="route('admin.post.create')">Create</Link>
+                  <Link :href="route('admin.notice.create')">Create</Link>
                 </el-button>
             </div>
             <el-table :data="tableData.data" style="width: 100%">
@@ -34,13 +34,6 @@
                     </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="Category" width="150">
-                    <template #header>
-                    <div @click="sortButton('categories.name')">
-                      Category <el-icon><DCaret /></el-icon>
-                    </div>
-                    </template>
-                </el-table-column>
                 <el-table-column prop="status_name" label="Status" width="100"/>
                 <el-table-column prop="email" label="created_by" width="250">
                     <template #header>
@@ -49,31 +42,27 @@
                     </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="email2" label="modified_by" width="250">
-                    <template #header>
-                    <div @click="sortButton('email2')">
-                      modified by <el-icon><DCaret /></el-icon>
-                    </div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="created_at" label="created_at" width="100">
+                <el-table-column prop="created_at" label="created_at" width="250">
                     <template #header>
                     <div @click="sortButton('created_at')">
                         created_at <el-icon><DCaret /></el-icon>
                     </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="updated_at" label="updated_at" width="100">
+                <el-table-column prop="updated_at" label="updated_at" width="250">
                     <template #header>
                     <div @click="sortButton('updated_at')">
                         updated_at <el-icon><DCaret /></el-icon>
                     </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="right" label="Operations" width="120">
+                <el-table-column prop="right" label="Operations" width="200">
                     <template #default="scope">
-                      <Link :href="route('admin.post.edit', scope.row.id)"><el-button link type="primary" size="small">Edit</el-button></Link>
-                    <el-button link type="primary" size="small" @click="deleteCategory(scope.row.id)">Delete</el-button>
+                      <div class="grap-3">
+                        <el-button link type="primary" size="small" @click="SendNotification(scope.row.id)">Send</el-button>
+                        <Link :href="route('admin.notice.edit', scope.row.id)"><el-button link type="primary" size="small">Edit</el-button></Link>
+                        <el-button link type="primary" size="small" @click="deleteCategory(scope.row.id)">Delete</el-button>
+                      </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -100,6 +89,7 @@
   import { Search, DCaret } from '@element-plus/icons-vue'
   import { Link } from '@inertiajs/vue3';
   import { ElMessage } from 'element-plus';
+
   const tableData = ref([])
 
   const handleClick = () => {
@@ -117,10 +107,10 @@
   })
 
   const getCategories = () => {
-    axios.get(route('admin.post.api.list', dataInput.value))
+    axios.get(route('admin.notice.api.lists', dataInput.value))
     .then(function(response){
       tableData.value = response.data
-      // console.log(response.data);
+      console.log(response.data);
     }).catch(function(error){
       console.log(error)
     })
@@ -142,7 +132,18 @@
   }
 
   const deleteCategory = (id) => {
-    axios.delete(route('admin.post.api.delete', id))
+    axios.delete(route('admin.notice.api.delete', id))
+    .then(function(response){
+        ElMessage.success(response.data.success)
+        // console.log(response.data.success)
+        getCategories()
+    }).catch(function(error){
+        console.log(error);
+    })
+  }
+
+  const SendNotification = (id) => {
+    axios.get(route('admin.notice.api.send', id))
     .then(function(response){
         ElMessage.success(response.data.success)
         // console.log(response.data.success)

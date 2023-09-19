@@ -157,32 +157,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'delete.image
         Route::get('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
     });
 
-    Route::prefix('tags')->name('tag.')->group(function(){
-        Route::get('', [TagController::class, 'index'])->name('lists');
-
-        Route::get('create', [TagController::class, 'create'])->name('create');
-
-        Route::post('create', [TagController::class, 'creating']);
-
-        Route::get('edit/{id}', [TagController::class, 'edit'])->name('edit');
-
-        Route::put('edit/{id}', [TagController::class, 'editing']);
-
-        Route::get('delete/{id}', [TagController::class, 'delete'])->name('delete');
-    });
-
     Route::prefix('notices')->name('notice.')->group(function(){
         Route::get('', [NoticeController::class, 'index'])->name('lists');
 
         Route::get('create', [NoticeController::class, 'create'])->name('create');
 
-        Route::post('create', [NoticeController::class, 'creating']);
-
         Route::get('edit/{id}', [NoticeController::class, 'edit'])->name('edit');
-
-        Route::put('edit/{id}', [NoticeController::class, 'editing']);
-
-        Route::get('delete/{id}', [NoticeController::class, 'delete'])->name('delete');
 
         Route::get('send/{id}', [NoticeController::class, 'sendNotifications'])->name('send');
 

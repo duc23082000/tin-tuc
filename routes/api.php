@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Web\CategoryController;
+use App\Http\Controllers\Admin\Web\NoticeController;
 use App\Http\Controllers\Admin\Web\PostController;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -23,32 +24,45 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('admin')->name('admin.')->middleware(['auth:admins',
-            config('jetstream.auth_session'),
-            'verified',
-            ])
-->group(function(){
-    Route::prefix('category')->name('category.')->group(function(){
-        Route::get('', [CategoryController::class, 'indexApi'])->name('api.list');
+Route::prefix('admin')->name('admin.')
+    ->middleware(['auth:admins',
+        config('jetstream.auth_session'),
+        'verified',
+        ])
+    ->group(function(){
+        Route::prefix('category')->name('category.')->group(function(){
+            Route::get('', [CategoryController::class, 'indexApi'])->name('api.list');
 
-        Route::post('create', [CategoryController::class, 'store'])->name('api.create');
+            Route::post('create', [CategoryController::class, 'store'])->name('api.create');
 
-        Route::get('edit/{id}', [CategoryController::class, 'editApi'])->name('api.edit');
+            Route::get('edit/{id}', [CategoryController::class, 'editApi'])->name('api.edit');
 
-        Route::put('edit/{id}', [CategoryController::class, 'update'])->name('api.update');
+            Route::put('edit/{id}', [CategoryController::class, 'update'])->name('api.update');
 
-        Route::delete('delete/{id}', [CategoryController::class, 'delete'])->name('api.delete');
-    });
+            Route::delete('delete/{id}', [CategoryController::class, 'delete'])->name('api.delete');
+        });
 
-    Route::prefix('post')->name('post.')->group(function(){
-        Route::get('', [PostController::class, 'indexApi'])->name('api.list');
+        Route::prefix('post')->name('post.')->group(function(){
+            Route::get('', [PostController::class, 'indexApi'])->name('api.list');
 
-        Route::post('create', [PostController::class, 'store'])->name('api.create');
+            Route::post('create', [PostController::class, 'store'])->name('api.create');
 
-        Route::put('edit/{id}', [PostController::class, 'update'])->name('api.update');
+            Route::put('edit/{id}', [PostController::class, 'update'])->name('api.update');
 
-        Route::delete('delete/{id}', [PostController::class, 'delete'])->name('api.delete');
-    });
+            Route::delete('delete/{id}', [PostController::class, 'delete'])->name('api.delete');
+        });
+
+        Route::prefix('notices')->name('notice.')->group(function(){
+            Route::get('', [NoticeController::class, 'indexApi'])->name('api.lists');
+
+            Route::post('create', [NoticeController::class, 'store'])->name('api.create');
+
+            Route::put('edit/{id}', [NoticeController::class, 'editing'])->name('api.update');
+
+            Route::delete('delete/{id}', [NoticeController::class, 'delete'])->name('api.delete');
+
+            Route::get('send/{id}', [NoticeController::class, 'sendNotifications'])->name('api.send');
+        });
 });
 
 

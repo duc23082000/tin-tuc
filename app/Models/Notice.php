@@ -11,6 +11,9 @@ class Notice extends Model
     use HasFactory;
     
     protected $table = 'notices';
+    protected $fillable = ['title', 'content', 'created_by_id', 'status'];
+
+    protected $appends = ['status_name'];
 
     public function created_by(){
         return $this->belongsTo(Admin::class, 'created_by_id', 'id');
@@ -27,4 +30,5 @@ class Notice extends Model
     public function getStatusNameAttribute(){
         return NoticeStatusEnum::getKey($this->status);
     }
+
 }

@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class NotificationRequest extends FormRequest
 {
@@ -16,16 +17,16 @@ class NotificationRequest extends FormRequest
         return true;
     }
 
-    public function prepareForValidation()
-    {
-        if($this->input('users.*')){
+    // public function prepareForValidation()
+    // {
+    //     if($this->input('users.*')){
             
-            $this->merge([
-                'user' => handle_array_users($this->users)["user"],
-                'author' => handle_array_users($this->users)["author"],
-            ]);
-        }
-    }
+    //         $this->merge([
+    //             'user' => handle_array_users($this->users)["user"],
+    //             'author' => handle_array_users($this->users)["author"],
+    //         ]);
+    //     }
+    // }
 
     /**
      * Get the validation rules that apply to the request.
@@ -36,28 +37,10 @@ class NotificationRequest extends FormRequest
     {
         $rules = [
             'title' => 'required|string|min:8|max:255',
-            'users' => 'required',
-            'author' => [],
-            'user' => [],
+            'content' => 'nullable',
+            'users' => [ Rule::requiredIf(empty($this->authors)), 'exists:users,id,deleted_at,NULL'],
+            'authors' => [ Rule::requiredIf(empty($this->users)), 'exists:admins,id,deleted_at,NULL'],
         ];
-        
-        if($this->input('users')){
-            if(empty($this->input('user'))){
-                $rules['author'][] = 'required';
-            }
-    
-            if(empty($this->input('author'))){
-                $rules['user'][] = 'required';
-            }
-    
-            if($this->input('user')){
-                $rules['user'][] = 'exists:users,id,deleted_at,NULL';
-            }
-    
-            if($this->input('author')){
-                $rules['author'][] = 'exists:admins,id,deleted_at,NULL';
-            }
-        }
         
         return $rules;
     }
@@ -70,10 +53,9 @@ class NotificationRequest extends FormRequest
             'title.min' => 'Tiêu đề phải có ít nhất 8 kí tự',
             'title.max' => 'Tiêu đề chỉ được phép tối đa 255 kí tự',
             'users.required' => 'Vui lòng chọn người nhận thông báo',
-            'user.required' => 'Giá trị người dùng không tồn tại',
-            'author.required' => 'Giá trị tác giả không tồn tại',
-            'user.exists' => 'Giá trị không hợp lệ',
-            'author.exists' => 'Giá trị không hợp lệ',
+            'authors.required' => 'Vui lòng chọn người nhận thông báo',
+            'users.exists' => 'Giá trị không hợp lệ',
+            'authors.exists' => 'Giá trị không hợp lệ',
         ];
     }
 

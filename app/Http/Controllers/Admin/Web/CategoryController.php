@@ -23,7 +23,8 @@ class CategoryController extends Controller
         return Inertia::render('admins/web/categories/Index');
     }
 
-    public function indexApi(Request $request){
+    public function indexApi(Request $request)
+    {
 
         $search = $request->input('search');
 

@@ -104,12 +104,19 @@
     status: props.post.status,
     posted_at: props.post.posted_at,
     tags: props.post.tags_id,
+    _method: "PUT",
   });
   console.log(props.post);
   const errors = ref({})
 
   const update = () => {
-    axios.put(route('admin.post.api.update', props.post.id), data.value)
+    axios.post(route('admin.post.api.update', props.post.id),
+      data.value,
+    {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+    })
     .then(function(response){
         ElMessage.success(response.data.success)
         router.visit(response.data.url)

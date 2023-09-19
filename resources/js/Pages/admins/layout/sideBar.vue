@@ -26,6 +26,14 @@
           <Link :href="route('admin.category.lists')"><el-menu-item>List</el-menu-item></Link>
           <Link :href="route('admin.category.create')"><el-menu-item>Create</el-menu-item></Link>
         </el-sub-menu>
+        <el-sub-menu index="3">
+          <template #title>
+            <el-icon><Bell /></el-icon>
+            <span>Notifications</span>
+          </template>
+          <Link :href="route('admin.notice.lists')"><el-menu-item index="3-1">List</el-menu-item></Link>
+          <Link :href="route('admin.notice.create')"><el-menu-item index="3-2">Create</el-menu-item></Link>
+        </el-sub-menu>
       </el-menu>
   </el-row>
 </template>
@@ -37,6 +45,7 @@ import {
   Location,
   Setting,
   Grid,
+  Bell,
 } from '@element-plus/icons-vue'
 import { Link } from '@inertiajs/vue3';
 </script>
