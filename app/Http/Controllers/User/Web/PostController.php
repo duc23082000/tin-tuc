@@ -14,6 +14,7 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use Inertia\Inertia;
 
 class PostController extends Controller
 {
@@ -45,7 +46,9 @@ class PostController extends Controller
 
         $posts = $this->posts->listPostUser($search, $category, $author, $tag)->paginate(20)->withQueryString();
 
-        return view('client.web.home', compact('posts'));
+        return Inertia::render('clients/web/home/HomePage', [
+            'posts' => $posts,  
+        ]);
     }
 
     public function show($id){

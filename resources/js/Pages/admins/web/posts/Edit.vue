@@ -99,14 +99,13 @@
 
   const data = ref({
     title: props.post.title,
-    content: props.post.content,
+    content: props.post.content ?? '',
     category_id: props.post.category_id,
     status: props.post.status,
     posted_at: props.post.posted_at,
     tags: props.post.tags_id,
     _method: "PUT",
   });
-  console.log(props.post);
   const errors = ref({})
 
   const update = () => {

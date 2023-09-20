@@ -100,6 +100,9 @@
         router.visit(response.data.url)
     }).catch(function(error){
         errors.value = error.response.data.errors
+        if(errors.value.users[0] == errors.value.authors[0]){
+          delete errors.value.authors
+        }
     })
   }
   

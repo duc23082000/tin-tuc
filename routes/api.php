@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Web\CategoryController;
 use App\Http\Controllers\Admin\Web\NoticeController;
 use App\Http\Controllers\Admin\Web\PostController;
+use App\Http\Controllers\User\Web\CategoryController as WebCategoryController;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -70,6 +71,12 @@ Route::prefix('admin')->name('admin.')
 Route::prefix('auth')->group(function(){
 
     Route::post('admin/login', [AuthController::class, 'handelLogin'])->name('api.handelLogin');
+
+});
+
+Route::prefix('home')->name('home.')->group(function(){
+
+    Route::get('admin/login', [WebCategoryController::class, 'index'])->name('api.categories');
 
 });
 

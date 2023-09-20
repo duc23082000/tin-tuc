@@ -36,7 +36,6 @@ Route::get('delete-acc', function () {
     return redirect(route('login'));
 })->name('delete.acc');
 
-Route::get('home', [WebPostController::class, 'index'])->name('home');
 
 Route::get('home/{id}', [WebPostController::class, 'show'])->name('show');
 
@@ -204,7 +203,7 @@ Route::prefix('author')->name('author.')->middleware(['auth:admins', 'delete.ima
 
 
 
-Route::get('/', function () {
+Route::get('auth', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -218,10 +217,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        // dd(123);
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+
+    Route::get('', [WebPostController::class, 'index'])->name('home');
 });
 
 

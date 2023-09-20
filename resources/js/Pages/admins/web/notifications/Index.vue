@@ -19,7 +19,7 @@
                   <Link :href="route('admin.notice.create')">Create</Link>
                 </el-button>
             </div>
-            <el-table :data="tableData.data" style="width: 100%">
+            <el-table :data="tableData.data" style="width: 100%" @cell-click="hoverRow">
                 <el-table-column fixed prop="id" label="ID" width="80">
                     <template #header>
                     <div @click="sortButton('id')">
@@ -76,7 +76,22 @@
                 @current-change="changePage"
               />
             </div>
-            
+            <el-dialog v-model="showModel">
+              <template #header="{ titleId, titleClass }">
+                <div class="my-header">
+                  <h4 :id="titleId" :class="titleClass">Title: {{ rowData.title }}</h4>
+                </div>
+              </template>
+              <small v-if="rowData.status == 0">Status: Unsent</small>
+              <small v-if="rowData.status == 1">Status: Sent</small>
+              <p>Content: <span v-html="rowData.content ?? '...'"></span></p>
+              <p>Receiver: <span v-for="(user, index) in rowData.users" :key="index">
+                {{ user.username }}, 
+              </span>
+              <span v-for="(user, index) in rowData.authors" :key="index">
+                {{ user.username }}, 
+              </span></p>
+            </el-dialog>
         </div>
       </div>
     </layout-admin>
@@ -86,16 +101,15 @@
   import axios from 'axios';
   import { ref, watchEffect } from 'vue';
   import layoutAdmin from '../../layout/layoutAdmin.vue'
-  import { Search, DCaret } from '@element-plus/icons-vue'
+  import { Search, DCaret, CircleCloseFilled } from '@element-plus/icons-vue'
   import { Link } from '@inertiajs/vue3';
   import { ElMessage } from 'element-plus';
 
   const tableData = ref([])
 
-  const handleClick = () => {
+  const rowData = ref({})
 
-  console.log('click')
-  }
+  const showModel = ref(false)
 
   const search = ref('')
 
@@ -153,7 +167,22 @@
     })
   }
 
+  const hoverRow = (data, column) => {
+    if(column.label != 'Operations'){
+      rowData.value = data;
+      showModel.value = true
+    }
+  }
+
   watchEffect(getCategories);
 
 
 </script>
+
+<style scoped>
+.my-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+</style>
