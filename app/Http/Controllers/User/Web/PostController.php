@@ -22,20 +22,10 @@ class PostController extends Controller
     public function __construct()
     {
         $this->posts = new PostFilter();
-        $categories = Category::all(); 
-
-        $tags = Tag::all();
-
-        $authors = Admin::where('role', UserRoleEnum::Author)->get();
-
-        View::share([
-            'categories' => $categories,
-            'tags' => $tags,
-            'authors' => $authors,
-        ]);
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $search = $request->input('search');
 
         $category = $request->input('category');
@@ -47,14 +37,37 @@ class PostController extends Controller
         $posts = $this->posts->listPostUser($search, $category, $author, $tag)->paginate(20)->withQueryString();
 
         return Inertia::render('clients/web/home/HomePage', [
-            'posts' => $posts,  
+            'posts' => $posts, 
+            'search' => $search,  
+            'category' => $category,  
+            'author' => $author,  
+            'tag' => $tag,  
         ]);
     }
 
-    public function show($id){
-        $post = Post::find($id);
-        $comments = Comment::with('commented_by')->where('post_id', $id)->get();
-        return view('client.web.show', compact('post', 'comments'));
+    public function categories()
+    {
+        return Category::all();
+    }
+
+    public function authors()
+    {
+        return Admin::where('role', UserRoleEnum::Author)->get();
+    }
+
+    public function tags()
+    {
+        return Tag::all();
+    }
+
+    public function show($title){
+        $post = Post::with('likes')->where('title', $title)->first();
+        // dd($post);
+        $comments = Comment::with('commented_by')->where('post_id', $post->id)->get();
+        return Inertia::render('clients/web/home/ShowPost', [
+            'post' => $post,
+            'comments' => $comments,
+        ]);
     }
 
     public function like($id){

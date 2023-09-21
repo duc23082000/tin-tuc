@@ -37,7 +37,6 @@ Route::get('delete-acc', function () {
 })->name('delete.acc');
 
 
-Route::get('home/{id}', [WebPostController::class, 'show'])->name('show');
 
 Route::middleware('auth')->group(function(){
     Route::get('like/{id}', [WebPostController::class, 'like'])->name('like');
@@ -219,6 +218,17 @@ Route::middleware([
 ])->group(function () {
 
     Route::get('', [WebPostController::class, 'index'])->name('home');
+
+    Route::get('category', [WebPostController::class, 'index'])->name('home.category');
+
+    Route::get('search', [WebPostController::class, 'index'])->name('home.search');
+
+    Route::get('author', [WebPostController::class, 'index'])->name('home.author');
+
+    Route::get('tag', [WebPostController::class, 'index'])->name('home.tag');
+
+    Route::get('{title}', [WebPostController::class, 'show'])->name('home.show');
+
 });
 
 

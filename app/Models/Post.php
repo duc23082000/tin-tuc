@@ -37,6 +37,10 @@ class Post extends Model
         return PostStatusEnum::getKey($this->status);
     }
 
+    // public function getStatusNameAttribute(){
+    //     return PostStatusEnum::getKey($this->status);
+    // }
+
     public function getTagsIdAttribute(){
         return $this->tags->pluck('id')->toArray();
     }

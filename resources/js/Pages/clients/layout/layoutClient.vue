@@ -1,11 +1,13 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header height="100px" class="!p-0 bg-slate-400">
+      <el-header height="100px" class="!p-0 shadow">
         <header-nav></header-nav>
       </el-header>
-      <el-main>Main</el-main>
-      <el-footer>Footer</el-footer>
+      <el-main class="!px-[400px]">
+        <slot></slot>
+      </el-main>
+      <el-footer><hr></el-footer>
     </el-container>
   </div>
 </template>

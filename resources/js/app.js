@@ -8,9 +8,20 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import CKEditor from '@ckeditor/ckeditor5-vue';
+/* import the fontawesome core */
+import { library } from '@fortawesome/fontawesome-svg-core'
+
+/* import font awesome icon component */
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+/* import specific icons */
+import { faUserSecret, faThumbsUp, faShareFromSquare, faComment } from '@fortawesome/free-solid-svg-icons'
+
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+/* add icons to the library */
+library.add(faUserSecret, faThumbsUp, faShareFromSquare, faComment)
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -21,6 +32,7 @@ createInertiaApp({
             .use(ZiggyVue)
             .use(ElementPlus)
             .use(CKEditor)
+            .component('font-awesome-icon', FontAwesomeIcon)
             .mixin({ methods: { appRoute: route } })
             .mount(el);
     },

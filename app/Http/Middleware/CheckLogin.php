@@ -17,7 +17,7 @@ class CheckLogin
     public function handle(Request $request, Closure $next): Response
     {
         if(Auth::check()){
-            return redirect(route('admin.post.lists'));
+            return redirect(route('home'));
         }
         return $next($request);
        

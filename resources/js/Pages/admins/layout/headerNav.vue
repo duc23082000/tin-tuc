@@ -23,7 +23,6 @@ import { Link, usePage } from '@inertiajs/vue3';
 
 const page = usePage();
 
-console.log(usePage().props.auth.user);
 </script>
 
 <style>

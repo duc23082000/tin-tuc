@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Web\CategoryController;
 use App\Http\Controllers\Admin\Web\NoticeController;
 use App\Http\Controllers\Admin\Web\PostController;
 use App\Http\Controllers\User\Web\CategoryController as WebCategoryController;
+use App\Http\Controllers\User\Web\PostController as WebPostController;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -74,9 +75,14 @@ Route::prefix('auth')->group(function(){
 
 });
 
-Route::prefix('home')->name('home.')->group(function(){
+Route::prefix('api.home')->name('home.api.')->group(function(){
 
-    Route::get('admin/login', [WebCategoryController::class, 'index'])->name('api.categories');
+    Route::get('categories', [WebPostController::class, 'categories'])->name('categories');
+
+    Route::get('authors', [WebPostController::class, 'authors'])->name('authors');
+
+    Route::get('tags', [WebPostController::class, 'tags'])->name('tags');
+
 
 });
 
