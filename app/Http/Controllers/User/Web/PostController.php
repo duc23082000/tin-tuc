@@ -63,10 +63,18 @@ class PostController extends Controller
     public function show($title){
         $post = Post::with('likes')->where('title', $title)->first();
         // dd($post);
+        if(!$post) {
+            return redirect(route('home'));
+        }
         $comments = Comment::with('commented_by')->where('post_id', $post->id)->get();
+
+
+        $checkLike = auth()->check() == true ? $post->likes->contains(Auth::user()->id) : false;
+
         return Inertia::render('clients/web/home/ShowPost', [
             'post' => $post,
             'comments' => $comments,
+            'checkLike' => $checkLike,
         ]);
     }
 
@@ -75,19 +83,25 @@ class PostController extends Controller
 
         if ($post->likes->contains(Auth::user()->id)) {
             $post->likes()->detach(Auth::user()->id);
+            return response()->json(['success' => 'minus']);
         } else {
             $post->likes()->attach(Auth::user()->id);
+            return response()->json(['success' => 'plus']);
         }
-        return back();
     }
 
     public function comment($id, Request $request){
-        $request->validate(['comment' => 'required|max:255']);
-        $comment = new Comment();
-        $comment->content = $request->comment;
-        $comment->post_id = $id;
-        $comment->commented_by_id = Auth::user()->id;
-        $comment->save();
-        return back();
+        $data = $request->validate(['content' => 'required|max:255']);
+        $data = array_merge($data, [
+            'post_id' => $id,
+            'commented_by_id' =>  Auth::user()->id,
+        ]);
+
+        Comment::create($data);
+
+        $comments = Comment::with('commented_by')->where('post_id', $id)->get();
+
+        return response()->json(['comment' => $comments]);
+
     }
 }

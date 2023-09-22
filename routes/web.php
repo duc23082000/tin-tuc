@@ -38,13 +38,7 @@ Route::get('delete-acc', function () {
 
 
 
-Route::middleware('auth')->group(function(){
-    Route::get('like/{id}', [WebPostController::class, 'like'])->name('like');
 
-    Route::post('comment/{id}', [WebPostController::class, 'comment'])->name('comment');
-
-    Route::get('notification/{id}', [NotificationController::class, 'show'])->name('notification.show');
-});
 
 
 Route::prefix('auth')->group(function(){
@@ -169,7 +163,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'delete.image
 
 });
 
-Route::prefix('')->name('account.')->middleware('auth.account')->group(function(){
+Route::prefix('')->name('user.')->middleware('auth')->group(function(){
     Route::get('logout', [AccAuthcontroller::class, 'logout'])->name('logout');
 
     Route::get('change-password', [AccAuthcontroller::class, 'formChange'])->name('change');
@@ -211,24 +205,22 @@ Route::get('auth', function () {
     ]);
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
 
-    Route::get('', [WebPostController::class, 'index'])->name('home');
 
-    Route::get('category', [WebPostController::class, 'index'])->name('home.category');
+Route::get('category', [WebPostController::class, 'index'])->name('home.category');
 
-    Route::get('search', [WebPostController::class, 'index'])->name('home.search');
+Route::get('search', [WebPostController::class, 'index'])->name('home.search');
 
-    Route::get('author', [WebPostController::class, 'index'])->name('home.author');
+Route::get('author', [WebPostController::class, 'index'])->name('home.author');
 
-    Route::get('tag', [WebPostController::class, 'index'])->name('home.tag');
+Route::get('tag', [WebPostController::class, 'index'])->name('home.tag');
 
-    Route::get('{title}', [WebPostController::class, 'show'])->name('home.show');
+Route::get('{title}', [WebPostController::class, 'show'])->name('home.show');
 
-});
+Route::get('', [WebPostController::class, 'index'])->name('home');
+
+
+
+
 
 

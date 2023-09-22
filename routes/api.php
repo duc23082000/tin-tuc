@@ -86,5 +86,17 @@ Route::prefix('api.home')->name('home.api.')->group(function(){
 
 });
 
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->name('api.')->group(function(){
+    Route::get('like/{id}', [WebPostController::class, 'like'])->name('like');
+
+    Route::post('comment/{id}', [WebPostController::class, 'comment'])->name('comment');
+
+    Route::get('notification/{id}', [NotificationController::class, 'show'])->name('notification.show');
+});
+
 
 

@@ -17,6 +17,9 @@
         </div>
 
         <div class="col-span-4 grid grid-cols-5 items-center">
+          <div>
+            <Link :href="route('home')" class="text-gray-700 font-semibold">Trang chủ</Link>
+          </div>
           <div class="group inline-block relative">
             <div
               class="text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center"
@@ -70,7 +73,8 @@
         </div>
       </div>
       <div class="flex items-center justify-end m-10">
-        <Link :href="route('admin.logout')"><el-button>Logout</el-button></Link>
+        <Link :href="route('user.logout')" v-if="page.props.auth.user"><el-button>Logout</el-button></Link>
+        <Link :href="route('login')" v-if="!page.props.auth.user"><el-button>Login</el-button></Link>
       </div>
     </div>
 </template>

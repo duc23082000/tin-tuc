@@ -3,36 +3,126 @@
         <div class="grid grid-cols-4">
             <div class="col-span-3">
                 <h1 class="text-2xl">
-                    <strong>{{ props.post.title }}</strong>
+                    <strong>{{ postData.title }}</strong>
                 </h1>
             </div>
             <div class="col-span-1">
-                <p class="text-sm flex items-center h-full">{{ props.post.posted_at }}</p>
+                <p class="text-sm flex items-center h-full">{{ postData.posted_at }}</p>
             </div>
         </div>
         <hr>
         <div class="my-2 image">
-            <img :src="'storage/images/' + props.post.image" alt="">
+            <img :src="'storage/images/' + postData.image" alt="">
         </div>
-        <div v-html="props.post.content ?? '...'"></div>
+        <div v-html="postData.content ?? '...'"></div>
 
-        <div class="shadow-sm h-[35px] bg-gray-100 mt-5">
+        <div class="shadow-sm h-[35px] bg-gray-100 my-5">
             <div class="h-full flex items-center mx-3">
-              <el-button type="primary" size="small"><font-awesome-icon icon="fa-thumbs-up" class="mr-2"/> Thích {{ props.post.likes.length }}</el-button>
+              <el-button type="primary" size="small" @click="handleLike"><font-awesome-icon icon="fa-thumbs-up" class="mr-2"/> Thích {{ likesSum }}</el-button>
               <el-button type="primary" size="small"><font-awesome-icon icon="share-from-square" class="mr-2"/> Chia sẻ</el-button>
               <el-button type="primary" size="small"><font-awesome-icon icon="comment" class="mr-2"/> Bình luận</el-button>
             </div>
         </div>
+        <hr>
+        <div class="my-5">
+                <Link v-for="(tag, index) in postData.tags" :key="index" 
+                    :href="route('home.tag') + '?tag=' + tag.name">
+                    <el-button class="mr-2 mt-2">{{ tag.name }}</el-button>
+                </Link>
+        </div>
 
+        <div class="bg-gray-100">
+            <div class="px-3 py-5">
+                <p class="text-xl mb-2">Bình luận({{ commentData.length }})</p>
+                <el-input
+                    v-model="comment"
+                    :rows="3"
+                    type="textarea"
+                    placeholder="Nhập bình luận"
+                    class="mb-2"
+                    @click="checkLogin"
+                />
+                <div class="mb-5">
+                    <el-button type="primary" @click="handleComment">Gửi bình luận</el-button>
+                </div>
+                <hr>
+                <div class="my-5 grid grid-cols-10" v-for="(comment, index) in commentData" :key="index">
+                    <div class="col-span-1">{{ comment.commented_by.username }}:</div>
+                    <div class="col-span-9">{{ comment.content }}</div>
+                </div>
+            </div>
+        </div>
+        <!-- <LoginFormDialog :checkLogin="login" :closeModal="closeModal"/> -->
+        <el-dialog v-model="login" title="Login Form">
+            <LoginFormDialog />
+        </el-dialog>
     </layout-client>
 </template>
 
 <script setup>
-import LayoutClient from '../../layout/layoutClient.vue'
+import { ref } from 'vue';
+import LayoutClient from '../../layout/layoutClient.vue';
+import { Link, usePage } from '@inertiajs/vue3';
+import axios from 'axios';
+import LoginFormDialog from '../auth/LoginFormDialog.vue'
 
 const props = defineProps(['post', 'comments'])
 
-console.log(props.post);
+const postData = ref(props.post);
+
+const commentData = ref(props.comments);
+
+const comment = ref('')
+
+const likesSum = ref(props.post.likes.length);
+
+// console.log(props.comments);
+const login = ref(false);
+
+const checkLogin = () => {
+    if(!usePage().props.auth.user){
+        login.value = true;
+        console.log(login.value);
+    } else {
+        login.value = false;
+    }
+}
+
+const handleComment = () => {
+    if(!usePage().props.auth.user){
+        login.value = true;
+        console.log(login.value);
+    } else {
+        axios.post(route('api.comment', props.post.id), {
+            'content': comment.value,
+        })
+        .then(function(respornse){
+            commentData.value = respornse.data.comment;
+            comment.value = '';
+        }).catch(function(errors){
+            console.log(errors.data);
+        })
+    }
+}
+
+const handleLike = () => {
+    if(!usePage().props.auth.user){
+        login.value = true;
+        console.log(login.value);
+    } else {
+        axios.get(route('api.like', props.post.id))
+        .then(function(respornse){ 
+            console.log(respornse.data.success);
+            if(respornse.data.success == 'plus'){
+                likesSum.value = likesSum.value + 1
+            } else {
+                likesSum.value = likesSum.value - 1
+            }
+        }).catch(function(errors){
+            console.log(errors.data);
+        })
+    }
+}
 
 </script>
 
