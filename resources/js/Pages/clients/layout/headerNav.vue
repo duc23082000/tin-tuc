@@ -100,6 +100,8 @@ const getCategories = () => {
   axios.get(route('home.api.categories'))
   .then(function(respornse){
     categories.value = respornse.data
+    console.log(3);
+
   })
   .catch(function(errors){
     console.log(errors);
@@ -110,6 +112,8 @@ const getAuthors = () => {
   axios.get(route('home.api.authors'))
   .then(function(respornse){
     authors.value = respornse.data
+    console.log(2);
+
   })
   .catch(function(errors){
     console.log(errors);
@@ -120,6 +124,7 @@ const getTags = () => {
   axios.get(route('home.api.tags'))
   .then(function(respornse){
     tags.value = respornse.data
+    console.log(1);
   })
   .catch(function(errors){
     console.log(errors);
@@ -131,6 +136,9 @@ const handleSearch = () => {
 }
 
 watchEffect([getCategories, getAuthors, getTags])
+// getCategories()
+// getTags()
+// getAuthors()
 
 </script>
 

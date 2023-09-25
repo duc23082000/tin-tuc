@@ -8,6 +8,9 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import CKEditor from '@ckeditor/ckeditor5-vue';
+
+
+import VueSocialauth from 'vue-social-auth'
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 

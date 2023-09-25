@@ -83,11 +83,13 @@ class PostController extends Controller
 
         if ($post->likes->contains(Auth::user()->id)) {
             $post->likes()->detach(Auth::user()->id);
-            return response()->json(['success' => 'minus']);
         } else {
             $post->likes()->attach(Auth::user()->id);
-            return response()->json(['success' => 'plus']);
         }
+
+        return response()->json([
+            'likes' => Post::find($id)->likes,
+        ]);
     }
 
     public function comment($id, Request $request){

@@ -26,8 +26,6 @@ import { Link } from '@inertiajs/vue3';
 
 const props = defineProps(['posts', 'search', 'category', 'author', 'tag'])
 
-console.log(props.posts.data);
-
 </script>
 
 <style>

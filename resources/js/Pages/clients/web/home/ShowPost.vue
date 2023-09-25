@@ -18,7 +18,7 @@
 
         <div class="shadow-sm h-[35px] bg-gray-100 my-5">
             <div class="h-full flex items-center mx-3">
-              <el-button type="primary" size="small" @click="handleLike"><font-awesome-icon icon="fa-thumbs-up" class="mr-2"/> Thích {{ likesSum }}</el-button>
+              <el-button type="primary" size="small" @click="handleLike"><font-awesome-icon icon="fa-thumbs-up" class="mr-2"/> Thích {{ likes.length }}</el-button>
               <el-button type="primary" size="small"><font-awesome-icon icon="share-from-square" class="mr-2"/> Chia sẻ</el-button>
               <el-button type="primary" size="small"><font-awesome-icon icon="comment" class="mr-2"/> Bình luận</el-button>
             </div>
@@ -74,9 +74,8 @@ const commentData = ref(props.comments);
 
 const comment = ref('')
 
-const likesSum = ref(props.post.likes.length);
+const likes = ref(props.post.likes)
 
-// console.log(props.comments);
 const login = ref(false);
 
 const checkLogin = () => {
@@ -111,13 +110,8 @@ const handleLike = () => {
         console.log(login.value);
     } else {
         axios.get(route('api.like', props.post.id))
-        .then(function(respornse){ 
-            console.log(respornse.data.success);
-            if(respornse.data.success == 'plus'){
-                likesSum.value = likesSum.value + 1
-            } else {
-                likesSum.value = likesSum.value - 1
-            }
+        .then(function(respornse){
+            likes.value = respornse.data.likes
         }).catch(function(errors){
             console.log(errors.data);
         })
