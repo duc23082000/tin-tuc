@@ -7,7 +7,7 @@
                 </h1>
             </div>
             <div class="col-span-1">
-                <p class="text-sm flex items-center h-full">{{ postData.posted_at }}</p>
+                <p class="text-sm flex items-center h-full">{{ formatDate(postData.posted_at) }}</p>
             </div>
         </div>
         <hr>
@@ -65,6 +65,8 @@ import LayoutClient from '../../layout/layoutClient.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import LoginFormDialog from '../auth/LoginFormDialog.vue'
+import moment from 'moment';
+
 
 const props = defineProps(['post', 'comments'])
 
@@ -116,6 +118,10 @@ const handleLike = () => {
             console.log(errors.data);
         })
     }
+}
+
+const formatDate = (date) => {
+  return moment(date).format('HH:mm-DD/MM/YYYY');
 }
 
 </script>

@@ -5,6 +5,10 @@
         <strong v-if="props.tag != null" class="text-xl">Tìm kiếm theo Tag "{{ props.tag }}"</strong>
         <strong v-if="props.search != null" class="text-xl">Tìm kiếm theo Từ khóa "{{ props.search }}"</strong>
         <div class="container">
+            <div v-if="props.posts.data.length == 0" class="mt-10">
+                <p class="text-2xl">...</p>
+                <p>Không tìm thấy bài nào viết hợp lệ.</p>
+            </div>
             <div v-for="(post, index) in props.posts.data" :key="index">
                 <Link :href="route('home.show', post.title)" class="grid grid-cols-3 mt-10">
                     <div class="col-span-1 mr-5 w-[348px] h-[232px]">

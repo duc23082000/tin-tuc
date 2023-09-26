@@ -18,7 +18,7 @@
 
         <div class="col-span-4 grid grid-cols-5 items-center">
           <div>
-            <Link :href="route('home')" class="text-gray-700 font-semibold">Trang chủ</Link>
+            <Link :href="route('home')" class="font-semibold" :class="selected('')">Trang chủ</Link>
           </div>
           <div class="group inline-block relative">
             <div
@@ -70,11 +70,50 @@
               </li>
             </ul>
           </div>
+
+          <div>
+            <Link :href="route('home')" class="text-gray-700 font-semibold">Đáng chú ý</Link>
+          </div>
+
         </div>
       </div>
-      <div class="flex items-center justify-end m-10">
-        <Link :href="route('user.logout')" v-if="page.props.auth.user"><el-button>Logout</el-button></Link>
-        <Link :href="route('login')" v-if="!page.props.auth.user"><el-button>Login</el-button></Link>
+
+      <div class="flex flex-row gap-20 items-center justify-end m-10">
+        <el-dropdown trigger="click" v-if="user">
+          <div class="el-dropdown-link inline-flex text-2xl">
+            <font-awesome-icon icon="bell"/>
+            <sup class="text-[#D71313]">
+              <b>{{ user.unread_notifications.length }}</b>
+            </sup>
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu class="w-[300px]">
+              <Link 
+                v-for="(notification, index) in user.notifications.slice(0, length_notification)" 
+                :key="index"
+                :href="route('notification.show', notification.id)">
+                <el-dropdown-item class="h-[50px]">
+                  <p :class="notification.read_at == null ? 'text-red-400' : ''">
+                    {{ notification.data.title }}
+                  </p>
+                  <small class="w-full flex justify-end">
+                    {{ formatDate(notification.created_at) }}
+                  </small>
+                </el-dropdown-item>
+              </Link>
+              <hr>
+              <div class="cursor-pointer h-10 flex items-center text-[0.9rem]" v-if="hiddenShow" @click="showNotification">
+                <p class="w-full text-center">Show All</p>
+              </div>
+              <div class="cursor-pointer h-10 flex items-center text-[0.9rem]" v-if="!hiddenShow" @click="hiddenNotification">
+                <p class="w-full text-center">Hidden Less</p>
+              </div>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
+        <Link :href="route('user.logout')" v-if="user" ><el-button>Logout</el-button></Link>
+        <Link :href="route('login')" v-if="!user" ><el-button>Login</el-button></Link>
       </div>
     </div>
 </template>
@@ -85,16 +124,25 @@ import axios from 'axios';
 import { handleError } from 'vue';
 import { ref, watchEffect } from 'vue';
 import { router } from '@inertiajs/vue3';
+import moment from 'moment';
 
-const page = usePage();
+const user = usePage().props.auth.user;
 
 const categories = ref({});
+
+const length_notification = ref(7)
+
+const hiddenShow = ref(true)
 
 const authors = ref({});
 
 const tags = ref({});
 
 const search = ref('')
+
+const selected = (url) => {
+  return window.location.href == route('home' + url) ? 'text-blue-400' : 'text-gray-700';
+}
 
 const getCategories = () => {
   axios.get(route('home.api.categories'))
@@ -108,6 +156,16 @@ const getCategories = () => {
   })
 }
 
+const showNotification = () => {
+  length_notification.value = user.notifications.length;
+  hiddenShow.value = !hiddenShow.value
+}
+
+const hiddenNotification = () => {
+  length_notification.value = 7;
+  hiddenShow.value = !hiddenShow.value
+}
+
 const getAuthors = () => {
   axios.get(route('home.api.authors'))
   .then(function(respornse){
@@ -118,6 +176,10 @@ const getAuthors = () => {
   .catch(function(errors){
     console.log(errors);
   })
+}
+
+const formatDate = (date) => {
+  return moment(date).format('HH:mm DD/MM');
 }
 
 const getTags = () => {
@@ -136,9 +198,6 @@ const handleSearch = () => {
 }
 
 watchEffect([getCategories, getAuthors, getTags])
-// getCategories()
-// getTags()
-// getAuthors()
 
 </script>
 

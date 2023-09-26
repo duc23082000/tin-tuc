@@ -191,10 +191,7 @@ Route::prefix('author')->name('author.')->middleware(['auth:admins', 'delete.ima
         Route::get('delete/{id}', [AuthorPostController::class, 'delete'])->name('delete');
     });
 
-    Route::get('notification/{id}', [AuthorNotificationController::class, 'show'])->name('notification.show');
 });
-
-
 
 Route::get('auth', function () {
     return Inertia::render('Welcome', [
@@ -218,6 +215,9 @@ Route::get('tag', [WebPostController::class, 'index'])->name('home.tag');
 Route::get('{title}', [WebPostController::class, 'show'])->name('home.show');
 
 Route::get('', [WebPostController::class, 'index'])->name('home');
+
+Route::get('notification/{id}', [NotificationController::class, 'show'])->middleware('auth')->name('notification.show');
+
 
 
 

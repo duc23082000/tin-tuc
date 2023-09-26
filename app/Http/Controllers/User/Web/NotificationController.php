@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\Web;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class NotificationController extends Controller
 {
@@ -17,6 +18,8 @@ class NotificationController extends Controller
             $notification->read_at = now();
             $notification->save();
         }
-        return view('client.web.notifications.show', compact('notification'));
+        return Inertia::render('clients/web/notification/ShowNotification', [
+            'notification' => $notification
+        ]);
     }
 }
