@@ -27,7 +27,6 @@ class Authcontroller extends Controller
             'email' => $request->input('email'),
             'password' => $request->input('password'),
         ];
-        
 
         if(Auth::guard('web')->attempt($user)){
             if($request->remember){
@@ -37,9 +36,9 @@ class Authcontroller extends Controller
                 setcookie('email_acc', "");
                 setcookie('password_acc', "");
             }
-            return redirect(route('home'));
+            return response()->json(['success' => 'Login thành công']);
         }
-        return back()->with('message', 'Tài khoản hoặc mật khẩu không chính xác');
+        return response()->json(['fail' => 'Tài khoản hoặc mật khẩu không chính xác'], 401);
     }
 
     public function logout(Request $request){

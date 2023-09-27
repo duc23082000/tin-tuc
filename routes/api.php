@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Web\CategoryController;
 use App\Http\Controllers\Admin\Web\NoticeController;
 use App\Http\Controllers\Admin\Web\PostController;
+use App\Http\Controllers\User\Auth\Authcontroller as AuthAuthcontroller;
 use App\Http\Controllers\User\Web\CategoryController as WebCategoryController;
 use App\Http\Controllers\User\Web\PostController as WebPostController;
 use App\Models\Category;
@@ -73,6 +74,8 @@ Route::prefix('auth')->group(function(){
 
     Route::post('admin/login', [AuthController::class, 'handelLogin'])->name('api.handelLogin');
 
+    Route::post('user/login', [AuthAuthcontroller::class, 'handelLogin'])->name('api.user.handelLogin');
+
 });
 
 Route::prefix('api.home')->name('home.api.')->group(function(){
@@ -82,7 +85,6 @@ Route::prefix('api.home')->name('home.api.')->group(function(){
     Route::get('authors', [WebPostController::class, 'authors'])->name('authors');
 
     Route::get('tags', [WebPostController::class, 'tags'])->name('tags');
-
 
 });
 

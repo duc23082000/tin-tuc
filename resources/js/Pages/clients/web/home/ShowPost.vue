@@ -52,9 +52,9 @@
                 </div>
             </div>
         </div>
-        <!-- <LoginFormDialog :checkLogin="login" :closeModal="closeModal"/> -->
+
         <el-dialog v-model="login" title="Login Form">
-            <LoginFormDialog />
+            <LoginFormDialog @login-success="handleLoginSuccess" />
         </el-dialog>
     </layout-client>
 </template>
@@ -62,7 +62,7 @@
 <script setup>
 import { ref } from 'vue';
 import LayoutClient from '../../layout/layoutClient.vue';
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import LoginFormDialog from '../auth/LoginFormDialog.vue'
 import moment from 'moment';
@@ -84,8 +84,6 @@ const checkLogin = () => {
     if(!usePage().props.auth.user){
         login.value = true;
         console.log(login.value);
-    } else {
-        login.value = false;
     }
 }
 
@@ -122,6 +120,10 @@ const handleLike = () => {
 
 const formatDate = (date) => {
   return moment(date).format('HH:mm-DD/MM/YYYY');
+}
+
+const handleLoginSuccess = (url) => {
+    router.visit(url)
 }
 
 </script>

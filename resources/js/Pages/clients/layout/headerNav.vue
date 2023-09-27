@@ -24,7 +24,7 @@
             <div
               class="text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center"
             >
-              <span class="mr-1">Categories</span>
+              <span class="mr-1" :class="selected('.category')">Categories</span>
             </div>
             <ul class="absolute hidden text-gray-700 pt-1 group-hover:block">
               <li class="" v-for="(category, index) in categories" :key="index">
@@ -41,7 +41,7 @@
             <div
               class="text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center"
             >
-              <span class="mr-1">Authors</span>
+              <span class="mr-1" :class="selected('.author')">Authors</span>
             </div>
             <ul class="absolute hidden text-gray-700 pt-1 group-hover:block">
               <li class="" v-for="(author, index) in authors" :key="index">
@@ -58,7 +58,7 @@
             <div
               class="text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center"
             >
-              <span class="mr-1">Tags</span>
+              <span class="mr-1" :class="selected('.tag')">Tags</span>
             </div>
             <ul class="absolute hidden text-gray-700 pt-1 group-hover:block h-[400px] overflow-auto">
               <li class="" v-for="(tag, index) in tags" :key="index">
@@ -140,8 +140,12 @@ const tags = ref({});
 
 const search = ref('')
 
-const selected = (url) => {
-  return window.location.href == route('home' + url) ? 'text-blue-400' : 'text-gray-700';
+const selected = (url) => { 
+  const pathname = ref(window.location.pathname);
+  if (pathname.value == '/') {
+    pathname.value  = '';
+  }
+  return window.location.origin + pathname.value == route('home' + url) ? 'text-blue-400' : 'text-gray-700';
 }
 
 const getCategories = () => {
