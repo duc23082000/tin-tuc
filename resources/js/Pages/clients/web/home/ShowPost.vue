@@ -83,14 +83,12 @@ const login = ref(false);
 const checkLogin = () => {
     if(!usePage().props.auth.user){
         login.value = true;
-        console.log(login.value);
     }
 }
 
 const handleComment = () => {
     if(!usePage().props.auth.user){
         login.value = true;
-        console.log(login.value);
     } else {
         axios.post(route('api.comment', props.post.id), {
             'content': comment.value,
@@ -107,7 +105,6 @@ const handleComment = () => {
 const handleLike = () => {
     if(!usePage().props.auth.user){
         login.value = true;
-        console.log(login.value);
     } else {
         axios.get(route('api.like', props.post.id))
         .then(function(respornse){

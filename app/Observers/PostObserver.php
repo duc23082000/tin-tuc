@@ -70,8 +70,10 @@ class PostObserver
 
     public function saved(Post $post) 
     {
-        $tags = request()->tags;
-        $newtags = array_filter($tags, 'is_string');
+        $tags = request()->input('tags', []);
+        $tagAll = Tag::all()->pluck('id')->toArray();
+        // $newtags = array_filter($tags, 'is_string');
+        $newtags = array_diff($tags, $tagAll);
 
         if(!empty($newtags)){
             $tagInsert =  array_map(function($value) {
@@ -82,7 +84,7 @@ class PostObserver
 
             $tagId = Tag::whereIn('name', $newtags)->pluck('id')->toArray();
 
-            $tagSame = array_filter($tags, 'is_numeric');
+            $tagSame = array_intersect($tags, $tagAll);
 
             $tagAll = array_merge($tagSame, $tagId);
             $post->tags()->sync($tagAll);

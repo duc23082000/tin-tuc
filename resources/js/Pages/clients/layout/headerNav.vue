@@ -112,7 +112,25 @@
           </template>
         </el-dropdown>
 
-        <Link :href="route('user.logout')" v-if="user" ><el-button>Logout</el-button></Link>
+        <div v-if="user">
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link">
+              <el-avatar> user </el-avatar>
+            </span>
+            <template #dropdown>
+              <div class="w-[250px]">
+                <el-dropdown-menu>
+                  <el-dropdown-item class="h-[50px]">Profile</el-dropdown-item>
+                  <el-dropdown-item class="h-[50px]">Setting</el-dropdown-item>
+                  <Link :href="route('user.logout')">
+                    <el-dropdown-item  class="h-[50px]">Logout</el-dropdown-item>
+                  </Link>
+                </el-dropdown-menu>
+              </div>
+            </template>
+          </el-dropdown>
+        </div>
+
         <Link :href="route('login')" v-if="!user" ><el-button>Login</el-button></Link>
       </div>
     </div>
@@ -152,7 +170,6 @@ const getCategories = () => {
   axios.get(route('home.api.categories'))
   .then(function(respornse){
     categories.value = respornse.data
-    console.log(3);
 
   })
   .catch(function(errors){
@@ -174,7 +191,6 @@ const getAuthors = () => {
   axios.get(route('home.api.authors'))
   .then(function(respornse){
     authors.value = respornse.data
-    console.log(2);
 
   })
   .catch(function(errors){
@@ -190,7 +206,6 @@ const getTags = () => {
   axios.get(route('home.api.tags'))
   .then(function(respornse){
     tags.value = respornse.data
-    console.log(1);
   })
   .catch(function(errors){
     console.log(errors);

@@ -97,6 +97,7 @@
 
 
   const props = defineProps(['status', 'tags', 'categories', 'post'])
+
   const data = ref({
     title: props.post.title,
     content: props.post.content ?? '',
@@ -109,7 +110,8 @@
   const errors = ref({})
 
   const update = () => {
-    axios.post(route('admin.post.api.update', props.post.id),
+    console.log(data.value);
+    axios.post(route('author.post.api.update', props.post.id),
       data.value,
     {
         headers: {

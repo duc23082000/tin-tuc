@@ -2,11 +2,11 @@
   <el-row class="mb-4">
     <div class="w-full">image</div>
   </el-row>
-  <el-row>
+  <el-row v-if="user.role == 0">
     <el-menu
         active-text-color="#ffd04b"
         background-color="#545c64"
-        class="el-menu-vertical-demo"
+        class="el-menu-vertical-demo w-full"
         default-active="2"
         text-color="#fff"
       >
@@ -36,6 +36,25 @@
         </el-sub-menu>
       </el-menu>
   </el-row>
+
+  <el-row v-if="user.role == 1">
+    <el-menu
+        active-text-color="#ffd04b"
+        background-color="#545c64"
+        class="el-menu-vertical-demo w-full"
+        default-active="2"
+        text-color="#fff"
+      >
+        <el-sub-menu index="1">
+          <template #title>
+            <el-icon><location /></el-icon>
+            <span>Posts</span>
+          </template>
+          <Link :href="route('author.post.lists')"><el-menu-item>List</el-menu-item></Link>
+          <Link :href="route('author.post.create')"><el-menu-item>Create</el-menu-item></Link>
+        </el-sub-menu>
+      </el-menu>
+  </el-row>
 </template>
 
 <script lang="ts" setup>
@@ -47,7 +66,10 @@ import {
   Grid,
   Bell,
 } from '@element-plus/icons-vue'
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+
+const user = usePage().props.auth.user;
+
 </script>
 
 <style>

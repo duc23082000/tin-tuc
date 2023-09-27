@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Web\CategoryController;
 use App\Http\Controllers\Admin\Web\NoticeController;
 use App\Http\Controllers\Admin\Web\PostController;
+use App\Http\Controllers\Author\PostController as AuthorPostController;
 use App\Http\Controllers\User\Auth\Authcontroller as AuthAuthcontroller;
 use App\Http\Controllers\User\Web\CategoryController as WebCategoryController;
 use App\Http\Controllers\User\Web\PostController as WebPostController;
@@ -65,6 +66,23 @@ Route::prefix('admin')->name('admin.')
             Route::delete('delete/{id}', [NoticeController::class, 'delete'])->name('api.delete');
 
             Route::get('send/{id}', [NoticeController::class, 'sendNotifications'])->name('api.send');
+        });
+});
+
+Route::prefix('author')->name('author.')
+    ->middleware(['auth:admins',
+        config('jetstream.auth_session'),
+        'verified',
+        ])
+    ->group(function(){
+        Route::prefix('post')->name('post.')->group(function(){
+            Route::get('', [AuthorPostController::class, 'indexApi'])->name('api.list');
+
+            Route::post('create', [AuthorPostController::class, 'store'])->name('api.create');
+
+            Route::put('edit/{id}', [AuthorPostController::class, 'update'])->name('api.update');
+
+            Route::delete('delete/{id}', [AuthorPostController::class, 'delete'])->name('api.delete');
         });
 });
 

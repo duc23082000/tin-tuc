@@ -46,7 +46,6 @@ class PostController extends Controller
         $posts = $this->post->listPost($search, $column, $sort)
             ->paginate(10)->withQueryString();
         
-        $sort = $sort == 'asc' ? 'desc' : 'asc';
         return $posts;
     }
 

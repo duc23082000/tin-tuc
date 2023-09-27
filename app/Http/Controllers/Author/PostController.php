@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class PostController extends Controller
 {
@@ -30,7 +31,12 @@ class PostController extends Controller
                 ]);    
     }
 
-    public function index(ListRequest $request){
+    public function index()
+    {
+        return  Inertia::render('admins/web/authorPosts/Index');
+    }
+
+    public function indexApi(ListRequest $request){
         
         $search = $request->input('search');
 
@@ -41,30 +47,27 @@ class PostController extends Controller
         $posts = $this->post->listPost($search, $collum, $sort)
             ->paginate(10)->withQueryString();
 
-        $sort = $sort == 'asc' ? 'desc' : 'asc';
-        return view('author.posts.lists', compact('posts', 'search', 'sort'));
+        return $posts;
     }
 
     public function create(){
         $tags = Tag::all();
         $categories = Category::all();
-        return view('author.posts.create', compact('tags', 'categories'));
+        return Inertia::render('admins/web/authorPosts/Create', [
+            'tags' => $tags,
+            'categories' => $categories,
+            'status' => PostStatusEnum::asArray(),
+        ]);
     }
 
-    public function creating(PostRequest $request){
-        $post = new Post();
-        $post->title = $request->input('title');
-        $post->content = $request->input('content');
-        $post->category_id = $request->input('category');
-        $post->status = $request->input('status');
-        $post->posted_at = $request->input('posted_at');
-        $post->created_by_id = Auth::guard('admins')->user()->id;
-        $post->modified_by_id = Auth::guard('admins')->user()->id;
-        $post->save();
+    public function store(PostRequest $request){
+        $data = array_merge($request->validated(), ['created_by_id' => app('admin_id'), 'modified_by_id' => app('admin_id')]);
+        $post = Post::create($data);
 
-        $post->tags()->sync($request->input('tags'));
-
-        return redirect(route('author.post.lists'));
+        return response()->json([
+            'success' => 'Tạo Thành công',
+            'url' => route('author.post.lists'),
+        ]);
     }
 
     public function upload(Request $request){
@@ -109,40 +112,42 @@ class PostController extends Controller
         }
         $tags = Tag::all();
         $categories = Category::all();
-        return view('author.posts.edit', compact('post', 'tags', 'categories'));
+        return  Inertia::render('admins/web/authorPosts/Edit', [
+            'tags' => $tags,
+            'categories' => $categories,
+            'post' => $post,
+            'status' => PostStatusEnum::asArray(),
+        ]);
     }
 
-    public function editing($id, PostRequest $request){
+    public function update($id, PostRequest $request){
         $post = Post::find($id);
-        if(!$post){
+        if(!$post || $post->created_by_id != Auth::guard('admins')->user()->id){
             return redirect(route('author.post.lists'));
         }
         if(!empty($post->image)){
             session()->put('oldImage'.app('admin_id'), $post->image);
         }
-        session()->put('contentImages'.Auth::guard('admins')->user()->id, $post->content);
-        $post->title = $request->input('title');
-        $post->content = $request->input('content');
-        $post->category_id = $request->input('category');
-        $post->status = $request->input('status');
-        $post->posted_at = $request->input('posted_at'); 
-        $post->modified_by_id = Auth::guard('admins')->user()->id;
-        $post->save();
-        
-        $post->tags()->sync($request->input('tags'));
+        session()->put('contentImages'.app('admin_id'), $post->content);
+        $data = array_merge($request->validated(), ['created_by_id' => app('admin_id'), 'modified_by_id' => app('admin_id')]);
+        $post->update($data);
 
-        return redirect(route('author.post.lists'));
+        return response()->json([
+            'success' => 'Sửa Thành công',
+            'url' => route('author.post.lists'),
+        ]);
     }
 
     public function delete($id){
         
         $post = Post::find($id);
-        if(!$post || $post->created_by_id != Auth::guard('admins')->user()->id){
+        if(!$post || $post->created_by_id != app('admin_id')){
             return redirect(route('author.post.lists'));
         }
 
         $post->delete();
 
-        return redirect(route('author.post.lists'));
+        return response()->json(['success' => 'Xóa thành công']);
+
     }
 }
