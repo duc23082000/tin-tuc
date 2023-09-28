@@ -9,7 +9,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 
 const form = useForm({
-    name: '',
+    username: '',
     email: '',
     password: '',
     password_confirmation: '',
@@ -36,7 +36,7 @@ const submit = () => {
                 <InputLabel for="name" value="Name" />
                 <TextInput
                     id="name"
-                    v-model="form.name"
+                    v-model="form.username"
                     type="text"
                     class="mt-1 block w-full"
                     required
