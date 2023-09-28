@@ -85,12 +85,6 @@ Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])->midd
 Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'delete.imageCkeditor'])->group(function(){
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('change-password', [AuthController::class, 'formChange'])->name('change');
-
-    Route::post('change-password', [AuthController::class, 'changePassword']);
-
-    Route::get('/email/verification-notification', [AuthController::class, 'sendMailVerify'])->middleware('throttle:6,1')->name('verification.send');
-
     Route::prefix('authors')->name('author.')->group(function(){
         Route::get('', [AuthorController::class, 'index'])->name('lists');
 
@@ -142,9 +136,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'delete.image
 
         Route::get('create', [CategoryController::class, 'create'])->name('create');
 
-
         Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('edit');
-
 
         Route::get('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
     });
