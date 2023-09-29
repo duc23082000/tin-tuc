@@ -7,7 +7,7 @@
       </el-header>
       <el-main class="md:!px-[400px]">
         <div class="md:border-x-2 md:border-black-500">
-          <div class="m-5">
+          <div class="md:m-5">
             <slot></slot>
           </div>
         </div>

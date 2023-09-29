@@ -18,7 +18,17 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
-import { faUserSecret, faThumbsUp, faShareFromSquare, faComment, faBell, faMagnifyingGlass, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, 
+    faThumbsUp, 
+    faShareFromSquare, 
+    faComment, 
+    faBell, 
+    faMagnifyingGlass, 
+    faBars, 
+    faUser, 
+    faGears, 
+    faArrowRightFromBracket 
+} from '@fortawesome/free-solid-svg-icons'
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -31,6 +41,9 @@ library.add(
     faBell,
     faMagnifyingGlass,
     faBars,
+    faUser,
+    faGears,
+    faArrowRightFromBracket,
 )
 
 createInertiaApp({

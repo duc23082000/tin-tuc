@@ -1,13 +1,13 @@
 <template>
     <layout-client>
-        <div class="grid grid-cols-4">
+        <div class="md:grid grid-cols-4">
             <div class="col-span-3">
                 <h1 class="text-2xl">
                     <strong>{{ postData.title }}</strong>
                 </h1>
             </div>
-            <div class="col-span-1">
-                <p class="text-sm flex items-center h-full">{{ formatDate(postData.posted_at) }}</p>
+            <div class="md:col-span-1">
+                <p class="text-xs md:text-sm flex items-center h-full">{{ formatDate(postData.posted_at) }}</p>
             </div>
         </div>
         <hr>
@@ -53,8 +53,8 @@
             </div>
         </div>
 
-        <el-dialog v-model="login" title="Login Form">
-            <LoginFormDialog @login-success="handleLoginSuccess" />
+        <el-dialog v-model="login" title="Login Form" class="!w-[300px] md:!w-[50%]">
+            <LoginFormDialog @login-success="handleLoginSuccess"/>
         </el-dialog>
     </layout-client>
 </template>
