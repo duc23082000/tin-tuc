@@ -12,7 +12,7 @@
                 <p>Không tìm thấy bài nào viết hợp lệ.</p>
             </div>
             <div v-for="(post, index) in props.posts.data" :key="index" class="mb-10">
-                <Link :href="route('home.show', post.title)" class="md:grid md:grid-cols-3">
+                <Link :href="route('home.show', post.title)" class="md:grid md:grid-cols-3 ">
                     <div class="md:col-span-1 md:mr-5 h-[200px] w-[300px] md:w-[348px] md:h-[232px]">
                         <img :src="'storage/images/' + post.image" alt="ko co anh">
                     </div>
@@ -20,7 +20,7 @@
                         {{ post.title }}
                     </div>
                 </Link>
-                <hr>
+                <hr class="md:hidden" :class="index == props.posts.data.length - 1 ? 'hidden' : ''">
             </div>
         </div>
     </layout-client>

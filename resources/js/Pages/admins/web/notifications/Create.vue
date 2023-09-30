@@ -1,6 +1,6 @@
 <template>
     <layout-admin>
-      <div class="shadow">
+      <div class="shadow h-[90%] md:h-[97.5%] m-3">
         <div class="m-3">
             <div class="mt-3">
               <label for="">Title:</label>
@@ -65,9 +65,9 @@
               <small v-if="errors.authors" class="text-red-600">{{ errors.authors[0] }}</small>
             </div>
 
-            <div class="mt-2">
-                <el-button type="primary" @click="create">Create</el-button>
-            </div>
+            <div class="mt-5 w-full">
+              <el-button type="primary" @click="create" class="w-full md:w-20">Create</el-button>
+          </div>
         </div>
       </div>
     </layout-admin>

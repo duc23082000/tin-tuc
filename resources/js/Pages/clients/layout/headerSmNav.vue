@@ -12,6 +12,43 @@
             />
             <el-button class="w-50" size="small" @click="handleSearch"><font-awesome-icon icon="magnifying-glass" /></el-button>
           </div>
+
+          <div class="mt-5">
+            <div class="mt-1 flex-row">
+              <div class="flex">
+                <span class="!w-20 font-semibold ">Mới nhất</span>
+                <div class="flex justify-end w-full items-end m-[2px]">
+                  <font-awesome-icon icon="angle-right"  class="text-[10px]"/>
+                </div>
+              </div>
+              <hr class="row-span-1">
+            </div>
+          </div>
+
+          <div class="mt-5">
+            <div class="mt-1 flex-row">
+              <div class="flex">
+                <span class="!w-20 font-semibold ">Hôm qua</span>
+                <div class="flex justify-end w-full items-end m-[2px]">
+                  <font-awesome-icon icon="angle-right"  class="text-[10px]"/>
+                </div>
+              </div>
+              <hr class="row-span-1">
+            </div>
+          </div>
+
+          <div class="mt-5">
+            <div class="mt-1 flex-row">
+              <div class="flex">
+                <span class="!w-20 font-semibold ">Tuần trước</span>
+                <div class="flex justify-end w-full items-end m-[2px]">
+                  <font-awesome-icon icon="angle-right"  class="text-[10px]"/>
+                </div>
+              </div>
+              <hr class="row-span-1">
+            </div>
+          </div>
+
         </el-drawer>
       </div>
 

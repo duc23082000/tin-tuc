@@ -93,7 +93,7 @@ const submit = () => {
             </div>
 
             <div>
-                <Link :href="route('account.login.Google')">Login Google</Link>
+                <a :href="route('account.login.Google')">Login Google</a>
             </div>
 
         </form>

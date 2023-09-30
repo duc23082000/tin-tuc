@@ -1,12 +1,12 @@
 <template>
     <layout-admin>
-      <div class="shadow">
+      <div class="shadow h-[90%] md:h-[97.5%] m-3">
         <div class="m-3">
             <label for="">Name:</label>
             <el-input v-model="name" />
             <small v-if="errors.name" class="text-red-600">{{ errors.name[0] }}</small>
-            <div class="mt-2">
-                <el-button type="primary" @click="updateCategory">Create</el-button>
+            <div class="mt-5 w-full">
+                <el-button type="primary" @click="updateCategory" class="w-full md:w-20">Create</el-button>
             </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 <template>
     <layout-admin>
-      <div class="shadow">
+      <div class="md:shadow">
         <div class="m-3">
             <div class="grid grid-cols-4 gap-2">
                 <div class="col-span-2 ">
@@ -20,7 +20,7 @@
                 </el-button>
             </div>
             <el-table :data="tableData.data" style="width: 100%">
-                <el-table-column fixed prop="id" label="ID" width="80">
+                <el-table-column prop="id" label="ID" width="80">
                     <template #header>
                     <div @click="sortButton('id')">
                         ID <el-icon><DCaret /></el-icon>
@@ -70,7 +70,7 @@
                     </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="right" label="Operations" width="120">
+                <el-table-column prop="right" fixed="right" label="Operations" width="120">
                     <template #default="scope">
                       <Link :href="route('admin.post.edit', scope.row.id)"><el-button link type="primary" size="small">Edit</el-button></Link>
                     <el-button link type="primary" size="small" @click="deleteCategory(scope.row.id)">Delete</el-button>
@@ -100,12 +100,8 @@
   import { Search, DCaret } from '@element-plus/icons-vue'
   import { Link } from '@inertiajs/vue3';
   import { ElMessage } from 'element-plus';
+
   const tableData = ref([])
-
-  const handleClick = () => {
-
-  console.log('click')
-  }
 
   const search = ref('')
 

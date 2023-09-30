@@ -1,6 +1,6 @@
 <template>
     <layout-admin>
-      <div class="shadow">
+      <div class="shadow h-[90%] md:h-[97.5%] m-3">
         <div class="m-3">
             <div class="mt-3">
               <label for="">Title:</label>
@@ -17,7 +17,7 @@
             <div class="mt-3">
               <label for="">Category:</label>
               <div>
-                <el-select v-model="data.category_id" class=" w-96" placeholder="Select" >
+                <el-select v-model="data.category_id" class="md:w-96" placeholder="Select" >
                   <el-option
                     v-for="(item, index) in props.categories"
                     :key="index"
@@ -44,6 +44,7 @@
                   v-model="data.posted_at"
                   type="date"
                   placeholder="Pick a day"
+                  class="!w-auto"
                 />
               </div>
               <small v-if="errors.posted_at" class="text-red-600">{{ errors.posted_at[0] }}</small>
@@ -79,9 +80,9 @@
               <small v-if="errors.image" class="text-red-600">{{ errors.image[0] }}</small>
             </div>
 
-            <div class="mt-2">
-                <el-button type="primary" @click="create">Create</el-button>
-            </div>
+            <div class="mt-5 w-full">
+              <el-button type="primary" @click="create" class="w-full md:w-20">Create</el-button>
+          </div>
         </div>
       </div>
     </layout-admin>

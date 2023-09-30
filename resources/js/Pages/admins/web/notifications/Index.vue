@@ -1,6 +1,6 @@
 <template>
     <layout-admin>
-      <div class="shadow">
+      <div class="md:shadow h-[90%] md:h-[97.5%]">
         <div class="m-3">
             <div class="grid grid-cols-4 gap-2">
                 <div class="col-span-2 ">
@@ -20,7 +20,7 @@
                 </el-button>
             </div>
             <el-table :data="tableData.data" style="width: 100%" @cell-click="hoverRow">
-                <el-table-column fixed prop="id" label="ID" width="80">
+                <el-table-column prop="id" label="ID" width="80">
                     <template #header>
                     <div @click="sortButton('id')">
                         ID <el-icon><DCaret /></el-icon>
@@ -56,7 +56,7 @@
                     </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="right" label="Operations" width="200">
+                <el-table-column prop="right" label="Operations" fixed="right" width="130px">
                     <template #default="scope">
                       <div class="grap-3">
                         <el-button link type="primary" size="small" @click="SendNotification(scope.row.id)">Send</el-button>

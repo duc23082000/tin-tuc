@@ -27,7 +27,8 @@ import { faUserSecret,
     faBars, 
     faUser, 
     faGears, 
-    faArrowRightFromBracket 
+    faArrowRightFromBracket, 
+    faAngleRight
 } from '@fortawesome/free-solid-svg-icons'
 
 
@@ -44,6 +45,7 @@ library.add(
     faUser,
     faGears,
     faArrowRightFromBracket,
+    faAngleRight,
 )
 
 createInertiaApp({
@@ -56,7 +58,6 @@ createInertiaApp({
             .use(ElementPlus)
             .use(CKEditor)
             .component('font-awesome-icon', FontAwesomeIcon)
-            .mixin({ methods: { appRoute: route } })
             .mount(el);
     },
     progress: {

@@ -46,9 +46,9 @@
                     <el-button type="primary" @click="handleComment">Gửi bình luận</el-button>
                 </div>
                 <hr>
-                <div class="my-5 grid grid-cols-10" v-for="(comment, index) in commentData" :key="index">
+                <div class="my-5 grid grid-cols-3 md:grid-cols-10" v-for="(comment, index) in commentData" :key="index">
                     <div class="col-span-1">{{ comment.commented_by.username }}:</div>
-                    <div class="col-span-9">{{ comment.content }}</div>
+                    <div class="col-span-2 md:col-span-9">{{ comment.content }}</div>
                 </div>
             </div>
         </div>

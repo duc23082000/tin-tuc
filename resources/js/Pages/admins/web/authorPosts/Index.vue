@@ -1,6 +1,6 @@
 <template>
     <layout-admin>
-      <div class="shadow">
+      <div class="md:shadow h-[90%] md:h-[97.5%]">
         <div class="m-3">
             <div class="grid grid-cols-4 gap-2">
                 <div class="col-span-2 ">
@@ -22,7 +22,7 @@
               </Link>
             </div>
             <el-table :data="tableData.data" style="width: 100%">
-                <el-table-column fixed prop="id" label="ID" width="80">
+                <el-table-column prop="id" label="ID" width="80">
                     <template #header>
                     <div @click="sortButton('id')">
                         ID <el-icon><DCaret /></el-icon>
@@ -72,7 +72,7 @@
                     </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="right" label="Operations" width="120">
+                <el-table-column prop="right" fixed="right" label="Operations" width="120">
                     <template #default="scope">
                       <Link :href="route('author.post.edit', scope.row.id)"><el-button link type="primary" size="small">Edit</el-button></Link>
                     <el-button link type="primary" size="small" @click="deleteCategory(scope.row.id)">Delete</el-button>
