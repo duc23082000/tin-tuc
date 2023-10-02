@@ -19,7 +19,7 @@
                   <Link :href="route('admin.notice.create')">Create</Link>
                 </el-button>
             </div>
-            <el-table :data="tableData.data" style="width: 100%" @cell-click="hoverRow">
+            <el-table :data="tableData.data" v-loading="loading" style="width: 100%" @cell-click="hoverRow">
                 <el-table-column prop="id" label="ID" width="80">
                     <template #header>
                     <div @click="sortButton('id')">
@@ -105,6 +105,8 @@
   import { Link } from '@inertiajs/vue3';
   import { ElMessage } from 'element-plus';
 
+  const loading = ref(true);
+
   const tableData = ref([])
 
   const rowData = ref({})
@@ -124,7 +126,8 @@
     axios.get(route('admin.notice.api.lists', dataInput.value))
     .then(function(response){
       tableData.value = response.data
-      console.log(response.data);
+      loading.value = false
+      // console.log(response.data);
     }).catch(function(error){
       console.log(error)
     })

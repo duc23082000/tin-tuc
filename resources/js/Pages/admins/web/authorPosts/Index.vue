@@ -21,7 +21,7 @@
                 </el-button>
               </Link>
             </div>
-            <el-table :data="tableData.data" style="width: 100%">
+            <el-table :data="tableData.data" v-loading="loading" style="width: 100%">
                 <el-table-column prop="id" label="ID" width="80">
                     <template #header>
                     <div @click="sortButton('id')">
@@ -102,6 +102,9 @@
   import { Search, DCaret } from '@element-plus/icons-vue'
   import { Link } from '@inertiajs/vue3';
   import { ElMessage } from 'element-plus';
+
+  const loading = ref(true);
+
   const tableData = ref([])
 
   const handleClick = () => {
@@ -122,6 +125,7 @@
     axios.get(route('admin.post.api.list', dataInput.value))
     .then(function(response){
       tableData.value = response.data
+      loading.value = false;
       // console.log(response.data);
     }).catch(function(error){
       console.log(error)

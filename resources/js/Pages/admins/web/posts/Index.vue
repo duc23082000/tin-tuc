@@ -19,7 +19,7 @@
                   <Link :href="route('admin.post.create')">Create</Link>
                 </el-button>
             </div>
-            <el-table :data="tableData.data" style="width: 100%">
+            <el-table :data="tableData.data" v-loading="loading" style="width: 100%">
                 <el-table-column prop="id" label="ID" width="80">
                     <template #header>
                     <div @click="sortButton('id')">
@@ -105,6 +105,8 @@
 
   const search = ref('')
 
+  const loading = ref(true);
+
   const dataInput = ref({
     search: '',
     column: '',
@@ -116,6 +118,7 @@
     axios.get(route('admin.post.api.list', dataInput.value))
     .then(function(response){
       tableData.value = response.data
+      loading.value = false
       // console.log(response.data);
     }).catch(function(error){
       console.log(error)
