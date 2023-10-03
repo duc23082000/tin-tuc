@@ -21,10 +21,10 @@ class AuthRequest extends FormRequest
      */
     public function rules(): array
     {
-        // if($this->url() == route('account.register') || $this->url() == route('admin.user.create') || $this->url() == route('admin.user.edit', $this->input('id'))){
-        //     $table = 'users';
-        // }
-        if($this->url() == route('admin.author.api.create') || $this->url() == route('admin.author.api.update', $this->input('id'))){
+        if($this->url() == route('account.register') || $this->url() == route('admin.user.api.create') || $this->url() == route('admin.user.api.update', $this->input('id', ''))){
+            $table = 'users';
+        }
+        if($this->url() == route('admin.author.api.create') || $this->url() == route('admin.author.api.update', $this->input('id', ''))){
             $table = 'admins';
         }
         

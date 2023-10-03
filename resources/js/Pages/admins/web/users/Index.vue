@@ -16,7 +16,7 @@
             </div>
             <div class="mt-2 mb-2">
                 <el-button>
-                    <Link :href="route('admin.author.create')">Create</Link>
+                    <Link :href="route('admin.user.create')">Create</Link>
                 </el-button>
             </div>
             <el-table :data="tableData.data" v-loading="loading" style="width: 100%">
@@ -57,8 +57,8 @@
                 </el-table-column>
                 <el-table-column prop="right" fixed="right" label="Operations" width="120">
                     <template #default="scope">
-                        <Link :href="route('admin.author.edit', scope.row.id)"><el-button link type="primary" size="small">Edit</el-button></Link>
-                    <el-button link type="primary" size="small" @click="deleteAuthor(scope.row.id)">Delete</el-button>
+                        <Link :href="route('admin.user.edit', scope.row.id)"><el-button link type="primary" size="small">Edit</el-button></Link>
+                    <el-button link type="primary" size="small" @click="deleteUser(scope.row.id)">Delete</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -87,8 +87,8 @@
     sort: 'desc',
   })
 
-  const getAuthors = () => {
-    axios.get(route('admin.author.api.list', dataInput.value))
+  const getUsers = () => {
+    axios.get(route('admin.user.api.list', dataInput.value))
     .then(function(response){
       tableData.value = response.data
       loading.value = false
@@ -109,18 +109,18 @@
     dataInput.value.search = search.value
   }
 
-  const deleteAuthor = (id) => {
-    axios.delete(route('admin.author.api.delete', id))
+  const deleteUser = (id) => {
+    axios.delete(route('admin.user.api.delete', id))
     .then(function(response){
         ElMessage.success(response.data.success)
         console.log(response.data.success)
-        getAuthors()
+        getUsers()
     }).catch(function(error){
         console.log(error);
     })
   }
 
-  watchEffect(getAuthors);
+  watchEffect(getUsers);
 
 
 </script>

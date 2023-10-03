@@ -42,6 +42,14 @@
           <Link :href="route('admin.author.lists')"><el-menu-item index="4-1">List</el-menu-item></Link>
           <Link :href="route('admin.author.create')"><el-menu-item index="4-2">Create</el-menu-item></Link>
         </el-sub-menu>
+        <el-sub-menu index="5">
+          <template #title>
+            <el-icon><User /></el-icon>
+            <span>User</span>
+          </template>
+          <Link :href="route('admin.user.lists')"><el-menu-item index="5-1">List</el-menu-item></Link>
+          <Link :href="route('admin.user.create')"><el-menu-item index="5-2">Create</el-menu-item></Link>
+        </el-sub-menu>
       </el-menu>
   </el-row>
 
@@ -74,6 +82,7 @@ import {
   Grid,
   Bell,
   EditPen,
+  User,
 } from '@element-plus/icons-vue'
 import { Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -105,6 +114,13 @@ switch(window.location.href){
   case route('admin.author.create'):
     active.value = "4-2"
     break
+  case route('admin.user.lists'):
+    active.value = "5-1"
+    break
+  case route('admin.user.create'):
+    active.value = "5-2"
+    break
+
 }
 
 

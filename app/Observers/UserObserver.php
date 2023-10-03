@@ -34,7 +34,7 @@ class UserObserver
 
     public function deleting(User $user): void
     {
-        $user->posts_created_by()->delete();
+        
     }
 
     /**

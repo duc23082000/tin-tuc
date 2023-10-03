@@ -91,9 +91,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'delete.image
         Route::get('create', [AuthorController::class, 'create'])->name('create');
 
         Route::get('edit/{id}', [AuthorController::class, 'edit'])->name('edit');
-
-        Route::get('delete/{id}', [AuthorController::class, 'delete'])->name('delete');
-
     });
 
     Route::prefix('users')->name('user.')->group(function(){
@@ -101,14 +98,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'delete.image
 
         Route::get('create', [UserController::class, 'create'])->name('create');
 
-        Route::post('create', [UserController::class, 'creating']);
-
         Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
-
-        Route::put('edit/{id}', [UserController::class, 'editing']);
-
-        Route::get('delete/{id}', [UserController::class, 'delete'])->name('delete');
-
     });
 
     Route::prefix('posts')->name('post.')->group(function(){
@@ -123,8 +113,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'delete.image
 
             Route::put('edit/{id}', [PostController::class, 'editing']);
         });
-
-        Route::get('delete/{id}', [PostController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('categories')->name('category.')->group(function(){
@@ -133,8 +121,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'delete.image
         Route::get('create', [CategoryController::class, 'create'])->name('create');
 
         Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('edit');
-
-        Route::get('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('notices')->name('notice.')->group(function(){

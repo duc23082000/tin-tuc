@@ -20,9 +20,9 @@ class UserController extends Controller
         $this->users = new UserFilter();
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        // return Inertia::render();
+        return Inertia::render('admins/web/users/Index');
     }
 
     public function indexApi(Request $request)
@@ -35,35 +35,40 @@ class UserController extends Controller
 
         $users = $this->users->listUser($search, $collum, $sort)->paginate(10)->withQueryString();
 
-        $sort = $sort == 'asc' ? 'desc' : 'asc';
-        return view('admin.web.users.lists', compact('users', 'search', 'sort'));
+        return $users;
 
     }
 
     public function create(){
-        return view('admin.web.users.create');
+        return Inertia::render('admins/web/users/Create');
     }
 
-    public function creating(AuthRequest $request){
-        // dd($request->posted_at);
+    public function store(AuthRequest $request){
         $user = new User();
         $user->username = $request->input('username');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
         $user->save();
 
-        return redirect(route('admin.author.lists'));
+        return response()->json([
+            'success' => 'Tạo Thành công',
+            'url' => route('admin.user.lists'),
+        ]);
     }
 
     public function edit($id){
         $user = User::find($id);
         if(!$user){
-            return redirect(route('admin.author.lists'));
+            return redirect(route('admin.user.lists'));
         }
-        return view('admin.web.users.edit', compact('user'));
+        
+        return  Inertia::render('admins/web/users/Edit', [
+            'user' => $user,
+        ]);
     }
+    
 
-    public function editing($id, AuthRequest $request){
+    public function update($id, AuthRequest $request){
         $user = User::find($id);
         if(!$user){
             return redirect(route('admin.author.lists'));
@@ -72,18 +77,21 @@ class UserController extends Controller
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
         $user->save();
-        return redirect(route('admin.author.lists'));
+        return response()->json([
+            'success' => 'Sửa Thành công',
+            'url' => route('admin.user.lists'),
+        ]);
     }
 
-    public function delete($id){
-        // dd(1);
+    public function delete($id)
+    {
         $user = User::find($id);
         if(!$user){
             return redirect(route('admin.author.lists'));
         }
-
         $user->delete();
 
-        return redirect(route('admin.author.lists'));
+        return response()->json(['success' => 'Xóa thành công']);
+
     }
 }
