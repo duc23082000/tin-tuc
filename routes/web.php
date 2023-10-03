@@ -90,11 +90,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admins', 'delete.image
 
         Route::get('create', [AuthorController::class, 'create'])->name('create');
 
-        Route::post('create', [AuthorController::class, 'creating']);
-
         Route::get('edit/{id}', [AuthorController::class, 'edit'])->name('edit');
-
-        Route::put('edit/{id}', [AuthorController::class, 'editing']);
 
         Route::get('delete/{id}', [AuthorController::class, 'delete'])->name('delete');
 

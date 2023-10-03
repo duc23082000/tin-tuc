@@ -1,18 +1,19 @@
 <template>
-    <el-form :model="form">
-      <el-form-item class="flex" >
-        <label class="">Email</label>
-        <el-input v-model="form.email"
+    <el-form :model="form"  label-position="top">
+      <el-form-item label="Email" >
+        <el-input 
+        v-model="form.email"
         autocomplete="off"
         placeholder="Please input email"
+        class="!w-full"
         />
       </el-form-item>
-      <el-form-item>
-        <p>Password</p>
+      <el-form-item label="Password">
         <el-input
           v-model="form.password"
           type="password"
           placeholder="Please input password"
+          class="!w-full"
           show-password
         />
       </el-form-item>

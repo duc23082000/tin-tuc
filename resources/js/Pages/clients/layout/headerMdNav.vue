@@ -74,7 +74,6 @@
           <div>
             <Link :href="route('home')" class="text-gray-700 font-semibold">Đáng chú ý</Link>
           </div>
-
         </div>
       </div>
 

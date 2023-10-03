@@ -21,10 +21,10 @@ class AuthRequest extends FormRequest
      */
     public function rules(): array
     {
-        if($this->url() == route('account.register') || $this->url() == route('admin.user.create') || $this->url() == route('admin.user.edit', $this->input('id'))){
-            $table = 'users';
-        }
-        if($this->url() == route('register') || $this->url() == route('admin.author.create') || $this->url() == route('admin.author.edit', $this->input('id'))){
+        // if($this->url() == route('account.register') || $this->url() == route('admin.user.create') || $this->url() == route('admin.user.edit', $this->input('id'))){
+        //     $table = 'users';
+        // }
+        if($this->url() == route('admin.author.api.create') || $this->url() == route('admin.author.api.update', $this->input('id'))){
             $table = 'admins';
         }
         
@@ -44,8 +44,8 @@ class AuthRequest extends FormRequest
             'email.required' => 'Email không được bỏ trống',
             'email.email' => 'Email phải là kiểu email',
             'email.unique' => 'Email đã được sử dụng',
-            'password.required' => 'password không được để trống',
-            'password.min' => 'password phải có ít nhất 6 kí tự',
+            'password.required' => 'Password không được để trống',
+            'password.min' => 'Password phải có ít nhất 6 kí tự',
             'cfpassword.same' => 'Password không trùng khớp',
         ];
     }

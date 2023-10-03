@@ -12,7 +12,7 @@
       >
         <el-sub-menu index="1">
           <template #title>
-            <el-icon><location /></el-icon>
+            <el-icon><Document /></el-icon>
             <span>Posts</span>
           </template>
           <Link :href="route('admin.post.lists')"><el-menu-item index="1-1">List</el-menu-item></Link>
@@ -34,6 +34,14 @@
           <Link :href="route('admin.notice.lists')"><el-menu-item index="3-1">List</el-menu-item></Link>
           <Link :href="route('admin.notice.create')"><el-menu-item index="3-2">Create</el-menu-item></Link>
         </el-sub-menu>
+        <el-sub-menu index="4">
+          <template #title>
+            <el-icon><EditPen /></el-icon>
+            <span>Authors</span>
+          </template>
+          <Link :href="route('admin.author.lists')"><el-menu-item index="4-1">List</el-menu-item></Link>
+          <Link :href="route('admin.author.create')"><el-menu-item index="4-2">Create</el-menu-item></Link>
+        </el-sub-menu>
       </el-menu>
   </el-row>
 
@@ -47,7 +55,7 @@
       >
         <el-sub-menu index="1">
           <template #title>
-            <el-icon><location /></el-icon>
+            <el-icon><Document /></el-icon>
             <span>Posts</span>
           </template>
           <Link :href="route('author.post.lists')"><el-menu-item>List</el-menu-item></Link>
@@ -65,6 +73,7 @@ import {
   Setting,
   Grid,
   Bell,
+  EditPen,
 } from '@element-plus/icons-vue'
 import { Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -78,17 +87,23 @@ switch(window.location.href){
   case route('admin.post.create'):
     active.value = "1-2"
     break
-    case route('admin.category.lists'):
+  case route('admin.category.lists'):
     active.value = "2-1"
     break
   case route('admin.category.create'):
     active.value = "2-2"
     break
-    case route('admin.notice.lists'):
+  case route('admin.notice.lists'):
     active.value = "3-1"
     break
   case route('admin.notice.create'):
     active.value = "3-2"
+    break
+  case route('admin.author.lists'):
+    active.value = "4-1"
+    break
+  case route('admin.author.create'):
+    active.value = "4-2"
     break
 }
 

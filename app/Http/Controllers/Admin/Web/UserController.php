@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -18,8 +19,14 @@ class UserController extends Controller
     {
         $this->users = new UserFilter();
     }
-    public function index(Request $request){
 
+    public function index(Request $request)
+    {
+        // return Inertia::render();
+    }
+
+    public function indexApi(Request $request)
+    {
         $search = $request->input('search');
 
         $collum = $request->input('collum') ?? 'updated_at';
@@ -30,6 +37,7 @@ class UserController extends Controller
 
         $sort = $sort == 'asc' ? 'desc' : 'asc';
         return view('admin.web.users.lists', compact('users', 'search', 'sort'));
+
     }
 
     public function create(){

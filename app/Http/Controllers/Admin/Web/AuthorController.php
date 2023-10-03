@@ -8,8 +8,8 @@ use App\Http\Requests\AuthRequest;
 use App\ModelFilters\AdminFilter;
 use App\Models\Admin;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 
 class AuthorController extends Controller
 {
@@ -18,28 +18,31 @@ class AuthorController extends Controller
     {
         $this->author = new AdminFilter();
     }
-    public function index(Request $request){
 
+    public function index()
+    {
+        return Inertia::render('admins/web/authors/Index');
+    }
+
+    public function indexApi(Request $request)
+    {
         $search = $request->input('search');
 
         $collum = $request->input('collum') ?? 'updated_at';
 
         $sort = $request->input('sort') ?? 'desc';
 
-        // $authors = $this->author->listUser($search, $collum, $sort, UserRoleEnum::Author)->paginate(10)->withQueryString();
         $authors = $this->author->listUser($search, $collum, $sort, UserRoleEnum::Author)->paginate(10)->withQueryString();
-            // ->paginate(10)->withQueryString();
 
-        $sort = $sort == 'asc' ? 'desc' : 'asc';
-        return view('admin.web.authors.lists', compact('authors', 'search', 'sort'));
+        return $authors;
     }
 
     public function create(){
-        return view('admin.web.authors.create');
+        return Inertia::render('admins/web/authors/Create');
     }
 
-    public function creating(AuthRequest $request){
-        // dd($request->posted_at);
+    public function store(AuthRequest $request){
+
         $user = new Admin();
         $user->username = $request->input('username');
         $user->email = $request->input('email');
@@ -47,7 +50,10 @@ class AuthorController extends Controller
         $user->role = UserRoleEnum::Author;
         $user->save();
 
-        return redirect(route('admin.author.lists'));
+        return response()->json([
+            'success' => 'Tạo Thành công',
+            'url' => route('admin.author.lists'),
+        ]);
     }
 
     public function edit($id){
@@ -55,10 +61,13 @@ class AuthorController extends Controller
         if(!$user){
             return redirect(route('admin.author.lists'));
         }
-        return view('admin.web.authors.edit', compact('user'));
+        
+        return  Inertia::render('admins/web/authors/Edit', [
+            'user' => $user,
+        ]);
     }
 
-    public function editing($id, AuthRequest $request){
+    public function update($id, AuthRequest $request){
         $user = Admin::find($id);
         if(!$user){
             return redirect(route('admin.author.lists'));
@@ -67,7 +76,11 @@ class AuthorController extends Controller
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
         $user->save();
-        return redirect(route('admin.author.lists'));
+        
+        return response()->json([
+            'success' => 'Sửa Thành công',
+            'url' => route('admin.author.lists'),
+        ]);
     }
 
     public function delete($id){
@@ -79,6 +92,6 @@ class AuthorController extends Controller
 
         $user->delete();
 
-        return redirect(route('admin.author.lists'));
+        return response()->json(['success' => 'Xóa thành công']);
     }
 }

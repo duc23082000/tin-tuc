@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Auth\AuthController;
+use App\Http\Controllers\Admin\Web\AuthorController;
 use App\Http\Controllers\Admin\Web\CategoryController;
 use App\Http\Controllers\Admin\Web\NoticeController;
 use App\Http\Controllers\Admin\Web\PostController;
@@ -44,6 +45,16 @@ Route::prefix('admin')->name('admin.')
             Route::put('edit/{id}', [CategoryController::class, 'update'])->name('api.update');
 
             Route::delete('delete/{id}', [CategoryController::class, 'delete'])->name('api.delete');
+        });
+
+        Route::prefix('author')->name('author.')->group(function(){
+            Route::get('', [AuthorController::class, 'indexApi'])->name('api.list');
+
+            Route::post('create', [AuthorController::class, 'store'])->name('api.create');
+
+            Route::put('edit/{id}', [AuthorController::class, 'update'])->name('api.update');
+
+            Route::delete('delete/{id}', [AuthorController::class, 'delete'])->name('api.delete');
         });
 
         Route::prefix('post')->name('post.')->group(function(){

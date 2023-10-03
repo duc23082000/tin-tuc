@@ -1,13 +1,13 @@
 <template>
     <layout-client>
-        <div class="grid grid-cols-4">
-            <div class="col-span-3">
+        <div class="md:grid grid-cols-4">
+            <div class="md:col-span-3">
                 <h1 class="text-2xl">
                     <strong>{{ notificationData.data.title }}</strong>
                 </h1>
             </div>
-            <div class="col-span-1">
-                <p class="text-sm flex items-center h-full">{{ formatDate(notificationData.created_at) }}</p>
+            <div class="md:col-span-1">
+                <p class="text-[10px] md:text-sm flex items-center h-full">{{ formatDate(notificationData.created_at) }}</p>
             </div>
         </div>
         <hr>

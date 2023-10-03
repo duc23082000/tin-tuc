@@ -12,7 +12,7 @@
         </div>
         <hr>
         <div class="my-2 image">
-            <img :src="'storage/images/' + postData.image" alt="">
+            <img v-if="postData.image" :src="'storage/images/' + postData.image" alt="">
         </div>
         <div v-html="postData.content ?? '...'"></div>
 
