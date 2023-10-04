@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Web\UserController;
 use App\Http\Controllers\Author\PostController as AuthorPostController;
 use App\Http\Controllers\User\Auth\Authcontroller as AuthAuthcontroller;
 use App\Http\Controllers\User\Web\CategoryController as WebCategoryController;
+use App\Http\Controllers\User\Web\NotificationController;
 use App\Http\Controllers\User\Web\PostController as WebPostController;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -138,6 +139,9 @@ Route::middleware([
     Route::post('comment/{id}', [WebPostController::class, 'comment'])->name('comment');
 
     Route::get('notification/{id}', [NotificationController::class, 'show'])->name('notification.show');
+
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notification.all');
+
 });
 
 

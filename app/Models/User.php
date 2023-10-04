@@ -61,17 +61,6 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
-        'unread_notifications',
-        'notifications',
     ];
 
-    public function getUnreadNotificationsAttribute()
-    {
-        return $this->unreadNotifications()->get();
-    }
-
-    public function getNotificationsAttribute()
-    {
-        return $this->notifications()->get();
-    }
 }

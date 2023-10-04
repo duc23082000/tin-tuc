@@ -91,13 +91,13 @@
           <div class="el-dropdown-link inline-flex text-l">
             <font-awesome-icon icon="bell"/>
             <sup class="text-[#D71313]">
-              <b>{{ user.unread_notifications.length }}</b>
+              <b>{{ notifications?.unread_notifications?.length }}</b>
             </sup>
           </div>
           <template #dropdown>
             <el-dropdown-menu class="w-[150px]">
               <Link 
-                v-for="(notification, index) in user.notifications.slice(0, length_notification)" 
+                v-for="(notification, index) in notifications?.notifications?.slice(0, length_notification)" 
                 :key="index"
                 :href="route('notification.show', notification.id)">
                 <el-dropdown-item class="h-[30px] !text-[10px]">
@@ -156,10 +156,11 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
-import { handleError } from 'vue';
+import { handleError, h } from 'vue';
 import { ref, watchEffect } from 'vue';
 import { router } from '@inertiajs/vue3';
 import moment from 'moment';
+import { ElNotification } from 'element-plus';
 
 const drawer = ref({
   sidebar: false,
@@ -181,6 +182,8 @@ const tags = ref({});
 
 const search = ref('')
 
+const notifications = ref({})
+
 const selected = (url) => { 
   const pathname = ref(window.location.pathname);
   if (pathname.value == '/') {
@@ -201,7 +204,7 @@ const getCategories = () => {
 }
 
 const showNotification = () => {
-  length_notification.value = user.notifications.length;
+  length_notification.value = notifications?.notifications?.length;
   hiddenShow.value = !hiddenShow.value
 }
 
@@ -235,11 +238,25 @@ const getTags = () => {
   })
 }
 
+const getNotifications = () => {
+  axios.get(route('api.notification.all'))
+  .then(function(respornse){
+    notifications.value = respornse.data
+  })
+}
+
 const handleSearch = () => {
   router.visit(route('home.search') + '?search=' + search.value)
 }
 
-watchEffect([getCategories, getAuthors, getTags])
+Echo.private(`notification.${user.id}`)
+    .listen('.notification.user', (data) => {
+        if(data.created_by){
+          getNotifications()
+        }
+    });
+
+watchEffect([getCategories, getAuthors, getTags, getNotifications])
 
 </script>
 

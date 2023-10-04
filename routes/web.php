@@ -17,6 +17,7 @@ use App\Http\Controllers\User\Web\PostController as WebPostController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -35,11 +36,6 @@ Route::get('delete-acc', function () {
     User::find(request()->user()->id)->delete();
     return redirect(route('login'));
 })->name('delete.acc');
-
-
-
-
-
 
 Route::prefix('auth')->group(function(){
     Route::prefix('admin')->name('admin.')->group(function(){
@@ -191,6 +187,7 @@ Route::get('{title}', [WebPostController::class, 'show'])->name('home.show');
 Route::get('', [WebPostController::class, 'index'])->name('home');
 
 Route::get('notification/{id}', [NotificationController::class, 'show'])->middleware('auth')->name('notification.show');
+
 
 
 

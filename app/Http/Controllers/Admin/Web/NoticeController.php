@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Web;
 
 use App\Enums\NoticeStatusEnum;
 use App\Enums\UserRoleEnum;
+use App\Events\NotificationEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NotificationRequest;
 use App\Http\Requests\TestValidate;
@@ -129,6 +130,7 @@ class NoticeController extends Controller
         }
         if(!empty($notice->users)){
             FacadesNotification::send($notice->users, new UserNotification($notice->created_by->email, $notice->title, $notice->content));
+            broadcast(new NotificationEvent($notice));
         }
         if(!empty($notice->authors)){
             FacadesNotification::send($notice->authors, new UserNotification($notice->created_by->email, $notice->title, $notice->content));

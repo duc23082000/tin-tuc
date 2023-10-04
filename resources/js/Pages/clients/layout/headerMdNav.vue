@@ -16,58 +16,64 @@
           </div>
         </div>
 
-        <div class="col-span-4 grid grid-cols-5 items-center">
+        <div class="col-span-4 grid grid-cols-5 items-center relative">
           <div>
             <Link :href="route('home')" class="font-semibold" :class="selected('')">Trang chủ</Link>
           </div>
-          <div class="group inline-block relative">
+          <div class="group h-full flex items-center">
             <div
               class="text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center"
             >
               <span class="mr-1" :class="selected('.category')">Categories</span>
             </div>
-            <ul class="absolute hidden text-gray-700 pt-1 group-hover:block">
-              <li class="" v-for="(category, index) in categories" :key="index">
-                <Link
-                  class="rounded-t bg-white hover:bg-gray-50 py-2 px-4 block whitespace-no-wrap"
-                  :href="route('home.category') + '?category=' + category.name"
-                  >{{ category.name }}</Link
-                >
-              </li>
-            </ul>
+            <div class="absolute hidden text-gray-700 pt-1 group-hover:block w-full h-[300px] left-0 top-[95px] bg-slate-100">
+              <div class="grid grid-cols-5">
+                <div class="" v-for="(category, index) in categories" :key="index">
+                  <Link
+                    class="rounded-t hover:bg-gray-50 py-2 px-4 block whitespace-no-wrap"
+                    :href="route('home.category') + '?category=' + category.name"
+                    >{{ category.name }}</Link
+                  >
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="group inline-block relative">
+          <div class="group h-full flex items-center">
             <div
               class="text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center"
             >
               <span class="mr-1" :class="selected('.author')">Authors</span>
             </div>
-            <ul class="absolute hidden text-gray-700 pt-1 group-hover:block">
-              <li class="" v-for="(author, index) in authors" :key="index">
-                <Link
-                  class="rounded-t bg-white hover:bg-gray-50 py-2 px-4 block whitespace-no-wrap"
-                  :href="route('home.author') + '?author=' + author.username"
-                  >{{ author.username }}</Link
-                >
-              </li>
+            <ul class="absolute hidden text-gray-700 pt-1 group-hover:block w-full left-0 top-[95px] h-[300px] bg-slate-100">
+              <div class="grid grid-cols-5">
+                <li class="" v-for="(author, index) in authors" :key="index">
+                  <Link
+                    class="rounded-t hover:bg-gray-50 py-2 px-4 block whitespace-no-wrap"
+                    :href="route('home.author') + '?author=' + author.username"
+                    >{{ author.username }}</Link
+                  >
+                </li>
+              </div>
             </ul>
           </div>
 
-          <div class="group inline-block relative">
+          <div class="group h-full flex items-center">
             <div
               class="text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center"
             >
               <span class="mr-1" :class="selected('.tag')">Tags</span>
             </div>
-            <ul class="absolute hidden text-gray-700 pt-1 group-hover:block h-[400px] overflow-auto">
-              <li class="" v-for="(tag, index) in tags" :key="index">
-                <Link
-                  class="rounded-t bg-white hover:bg-gray-50 py-2 px-4 block whitespace-no-wrap"
-                  :href="route('home.tag') + '?tag=' + tag.name"
-                  >{{ tag.name }}</Link
-                >
-              </li>
+            <ul class="absolute hidden text-gray-700 pt-1 group-hover:block h-[400px] overflow-auto w-full left-0 top-[95px] bg-slate-100">
+              <div class="grid grid-cols-5">
+                <li class="" v-for="(tag, index) in tags" :key="index">
+                  <Link
+                    class="rounded-t hover:bg-gray-50 py-2 px-4 block whitespace-no-wrap"
+                    :href="route('home.tag') + '?tag=' + tag.name"
+                    >{{ tag.name }}</Link
+                  >
+                </li>
+              </div>
             </ul>
           </div>
 
@@ -82,13 +88,13 @@
           <div class="el-dropdown-link inline-flex text-2xl">
             <font-awesome-icon icon="bell"/>
             <sup class="text-[#D71313]">
-              <b>{{ user.unread_notifications.length }}</b>
+              <b>{{ notifications?.unread_notifications?.length }}</b>
             </sup>
           </div>
           <template #dropdown>
             <el-dropdown-menu class="w-[300px]">
               <Link 
-                v-for="(notification, index) in user.notifications.slice(0, length_notification)" 
+                v-for="(notification, index) in notifications?.notifications?.slice(0, length_notification)" 
                 :key="index"
                 :href="route('notification.show', notification.id)">
                 <el-dropdown-item class="h-[50px]">
@@ -138,10 +144,12 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
-import { handleError } from 'vue';
+import { handleError, h } from 'vue';
 import { ref, watchEffect } from 'vue';
 import { router } from '@inertiajs/vue3';
 import moment from 'moment';
+import { ElNotification } from 'element-plus';
+
 
 const user = usePage().props.auth.user;
 
@@ -156,6 +164,8 @@ const authors = ref({});
 const tags = ref({});
 
 const search = ref('')
+
+const notifications = ref({})
 
 const selected = (url) => { 
   const pathname = ref(window.location.pathname);
@@ -177,8 +187,15 @@ const getCategories = () => {
 }
 
 const showNotification = () => {
-  length_notification.value = user.notifications.length;
+  length_notification.value = notifications.notifications.length;
   hiddenShow.value = !hiddenShow.value
+}
+
+const getNotifications = () => {
+  axios.get(route('api.notification.all'))
+  .then(function(respornse){
+    notifications.value = respornse.data
+  })
 }
 
 const hiddenNotification = () => {
@@ -215,7 +232,18 @@ const handleSearch = () => {
   router.visit(route('home.search') + '?search=' + search.value)
 }
 
-watchEffect([getCategories, getAuthors, getTags])
+watchEffect([getCategories, getAuthors, getTags, getNotifications])
+
+Echo.private(`notification.${user.id}`)
+    .listen('.notification.user', (data) => {
+        if(data.created_by){
+          getNotifications()
+          ElNotification({
+            title: 'Thông báo Mới',
+            message: h('i', { style: 'color: teal' }, 'Bạn có 1 thông báo từ' + data.created_by),
+          })
+        }
+    });
 
 </script>
 

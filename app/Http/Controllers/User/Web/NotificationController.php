@@ -22,4 +22,12 @@ class NotificationController extends Controller
             'notification' => $notification
         ]);
     }
+
+    public function index()
+    {
+        return response()->json([
+            'notifications' => auth()->user()->notifications,
+            'unread_notifications' => auth()->user()->unreadNotifications,
+        ]);
+    }
 }
