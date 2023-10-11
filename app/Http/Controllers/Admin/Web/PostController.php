@@ -74,7 +74,7 @@ class PostController extends Controller
     public function upload(Request $request)
     {
         try {
-            $request->validate(['upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120']);
+            $request->validate(['upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:1']);
             if($request->hasFile('upload')){
                 $image = $request->file('upload');
                 
@@ -99,10 +99,8 @@ class PostController extends Controller
             
             return response()->json([
                 'uploaded' => 0,
-                'error' => [
-                    'message' => 'Ảnh phải có định dạng jpeg,png,jpg,gif và nhỏ hơn 5MB',
-                ],
-            ]);
+                'message' => 'Ảnh phải có định dạng jpeg,png,jpg,gif và nhỏ hơn 5MB',
+            ], 400);
         }
     }
 

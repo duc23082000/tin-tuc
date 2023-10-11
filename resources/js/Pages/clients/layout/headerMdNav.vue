@@ -88,13 +88,13 @@
           <div class="el-dropdown-link inline-flex text-2xl">
             <font-awesome-icon icon="bell"/>
             <sup class="text-[#D71313]">
-              <b>{{ notifications?.unread_notifications?.length }}</b>
+              <b>{{ useUsersStore().notifications?.unread_notifications?.length }}</b>
             </sup>
           </div>
           <template #dropdown>
             <el-dropdown-menu class="w-[300px]">
               <Link 
-                v-for="(notification, index) in notifications?.notifications?.slice(0, length_notification)" 
+                v-for="(notification, index) in useUsersStore().notifications?.notifications?.slice(0, length_notification)" 
                 :key="index"
                 :href="route('notification.show', notification.id)">
                 <el-dropdown-item class="h-[50px]">
@@ -142,16 +142,17 @@
 </template>
 
 <script setup>
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 import axios from 'axios';
 import { handleError, h } from 'vue';
 import { ref, watchEffect } from 'vue';
 import { router } from '@inertiajs/vue3';
 import moment from 'moment';
 import { ElNotification } from 'element-plus';
+import { useUsersStore } from '@/stores/store.js'
 
 
-const user = usePage().props.auth.user;
+const user = useUsersStore().user;
 
 const categories = ref({});
 
@@ -164,8 +165,6 @@ const authors = ref({});
 const tags = ref({});
 
 const search = ref('')
-
-const notifications = ref({})
 
 const selected = (url) => { 
   const pathname = ref(window.location.pathname);
@@ -187,15 +186,8 @@ const getCategories = () => {
 }
 
 const showNotification = () => {
-  length_notification.value = notifications.notifications.length;
+  length_notification.value = useUsersStore().notifications.notifications.length;
   hiddenShow.value = !hiddenShow.value
-}
-
-const getNotifications = () => {
-  axios.get(route('api.notification.all'))
-  .then(function(respornse){
-    notifications.value = respornse.data
-  })
 }
 
 const hiddenNotification = () => {
@@ -232,18 +224,20 @@ const handleSearch = () => {
   router.visit(route('home.search') + '?search=' + search.value)
 }
 
-watchEffect([getCategories, getAuthors, getTags, getNotifications])
+watchEffect([getCategories, getAuthors, getTags])
 
-Echo.private(`notification.${user.id}`)
+if(user){
+  Echo.private(`notification.${user.id}`)
     .listen('.notification.user', (data) => {
         if(data.created_by){
-          getNotifications()
+          useUsersStore().getNotifications()
           ElNotification({
             title: 'Thông báo Mới',
             message: h('i', { style: 'color: teal' }, 'Bạn có 1 thông báo từ' + data.created_by),
           })
         }
     });
+}
 
 </script>
 

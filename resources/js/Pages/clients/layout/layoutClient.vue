@@ -1,7 +1,7 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header class="!h-[50px] md:!h-[100px] !p-0 shadow fixed z-30 left-0 right-0 bg-white">
+      <el-header class="!h-[50px] md:!h-[100px] !p-0 shadow fixed z-30 left-0 right-0 bg-white/90">
         <header-md-nav class="hidden md:grid"></header-md-nav>
         <header-sm-nav class="md:hidden"></header-sm-nav>
       </el-header>

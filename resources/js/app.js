@@ -9,6 +9,9 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 
+import { createPinia } from 'pinia'
+const pinia = createPinia()
+
 
 import VueSocialauth from 'vue-social-auth'
 /* import the fontawesome core */
@@ -57,6 +60,7 @@ createInertiaApp({
             .use(ZiggyVue)
             .use(ElementPlus)
             .use(CKEditor)
+            .use(pinia)
             .component('font-awesome-icon', FontAwesomeIcon)
             .mount(el);
     },

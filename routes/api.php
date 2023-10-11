@@ -74,6 +74,8 @@ Route::prefix('admin')->name('admin.')
 
             Route::post('create', [PostController::class, 'store'])->name('api.create');
 
+            Route::post('upload', [PostController::class, 'upload'])->name('api.upload');
+
             Route::put('edit/{id}', [PostController::class, 'update'])->name('api.update');
 
             Route::delete('delete/{id}', [PostController::class, 'delete'])->name('api.delete');

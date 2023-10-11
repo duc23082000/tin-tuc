@@ -11,8 +11,11 @@
             </div>
 
             <div class="mt-3">
-              <ckeditor :editor="ClassicEditor" id="editor" v-model="data.content" ></ckeditor>
+              <ckeditor :editor="ClassicEditor" id="editor" :config="config" v-model="data.content" @click="errorUploadImage.status = false"></ckeditor>
+              <small v-if="errorUploadImage.status" class="text-red-600">{{ errorUploadImage.message }}</small>
             </div>
+
+            <div id="editor"></div>
 
             <div class="mt-3">
               <label for="">Category:</label>
@@ -93,8 +96,44 @@
   import { ref, watchEffect } from 'vue';
   import layoutAdmin from '../../layout/layoutAdmin.vue'
   import { ElMessage } from 'element-plus';
-  import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
   import { router } from '@inertiajs/vue3';
+  import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+  const errorUploadImage =  ref({
+    message: '',
+    status: false,
+  })
+
+  function uploader(editor) {
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+        return {
+            upload: async () => {
+                try {
+                    const response = await axios.post(
+                        route("admin.post.api.upload"),
+                        {
+                            upload: await loader.file
+                        },
+                        {
+                            headers: {
+                                "Content-Type": "multipart/form-data",
+                            },
+                        }
+                    );
+                    return {
+                        default: response.data.url,
+                    };
+                } catch (error) {
+                    errorUploadImage.value.message = error.response.data.message;
+                    errorUploadImage.value.status = true;
+                }
+            },
+        };
+    };
+}
+const config = ref({
+    extraPlugins: [uploader],
+});
 
 
   const data = ref({
@@ -132,3 +171,10 @@
   }
   
 </script>
+
+
+<style>
+.ck.ck-balloon-panel.ck-balloon-panel_position_border-side_right.ck-powered-by-balloon {
+  display: none;
+}
+</style>

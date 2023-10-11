@@ -182,7 +182,9 @@ const tags = ref({});
 
 const search = ref('')
 
-const notifications = ref({})
+const notifications = ref({
+
+})
 
 const selected = (url) => { 
   const pathname = ref(window.location.pathname);
@@ -238,10 +240,11 @@ const getTags = () => {
   })
 }
 
-const getNotifications = () => {
+const realTimeNotifications = () => {
   axios.get(route('api.notification.all'))
   .then(function(respornse){
-    notifications.value = respornse.data
+    notifications.value.notifications = respornse.data.notifications
+    notifications.value.unread_notifications = respornse.data.unread_notifications
   })
 }
 
@@ -249,14 +252,16 @@ const handleSearch = () => {
   router.visit(route('home.search') + '?search=' + search.value)
 }
 
-Echo.private(`notification.${user.id}`)
+if(user){
+  Echo.private(`notification.${user.id}`)
     .listen('.notification.user', (data) => {
         if(data.created_by){
-          getNotifications()
+          realTimeNotifications()
         }
     });
+}
 
-watchEffect([getCategories, getAuthors, getTags, getNotifications])
+watchEffect([getCategories, getAuthors, getTags])
 
 </script>
 
