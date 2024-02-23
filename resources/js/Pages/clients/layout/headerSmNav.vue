@@ -53,14 +53,14 @@
       </div>
 
       <div>
-        <Link :href="route('home')" class="font-semibold" :class="selected('')">Home</Link>
+        <Link :href="route('home')" class="font-semibold" :class="usePageStore().selected('')">Home</Link>
       </div>
 
       <div @click="drawer.categories = true">
-        <span class="font-semibold" :class="selected('.category')">Categories</span>
+        <span class="font-semibold" :class="usePageStore().selected('.category')">Categories</span>
         <el-drawer v-model="drawer.categories" size="50%" title="I am the title" :with-header="false" direction="ttb">
           <div class="grid grid-cols-4 gap-2">
-            <div v-for="(category, index) in categories" :key="index">
+            <div v-for="(category, index) in usePageStore().categories" :key="index">
               <Link
                   class="rounded-t bg-white hover:bg-gray-50 py-2 px-4 block whitespace-no-wrap"
                   :href="route('home.category') + '?category=' + category.name"
@@ -72,10 +72,10 @@
       </div>
       
       <div @click="drawer.authors = true">
-        <span class="font-semibold" :class="selected('.author')">Author</span>
+        <span class="font-semibold" :class="usePageStore().selected('.author')">Author</span>
         <el-drawer v-model="drawer.authors" size="50%" title="I am the title" :with-header="false" direction="ttb">
           <div class="grid grid-cols-4 gap-2">
-            <div v-for="(author, index) in authors" :key="index">
+            <div v-for="(author, index) in usePageStore().authors" :key="index">
               <Link
                   class="rounded-t bg-white hover:bg-gray-50 py-2 px-4 block whitespace-no-wrap"
                   :href="route('home.author') + '?author=' + author.username"
@@ -91,13 +91,13 @@
           <div class="el-dropdown-link inline-flex text-l">
             <font-awesome-icon icon="bell"/>
             <sup class="text-[#D71313]">
-              <b>{{ notifications?.unread_notifications?.length }}</b>
+              <b>{{ useUsersStore().notifications?.unread_notifications?.length }}</b>
             </sup>
           </div>
           <template #dropdown>
-            <el-dropdown-menu class="w-[150px]">
+            <el-dropdown-menu class="w-[150px] bg-white">
               <Link 
-                v-for="(notification, index) in notifications?.notifications?.slice(0, length_notification)" 
+                v-for="(notification, index) in useUsersStore().notifications?.notifications?.slice(0, length_notification)" 
                 :key="index"
                 :href="route('notification.show', notification.id)">
                 <el-dropdown-item class="h-[30px] !text-[10px]">
@@ -136,12 +136,12 @@
                     <font-awesome-icon icon="fa-gears" />
                     <span class="w-full flex justify-end">Setting</span>
                   </el-dropdown-item>
-                  <Link :href="route('user.logout')">
+                  <a :href="route('user.logout')">
                     <el-dropdown-item  class="h-[30px] !text-[10px]">
                       <font-awesome-icon icon="fa-arrow-right-from-bracket" />
                       <span class="w-full flex justify-end">Logout</span>
                     </el-dropdown-item>
-                  </Link>
+                  </a>
                 </el-dropdown-menu>
               </div>
             </template>
@@ -155,12 +155,10 @@
 
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
-import axios from 'axios';
-import { handleError, h } from 'vue';
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import moment from 'moment';
-import { ElNotification } from 'element-plus';
+import { useUsersStore, usePageStore } from '@/stores/store.js'
 
 const drawer = ref({
   sidebar: false,
@@ -168,45 +166,13 @@ const drawer = ref({
   authors: false,
 })
 
-const user = usePage().props.auth.user;
-
-const categories = ref({});
-
+const user = useUsersStore().user;
 const length_notification = ref(7)
-
 const hiddenShow = ref(true)
-
-const authors = ref({});
-
-const tags = ref({});
-
 const search = ref('')
 
-const notifications = ref({
-
-})
-
-const selected = (url) => { 
-  const pathname = ref(window.location.pathname);
-  if (pathname.value == '/') {
-    pathname.value  = '';
-  }
-  return window.location.origin + pathname.value == route('home' + url) ? 'text-blue-400' : 'text-gray-700';
-}
-
-const getCategories = () => {
-  axios.get(route('home.api.categories'))
-  .then(function(respornse){
-    categories.value = respornse.data
-
-  })
-  .catch(function(errors){
-    console.log(errors);
-  })
-}
-
 const showNotification = () => {
-  length_notification.value = notifications?.notifications?.length;
+  length_notification.value = useUsersStore().notifications.notifications.length;
   hiddenShow.value = !hiddenShow.value
 }
 
@@ -215,53 +181,13 @@ const hiddenNotification = () => {
   hiddenShow.value = !hiddenShow.value
 }
 
-const getAuthors = () => {
-  axios.get(route('home.api.authors'))
-  .then(function(respornse){
-    authors.value = respornse.data
-
-  })
-  .catch(function(errors){
-    console.log(errors);
-  })
-}
-
 const formatDate = (date) => {
   return moment(date).format('HH:mm DD/MM');
-}
-
-const getTags = () => {
-  axios.get(route('home.api.tags'))
-  .then(function(respornse){
-    tags.value = respornse.data
-  })
-  .catch(function(errors){
-    console.log(errors);
-  })
-}
-
-const realTimeNotifications = () => {
-  axios.get(route('api.notification.all'))
-  .then(function(respornse){
-    notifications.value.notifications = respornse.data.notifications
-    notifications.value.unread_notifications = respornse.data.unread_notifications
-  })
 }
 
 const handleSearch = () => {
   router.visit(route('home.search') + '?search=' + search.value)
 }
-
-if(user){
-  Echo.private(`notification.${user.id}`)
-    .listen('.notification.user', (data) => {
-        if(data.created_by){
-          realTimeNotifications()
-        }
-    });
-}
-
-watchEffect([getCategories, getAuthors, getTags])
 
 </script>
 

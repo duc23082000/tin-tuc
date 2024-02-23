@@ -34,6 +34,8 @@ import { faUserSecret,
     faAngleRight
 } from '@fortawesome/free-solid-svg-icons'
 
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -49,6 +51,7 @@ library.add(
     faGears,
     faArrowRightFromBracket,
     faAngleRight,
+    faGoogle,
 )
 
 createInertiaApp({

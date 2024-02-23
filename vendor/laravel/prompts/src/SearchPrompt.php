@@ -7,12 +7,19 @@ use InvalidArgumentException;
 
 class SearchPrompt extends Prompt
 {
+    use Concerns\ReducesScrollingToFitTerminal;
+    use Concerns\Truncation;
     use Concerns\TypedValue;
 
     /**
      * The index of the highlighted option.
      */
     public ?int $highlighted = null;
+
+    /**
+     * The index of the first visible option.
+     */
+    public int $firstVisible = 0;
 
     /**
      * The cached matches.
@@ -22,7 +29,7 @@ class SearchPrompt extends Prompt
     protected ?array $matches = null;
 
     /**
-     * Create a new SuggestPrompt instance.
+     * Create a new SearchPrompt instance.
      *
      * @param  Closure(string): array<int|string, string>  $options
      */
@@ -32,24 +39,36 @@ class SearchPrompt extends Prompt
         public string $placeholder = '',
         public int $scroll = 5,
         public ?Closure $validate = null,
+        public string $hint = '',
+        public bool|string $required = true,
     ) {
+        if ($this->required === false) {
+            throw new InvalidArgumentException('Argument [required] must be true or a string.');
+        }
+
         $this->trackTypedValue(submit: false);
 
+        $this->reduceScrollingToFitTerminal();
+
         $this->on('key', fn ($key) => match ($key) {
-            Key::UP, Key::SHIFT_TAB => $this->highlightPrevious(),
-            Key::DOWN, Key::TAB => $this->highlightNext(),
+            Key::UP, Key::UP_ARROW, Key::SHIFT_TAB, Key::CTRL_P => $this->highlightPrevious(),
+            Key::DOWN, Key::DOWN_ARROW, Key::TAB, Key::CTRL_N => $this->highlightNext(),
             Key::ENTER => $this->highlighted !== null ? $this->submit() : $this->search(),
-            Key::LEFT, Key::RIGHT => $this->highlighted = null,
+            Key::oneOf([Key::LEFT, Key::LEFT_ARROW, Key::RIGHT, Key::RIGHT_ARROW, Key::CTRL_B, Key::CTRL_F, Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) => $this->highlighted = null,
             default => $this->search(),
         });
     }
 
+    /**
+     * Perform the search.
+     */
     protected function search(): void
     {
         $this->state = 'searching';
         $this->highlighted = null;
         $this->render();
         $this->matches = null;
+        $this->firstVisible = 0;
         $this->state = 'active';
     }
 
@@ -86,6 +105,16 @@ class SearchPrompt extends Prompt
     }
 
     /**
+     * The currently visible matches.
+     *
+     * @return array<string>
+     */
+    public function visible(): array
+    {
+        return array_slice($this->matches(), $this->firstVisible, $this->scroll, preserve_keys: true);
+    }
+
+    /**
      * Highlight the previous entry, or wrap around to the last entry.
      */
     protected function highlightPrevious(): void
@@ -98,6 +127,12 @@ class SearchPrompt extends Prompt
             $this->highlighted = null;
         } else {
             $this->highlighted = $this->highlighted - 1;
+        }
+
+        if ($this->highlighted < $this->firstVisible) {
+            $this->firstVisible--;
+        } elseif ($this->highlighted === count($this->matches) - 1) {
+            $this->firstVisible = count($this->matches) - min($this->scroll, count($this->matches));
         }
     }
 
@@ -113,13 +148,25 @@ class SearchPrompt extends Prompt
         } else {
             $this->highlighted = $this->highlighted === count($this->matches) - 1 ? null : $this->highlighted + 1;
         }
+
+        if ($this->highlighted > $this->firstVisible + $this->scroll - 1) {
+            $this->firstVisible++;
+        } elseif ($this->highlighted === 0 || $this->highlighted === null) {
+            $this->firstVisible = 0;
+        }
     }
 
+    /**
+     * Get the current search query.
+     */
     public function searchValue(): string
     {
         return $this->typedValue;
     }
 
+    /**
+     * Get the selected value.
+     */
     public function value(): int|string|null
     {
         if ($this->matches === null || $this->highlighted === null) {
@@ -137,17 +184,5 @@ class SearchPrompt extends Prompt
     public function label(): ?string
     {
         return $this->matches[array_keys($this->matches)[$this->highlighted]] ?? null;
-    }
-
-    /**
-     * Truncate a value with an ellipsis if it exceeds the given length.
-     */
-    protected function truncate(string $value, int $length): string
-    {
-        if ($length <= 0) {
-            throw new InvalidArgumentException("Length [{$length}] must be greater than zero.");
-        }
-
-        return mb_strlen($value) <= $length ? $value : (mb_substr($value, 0, $length - 1).'…');
     }
 }

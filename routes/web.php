@@ -14,10 +14,12 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\User\Web\NotificationController;
 use App\Http\Controllers\User\Web\PostController as WebPostController;
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -33,8 +35,12 @@ use Inertia\Inertia;
 */
 
 Route::get('delete-acc', function () {
-    User::find(request()->user()->id)->delete();
-    return redirect(route('login'));
+    // $a = new Admin();
+    // $a->email = 'duc.nd.909@aptechlearning.edu.vn';
+    // $a->password = Hash::make('123456');
+    // $a->username = 'duc2308';
+    // $a->save();
+    dd(1);
 })->name('delete.acc');
 
 Route::prefix('auth')->group(function(){

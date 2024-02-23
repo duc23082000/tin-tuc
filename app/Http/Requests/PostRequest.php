@@ -46,7 +46,7 @@ class PostRequest extends FormRequest
             $rules['posted_at'][] = 'before_or_equal:today';
         }
         if($this->file('image')){
-            $rules['image'] = 'required|image|mimes:jpeg,png,jpg,gif|max:5120';
+            $rules['image'] = 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
         }
         return $rules;
     }

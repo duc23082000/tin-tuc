@@ -43,9 +43,7 @@ class NoticeController extends Controller
         $sort = $request->input('sort') ?? 'desc';
 
         $notices = $this->notices->listNotification($search, $collum, $sort)->with(['users', 'authors'])->paginate(10)->withQueryString();
-
-        $sort = $sort == 'asc' ? 'desc' : 'asc';
-
+        
         return $notices;
     }
 

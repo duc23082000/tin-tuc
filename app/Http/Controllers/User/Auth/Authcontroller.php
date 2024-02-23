@@ -27,7 +27,7 @@ class Authcontroller extends Controller
             'email' => $request->input('email'),
             'password' => $request->input('password'),
         ];
-
+        
         if(Auth::guard('web')->attempt($user)){
             if($request->remember){
                 setcookie('email_acc', $request->input('email'), time()+(10*24*60*60));
@@ -43,7 +43,6 @@ class Authcontroller extends Controller
 
     public function logout(Request $request){
         Auth::guard('web')->logout();
-
         return redirect(route('login'));
     }
 
@@ -146,18 +145,17 @@ class Authcontroller extends Controller
     {
         $user = Socialite::driver('google')->user();
         $email = $user->email;
-        // dd($email);
+        $username = $user->name;
 
         $select = User::where('email', $email)->first();
         // dd($select->id);
 
         if(empty($select)){
             $newUser = new User();
-            $newUser->username = $email;
+            $newUser->username = $username;
             $newUser->email = $email;
             $newUser->password = '';
             $newUser->save();
-            // dd(1);
             Auth::guard('web')->loginUsingId($newUser->id);
             return redirect(route('home'));
         }

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 6.6.4
+
+### Fixed
+
+- Fix conversion of `Enum::fromKey()` to native enum
+
+## 6.6.3
+
+### Fixed
+
+- Remove leading backslash in class names passed to `php artisan enum:to-native`
+
 ## 6.6.2
 
 ### Fixed
